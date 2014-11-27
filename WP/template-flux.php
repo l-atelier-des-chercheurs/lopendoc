@@ -9,28 +9,37 @@ $getallposts = new WP_Query( array(
 
 
 
-<div id="cropwindow">
-	<div id="cropcontent">
+<div id="leftView" class='viewport'>
+	<div class="cropcontent">
+
+		<div class='colTitle'>
+			<h3>Documents</h3>
+		</div>
+
+		<button class="addPost">
+			<h3>Nouveau post</h3>
+		</button>
+
+
 		<?php
 
 			global $wp_query;
 			$wp_query->in_the_loop = true;
 
+
 			while ($getallposts->have_posts()) : $getallposts->the_post() ?>
-			<article data-post="<?php the_ID(); ?>" <?php post_class(); ?> style="">
+			<article class="post" data-post="<?php the_ID(); ?>" <?php post_class(); ?> style="">
+
+				<div class="make-it-publish">
+
+				</div>
 
 				<header class="entry-header">
-					<?php if ( in_array( 'category', get_object_taxonomies( get_post_type() ) ) ) : ?>
-					<div class="entry-meta">
-						<span class="cat-links"><?php echo get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'twentyfourteen' ) ); ?></span>
-					</div>
 					<?php
-						endif;
-
 						if ( is_single() ) :
-							the_title( '<h1 class="entry-title">', '</h1>' );
+							the_title( '<h2 class="entry-title">', '</h2>' );
 						else :
-							the_title( '<h1 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h1>' );
+							the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 						endif;
 					?>
 
@@ -43,15 +52,7 @@ $getallposts = new WP_Query( array(
 				</header><!-- .entry-header -->
 
 				<div class="entry-content">
-					<?php
-						the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'twentyfourteen' ) );
-						wp_link_pages( array(
-							'before'      => '<div class="page-links"><span class="page-links-title">' . __( 'Pages:', 'twentyfourteen' ) . '</span>',
-							'after'       => '</div>',
-							'link_before' => '<span>',
-							'link_after'  => '</span>',
-						) );
-					?>
+					<?php the_content(); ?>
 				</div><!-- .entry-content -->
 
 <!--
@@ -74,5 +75,17 @@ $getallposts = new WP_Query( array(
 			</article>
 
 		<?php endwhile; ?>
+	</div>
+</div>
+
+<div id="rightView" class='viewport'>
+	<div class="cropcontent">
+
+		<div class='colTitle'>
+			<h3>Article</h3>
+		</div>
+
+
+
 	</div>
 </div>

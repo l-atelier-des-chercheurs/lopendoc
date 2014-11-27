@@ -20,3 +20,11 @@ function roots_wp_title($title) {
   return $title;
 }
 add_filter('wp_title', 'roots_wp_title', 10);
+
+
+
+// custom typeface
+function google_font(){
+	echo "<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>","\n";
+}
+add_action( 'wp_enqueue_scripts', 'google_font');

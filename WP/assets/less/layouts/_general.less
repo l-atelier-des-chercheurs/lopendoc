@@ -1,10 +1,216 @@
-// Content wrapper
+.banner { }
+
+
+/*******************************************************************
+	WRAPPER
+*********************************************************************/
+
 .wrap { }
 
-// Main content area
+/*******************************************************************
+	MAIN
+*********************************************************************/
+
 .main {
   .make-sm-column(@main-sm-columns);
   .sidebar-primary & {
     .make-sm-column(@main-sm-columns - @sidebar-sm-columns);
   }
 }
+
+
+
+
+/*******************************************************************
+	HOME / 2col
+*********************************************************************/
+
+a {
+	color: @text-color;
+}
+
+
+#leftView {
+	.make-sm-column(6);
+
+	.cropcontent {
+
+		.addPost {
+
+			border:0;
+
+			.make-sm-column(8);
+			.make-sm-column-offset(1);
+
+			width: auto;
+
+			background-color: #fff;
+			box-shadow: 0px 0px 8px 0px rgba(0,0,0,.3);
+
+			padding: 5%;
+
+			margin-bottom: 30px;
+
+			> * {
+				margin: 0;
+			}
+		}
+
+		.post {
+			&.publish {
+				background-color: @brand-primary;
+
+			}
+			box-shadow: 0px 0px 8px 0px rgba(0,0,0,.3);
+		}
+	}
+
+
+}
+
+#rightView {
+	.make-sm-column(4);
+	background-color: #fff;
+	height: 100vh;
+  box-shadow: -3px 0px 3px 0px rgba(0,0,0,.3);
+
+
+}
+
+
+.cropcontent {
+	padding-top: 70px;
+	padding-bottom: 30px;
+
+
+	.make-row;
+
+	.colTitle {
+		position: absolute;
+		top:0;
+		width: 100%;
+		text-align: center;
+
+		background-color: #EAEAEA;
+
+		h3 {
+			margin: 7px;
+
+		}
+
+	}
+
+	.post + .post {
+		margin-top: 30px;
+	}
+
+
+}
+
+.viewport {
+	height: 800px;
+	height: 100vh;
+	overflow: scroll;
+}
+
+
+
+/* EDIT FEE */
+
+.fee-toolbar {
+	bottom: 0px !important;
+}
+
+
+
+
+
+.post {
+	.make-sm-column(8);
+	.make-sm-column-offset(1);
+	padding: 5%;
+	padding-top: 1%;
+	position: relative;
+
+	background-color: #fff;
+
+
+	.make-it-publish {
+
+		position: absolute;
+
+		right: -15px;
+		top: -15px;
+		width: 30px;
+		height: 30px;
+
+		background-color: @brand-primary;
+
+	}
+
+	.entry-title {
+	  font-size: 2em;
+	  line-height: 2;
+		font-weight: 700;
+
+		margin: 0;
+		margin-bottom: 1em;
+
+	}
+
+	.entry-meta {
+
+		> * {
+			display: block;
+
+		}
+
+	}
+
+	.entry-content {
+
+		font-size: 1.4em;
+
+
+	}
+	img {
+		max-width: 100%;
+		width: 100%;
+		height:auto;
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************
+	SIDEBAR
+*********************************************************************/
+
+
+.sidebar {
+  .make-sm-column(@sidebar-sm-columns);
+}
+
+
+
+
+
+
+
+
+
+/*******************************************************************
+	FOOTER
+*********************************************************************/
+
+.content-info { }
