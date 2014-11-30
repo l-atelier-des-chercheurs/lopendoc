@@ -195,7 +195,7 @@ function tag_Date(&$content, $message_date) {
     return $message_date;
 }
 
-function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config, $postmodifiers) {
+function CreatePost($poster, $project, $mimeDecodedEmail, $post_id, &$is_reply, $config, $postmodifiers) {
 
     $fulldebug = IsDebugMode();
     $fulldebugdump = false;
@@ -417,7 +417,8 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config, $
         'post_excerpt' => $post_excerpt,
         'ID' => $id,
         'customImages' => $customImages,
-        'post_status' => $post_status
+        'post_status' => $post_status,
+        'tax_input' => $project
     );
     return $details;
 }
@@ -425,7 +426,7 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config, $
 /**
  * This is the main handler for all of the processing
  */
-function PostEmail($poster, $mimeDecodedEmail, $config) {
+function PostEmail($poster, $project, $mimeDecodedEmail, $config) {
     postie_disable_revisions();
     extract($config);
 
@@ -438,7 +439,7 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
     $is_reply = false;
     $postmodifiers = new PostiePostModifiers();
 
-    $details = CreatePost($poster, $mimeDecodedEmail, $post_id, $is_reply, $config, $postmodifiers);
+    $details = CreatePost($poster, $project, $mimeDecodedEmail, $post_id, $is_reply, $config, $postmodifiers);
 
     $details = apply_filters('postie_post', $details);
     $details = apply_filters('postie_post_before', $details);
@@ -1446,6 +1447,43 @@ function ValidatePoster(&$mimeDecodedEmail, $config) {
         return '';
     }
     return $poster;
+}
+/*****************
+	CUSTOM LOPENDOC FUNCTION
+	****************/
+
+function ValidateProject(&$mimeDecodedEmail, $config) {
+    $test_email = '';
+    extract($config);
+    $poster = NULL;
+    $from = "";
+    $project = "";
+    if (property_exists($mimeDecodedEmail, "headers") && array_key_exists('from', $mimeDecodedEmail->headers)) {
+        $from = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["from"]));
+        $from = apply_filters("postie_filter_email", $from);
+
+        $toEmail = '';
+        if (isset($mimeDecodedEmail->headers["to"])) {
+            $toEmail = $mimeDecodedEmail->headers["to"];
+        }
+
+        $posPlus = strpos($toEmail, '+') + 1;
+
+        if ( $posPlus !== false ) {
+	        $toEmailFromPlus = substr($toEmail, $posPlus);
+
+	        $projectTerm = stristr( $toEmailFromPlus, '@', true );
+
+					$project = array( 'projets' =>  $projectTerm);
+				}
+
+        DebugEcho("ValidateProject: project $project");
+    } else {
+        DebugEcho("No header found");
+        DebugDump($mimeDecodedEmail->headers);
+    }
+
+    return $project;
 }
 
 function isValidSmtpServer($mimeDecodedEmail, $smtpservers) {
@@ -3550,8 +3588,9 @@ function postie_get_mail() {
 
         //Check poster to see if a valid person
         $poster = ValidatePoster($mimeDecodedEmail, $config);
+        $project = ValidateProject($mimeDecodedEmail, $config);
         if (!empty($poster)) {
-            PostEmail($poster, $mimeDecodedEmail, $config);
+            PostEmail($poster, $project, $mimeDecodedEmail, $config);
         } else {
             EchoInfo("Ignoring email - not authorized.");
         }
