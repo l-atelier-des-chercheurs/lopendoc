@@ -49,7 +49,9 @@ var Roots = {
 
 			});
 
-
+			$(".addPost").click(function() {
+				$("#wp-admin-bar-new-post .ab-item").trigger("click");
+			});
 
     }
   },
