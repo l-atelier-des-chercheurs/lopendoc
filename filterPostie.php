@@ -48,12 +48,52 @@ add_filter('postie_post', 'auto_tag');
 add_filter('postie_filter_email', 'change_email');
 */
 
-add_filter('postie_filter_email', 'plus_filter');
 
-function plus_filter($fromEmail, $toEmail, $replytoEmail) {
-    if (stristr($toEmail, '+'))
-        return stristr($toEmail, '+');
-    return $toEmail
+add_filter('postie_filter_email2', 'plus_filter', 10, 3);
+
+function plus_filter( $email) {
+	global $project;
+  DebugEcho("step-01");
+  DebugEcho("emailVar " . $email[1]);
+
+  $fromField = $email[0];
+  $toField = $email[1];
+
+  $posPlus = strpos($toField, '+') + 1;
+
+  if ( $posPlus !== false ) {
+    $toEmailFromPlus = substr($toField, $posPlus);
+
+    $projectTerm = stristr( $toEmailFromPlus, '@', true );
+
+		$project = $projectTerm;
+	}
+
+  return $fromField;
+}
+
+add_filter('postie_post', 'tax_tag');
+
+function tax_tag($post) {
+	global $project;
+  DebugEcho("step-02");
+  DebugEcho("checkVar " . $project );
+
+  //$project = array( 'projets' =>  $projectTerm);
+  array_push($post['tax_input'], $project);
+  return $post;
+}
+
+
+
+function auto_tag($post) {
+    // this function automatically inserts tags for a post
+    $my_tags = array('cooking', 'latex', 'wordpress');
+    foreach ($my_tags as $my_tag) {
+        if (stripos($post['post_content'], $my_tag) !== false)
+            array_push($post['tags_input'], $my_tag);
+    }
+    return $post;
 }
 
 /*
@@ -79,16 +119,6 @@ function filter_content($post) {
 function filter_title($post) {
     //this function appends "(via postie)" to the title (subject)
     $post['post_title'] = $post['post_title'] . ' (via postie)';
-    return $post;
-}
-
-function auto_tag($post) {
-    // this function automatically inserts tags for a post
-    $my_tags = array('cooking', 'latex', 'wordpress');
-    foreach ($my_tags as $my_tag) {
-        if (stripos($post['post_content'], $my_tag) !== false)
-            array_push($post['tags_input'], $my_tag);
-    }
     return $post;
 }
 
