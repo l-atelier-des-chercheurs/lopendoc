@@ -35,29 +35,40 @@ function updateView() {
 // rename this variable, you will also need to rename the namespace below.
 var Roots = {
 
-	page_template_template_flux_php: {
+  // All pages
+  common: {
     init: function() {
+      // JavaScript to be fired on all pages
 
-			$(".post .make-it-publish").each(function() {
+			$(".post .button-right").each(function() {
+
+
+			});
+
+			$(".post .button-right .edit-post").click( function() {
+				console.log("edit-post click");
+				var $thisPost = $(this).parents(".post");
+				var pageLink = $thisPost.find(".entry-title a").attr("href");
+				$thisPost.find(".entry-header, .entry-content").remove();
+
+				console.log("pageLink = " + pageLink);
+
+				$thisPost.append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
+			});
+
+			$(".post .button-right .publish-post").each(function() {
 				$(this).click( function() {
 					$(this).parent(".post").toggleClass("publish");
 					updateView();
 				});
-
-
 			});
 
 			$(".addPost").click(function() {
 				$("#wp-admin-bar-new-post .ab-item").trigger("click");
 			});
 
-    }
-  },
 
-  // All pages
-  common: {
-    init: function() {
-      // JavaScript to be fired on all pages
+
     }
   },
   // Home page

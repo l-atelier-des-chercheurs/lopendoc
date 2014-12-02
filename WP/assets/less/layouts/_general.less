@@ -138,8 +138,7 @@ a {
 
 	background-color: #fff;
 
-
-	.make-it-publish {
+	.button-right {
 
 		position: absolute;
 
@@ -149,14 +148,33 @@ a {
 		padding-top: 8px;
 		padding-left: 10px;
 
-		width: 50px;
-		height: 50px;
+
+		> * {
+			position: relative;
+			width: 50px;
+			height: 50px;
+			cursor: pointer;
+		}
+
+		.publish-post {
+
+
+		}
+
+		.edit-post {
+
+
+		}
 
 
 		svg {
 			width: 40px;
 			height: 40px;
-			fill: #4aff93;
+			fill: #fff;
+
+			&:hover {
+				fill: #4aff93;
+			}
 		}
 
 	}
@@ -189,10 +207,12 @@ a {
 	}
 	img {
 		max-width: 100%;
-		width: 100%;
 		height:auto;
 	}
 
+	.edit-frame {
+	  min-height: 600px;
+	}
 
 }
 

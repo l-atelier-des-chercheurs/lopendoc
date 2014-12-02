@@ -66,3 +66,4 @@ function projet_taxonomy() {
 
 // Hook into the 'init' action
 add_action( 'init', 'projet_taxonomy', 0 );
+
