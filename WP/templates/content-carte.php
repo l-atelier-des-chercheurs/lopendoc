@@ -1,4 +1,13 @@
-<article class="post" data-post="<?php the_ID(); ?>" <?php post_class(); ?> style="">
+<?php
+	$status = "";
+	if ( get_post_status() == 'private' ) {
+		$status = 'private';
+	} else {
+		$status = 'public';
+	}
+?>
+
+<article class="post" data-post="<?php the_ID(); ?>" <?php post_class(); ?> data-status="<?php echo $status; ?>" style="">
 
 	<?php
 		if ( is_user_logged_in() ) {

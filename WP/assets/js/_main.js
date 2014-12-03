@@ -51,6 +51,8 @@ var Roots = {
 				var pageLink = $thisPost.find(".entry-title a").attr("href");
 				$thisPost.find(".entry-header, .entry-content").remove();
 
+				$thisPost.addClass("is-edited");
+
 				console.log("pageLink = " + pageLink);
 
 				$thisPost.append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
