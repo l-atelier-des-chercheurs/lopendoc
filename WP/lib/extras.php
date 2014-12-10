@@ -21,7 +21,14 @@ function roots_wp_title($title) {
 }
 add_filter('wp_title', 'roots_wp_title', 10);
 
-
+add_action( 'init', 'blockusers_init' );
+function blockusers_init() {
+if ( is_admin() && ! current_user_can( 'administrator' ) &&
+! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+wp_redirect( home_url() );
+exit;
+}
+}
 
 // custom typeface
 function google_font(){
@@ -66,4 +73,26 @@ function projet_taxonomy() {
 
 // Hook into the 'init' action
 add_action( 'init', 'projet_taxonomy', 0 );
+
+
+
+function habfna_hide_admin_bar_settings()
+{
+?>
+	<style type="text/css">
+		.show-admin-bar {
+			display: none;
+		}
+	</style>
+<?php
+}
+function habfna_disable_admin_bar()
+{
+	if(!current_user_can('administrator'))
+	{
+		add_filter( 'show_admin_bar', '__return_false' );
+		add_action( 'admin_print_scripts-profile.php', 'habfna_hide_admin_bar_settings' );
+	}
+}
+add_action('init', 'habfna_disable_admin_bar', 9);
 

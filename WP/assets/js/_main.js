@@ -40,12 +40,17 @@ var Roots = {
     init: function() {
       // JavaScript to be fired on all pages
 
+			console.log("edit post ajax");
+
 			$(".post .button-right").each(function() {
 
 
 			});
 
-			$(".post .button-right .edit-post").click( function() {
+			$(".post .button-right .edit-post").click( function(e) {
+
+				e.preventDefault();
+
 				console.log("edit-post click");
 				var $thisPost = $(this).parents(".post");
 				var pageLink = $thisPost.find(".entry-title a").attr("href");
@@ -56,14 +61,18 @@ var Roots = {
 				console.log("pageLink = " + pageLink);
 
 				$thisPost.append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
+				return false;
+
 			});
 
+/*
 			$(".post .button-right .publish-post").each(function() {
 				$(this).click( function() {
 					$(this).parent(".post").toggleClass("publish");
 					updateView();
 				});
 			});
+*/
 
 			$(".addPost").click(function() {
 				$("#wp-admin-bar-new-post .ab-item").trigger("click");

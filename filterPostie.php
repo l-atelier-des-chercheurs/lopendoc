@@ -51,13 +51,15 @@ add_filter('postie_filter_email', 'change_email');
 
 add_filter('postie_filter_email2', 'plus_filter', 10, 3);
 
-function plus_filter( $email) {
+function plus_filter( $from, $toEmail, $replytoEmail) {
 	global $project;
   DebugEcho("step-01");
-  DebugEcho("emailVar " . $email[1]);
+  DebugDump("from " . $from);
+  DebugDump("toEmail " . $toEmail);
+  DebugDump("replytoEmail " . $replytoEmail);
 
-  $fromField = $email[0];
-  $toField = $email[1];
+  $fromField = $from;
+  $toField = $toEmail;
 
   $posPlus = strpos($toField, '+') + 1;
 
@@ -77,33 +79,68 @@ add_filter('postie_post', 'tax_tag');
 function tax_tag($post) {
 	global $project;
   DebugEcho("step-02");
-  DebugEcho("checkVar " . $project );
+  DebugEcho("project " . $project );
 
-  //$project = array( 'projets' =>  $projectTerm);
-  array_push($post['tax_input'], $project);
+  $projectField = array( 'projets' =>  array( $project ) );
+  $post['tax_input'] = $projectField;
+
   return $post;
 }
 
 
 
-function auto_tag($post) {
-    // this function automatically inserts tags for a post
-    $my_tags = array('cooking', 'latex', 'wordpress');
-    foreach ($my_tags as $my_tag) {
-        if (stripos($post['post_content'], $my_tag) !== false)
-            array_push($post['tags_input'], $my_tag);
-    }
-    return $post;
-}
+
+
 
 /*
-add_filter('postie_filter_email', 'my_filterEmail');
 
-function my_filterEmail($fromEmail, $toEmail, $replytoEmail) {
-    //do some email validation logic
-    return $fromEmail
-}
+	Si le sujet contient uniquement "Description"
+	Alors passer le post en sticky
+
 */
+
+function sticky_or_not($post,$post_part_to_check,$isTerm) {
+
+	DebugEcho("Check Description sticky");
+  DebugEcho("post[post_part_to_check] " . $post[$post_part_to_check] );
+  DebugEcho("isTerm " . $isTerm );
+
+	if( strcasecmp($post[$post_part_to_check], $isTerm) == 0 ) {
+
+		$post['post_status'] = 'publish';
+		$post['is_sticky'] = 'true';
+
+		DebugEcho("stickied");
+
+    DebugEcho(("Post postie_post filter BEFORE"));
+    DebugDump($post);
+
+	}
+
+
+/*
+	foreach ($post[$post_part_to_check] as $key=>$cat_or_tag) {
+		if (term_exists($cat_or_tag, $taxonomy_name)) {
+			wp_set_object_terms( $post['ID'], $cat_or_tag, $taxonomy_name, true );
+			unset($post[$post_part_to_check][$key]);
+		}
+	}
+*/
+		return $post;
+}
+function make_sticky_descriptions($post) {
+	// Check for categories and use in type
+	$post = sticky_or_not($post,'post_title','Description');
+	return $post;
+}
+add_filter('postie_post_before', 'make_sticky_descriptions');
+
+
+
+
+
+
+
 
 
 function filter_content($post) {
@@ -133,5 +170,16 @@ function change_email($email) {
         return get_option("admin_email");
     return $email;
 }
+
+function auto_tag($post) {
+    // this function automatically inserts tags for a post
+    $my_tags = array('cooking', 'latex', 'wordpress');
+    foreach ($my_tags as $my_tag) {
+        if (stripos($post['post_content'], $my_tag) !== false)
+            array_push($post['tags_input'], $my_tag);
+    }
+    return $post;
+}
+
 
 ?>
