@@ -18,7 +18,7 @@ $getallposts = new WP_Query( array(
 		</div>
 
 		<button class="addPost">
-			<h3>Nouveau post</h3>
+			<h3>+</h3>
 		</button>
 
 

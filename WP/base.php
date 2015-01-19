@@ -7,6 +7,13 @@
     </div>
   <![endif]-->
 
+	<script type="text/javascript">
+		if( window.top !== window.self ) {
+			document.getElementsByTagName('body')[0].className += ' iframe';
+		}
+	</script>
+
+
   <?php
     do_action('get_header');
     get_template_part('templates/header');

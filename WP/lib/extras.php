@@ -30,11 +30,20 @@ exit;
 }
 }
 
+
+// image size
+update_option('medium_size_w', 800);
+update_option('medium_size_h', 600);
+update_option('thumbnail_size_w', 600);
+update_option('thumbnail_size_h', 400);
+
+
 // custom typeface
 function google_font(){
 	echo "<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>","\n";
+	echo "<link href='http://fonts.googleapis.com/css?family=Share:400,400italic,700,700italic' rel='stylesheet' type='text/css'>","\n";
 }
-add_action( 'wp_enqueue_scripts', 'google_font');
+//add_action( 'wp_enqueue_scripts', 'google_font');
 
 
 
@@ -60,7 +69,7 @@ function projet_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -68,14 +77,11 @@ function projet_taxonomy() {
 		'show_tagcloud'              => true,
 	);
 	register_taxonomy( 'projets', array( 'post' ), $args );
-
 }
-
 // Hook into the 'init' action
 add_action( 'init', 'projet_taxonomy', 0 );
 
-
-
+// cacher la barre admin
 function habfna_hide_admin_bar_settings()
 {
 ?>
@@ -95,4 +101,41 @@ function habfna_disable_admin_bar()
 	}
 }
 add_action('init', 'habfna_disable_admin_bar', 9);
+
+// enlever le Privé
+function the_title_trim($title) {
+	// Might aswell make use of this function to escape attributes
+	$title = attribute_escape($title);
+	// What to find in the title
+	$findthese = array(
+		'#Protégé:#', // # is just the delimeter
+		'#Privé : #'
+	);
+	// What to replace it with
+	$replacewith = array(
+		'',
+		'' // What to replace private with
+	);
+	// Items replace by array key
+	$title = preg_replace($findthese, $replacewith, $title);
+	return $title;
+}
+add_filter('the_title', 'the_title_trim');
+add_filter('private_title_format', 'blank');
+function blank($title) {
+       return '%s';
+}
+
+// lien vers l'image à l'ajout
+update_option('image_default_link_type','file');
+
+// titre custom
+function custom_bloginfo() {
+	$blogname = get_bloginfo('name');
+	$blogeditedname = substr( $blogname, stripos($blogname, "@"));
+	return $blogeditedname;
+}
+
+
+
 

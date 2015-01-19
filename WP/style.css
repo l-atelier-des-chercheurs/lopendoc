@@ -2,8 +2,39 @@
 Theme Name:         Opendoc
 Theme URI:          https://github.com/sarahgarcin/lopendoc
 Description:
-Version:            0.9
-Author:
+Version:            0.98
+Author:				L'équipe de l'Opendoc
 Author URI:
 
 */
+
+/* couleur de tags = rgb(253, 75, 18)
+
+	*/
+
+
+.topIcons > * {
+}
+
+
+
+
+
+
+.publish-private-post .mode-switcher .icons {
+}
+
+
+
+
+.logged-in .button-right {
+}
+
+.logged-in .button-right .icons {
+}
+
+
+
+
+.post img {
+}

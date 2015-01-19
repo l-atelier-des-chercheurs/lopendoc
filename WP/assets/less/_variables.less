@@ -4,13 +4,12 @@
 @main-sm-columns:       @grid-columns;
 @sidebar-sm-columns:    4;
 
-
 // Brand colors
 // -------------------------
 
-@brand-primary:         #4AFF93;
+@brand-primary:         #F16F2D;
 
-@font-family-sans-serif: "PT Sans";
+@font-family-sans-serif: "Share";
 
 
 // Glyphicons path
@@ -19,7 +18,7 @@
 @icon-font-path:        "../vendor/bootstrap/fonts/";
 
 
-@body-bg:               #ccc;
+@body-bg:               #fff;
 //** Global text color on `<body>`.
 @text-color:            #383838;
 
@@ -28,7 +27,7 @@
 //** Link hover color set via `darken()` function.
 @link-hover-color:      darken(@link-color, 15%);
 
-@grid-columns:              10;
+@grid-columns:              12;
 //** Padding between columns. Gets divided in half for the left and right.
 @grid-gutter-width:         0px;
 
@@ -37,3 +36,30 @@
 @font-size-h2:            floor((@font-size-base * 2)); // ~30px
 @font-size-h3:            ceil((@font-size-base * 1.8)); // ~24px
 @font-size-h4:            ceil((@font-size-base * 1.6)); // ~18px
+
+
+@font-face {
+    font-family: 'Share';
+    src: url('../fonts/Share-Regular-webfont.eot');
+    src: url('../fonts/Share-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Share-Regular-webfont.woff') format('woff'),
+         url('../fonts/Share-Regular-webfont.ttf') format('truetype'),
+         url('../fonts/Share-Regular-webfont.svg#share-regularregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Share';
+    src: url('../fonts/Share-Bold-webfont.eot');
+    src: url('../fonts/Share-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Share-Bold-webfont.woff') format('woff'),
+         url('../fonts/Share-Bold-webfont.ttf') format('truetype'),
+         url('../fonts/Share-Bold-webfont.svg#share-regularregular') format('svg');
+    font-weight: bold;
+    font-style: normal;
+
+}
+
+

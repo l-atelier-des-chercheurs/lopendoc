@@ -1,6 +1,6 @@
 <?php
 /*
-	Page d'accueil : multi projets
+Template Name: Tous les Projets
 */
 ?>
 
@@ -14,8 +14,7 @@
 	 $tax = 'projets';
  	 $tax_args = array(
  	 	 'orderby' => 'id',
- 	 	 'order' => 'DESC',
-//  	 	 'hide_empty' => false
+ 	 	 'order' => 'DESC'
 	 );
 	 $terms = get_terms( $tax, $tax_args);
 	 $count = count($terms);
@@ -32,19 +31,20 @@
 						      )
 						  ),
 					    'post_type'      => 'post', // set the post type to page
-					    'posts_per_page' => 1,
-							'order' => 'DESC',
-							'tag' => 'featured'
+					    'posts_per_page' => 5,
+							'order' => 'DESC'
 						);
 
 						//  assigning variables to the loop
 						$wp_query = new WP_Query($args);
 
+						if ( $wp_query->have_posts() ) {
+
 			?>
 
 			<div class="colonneswrappers">
 				<section  class="colonnes">
-					<header class="page-header">
+					<header class="page-header post">
 							<?php
 							    $term_link = get_term_link($term->slug, $tax);
 							    $term_name = str_replace(', ', "</br>", $term->name);
@@ -53,47 +53,13 @@
 					</header>
 					 <div class="colonnescontent">
 
-						<?php
+						 <?php
 
-							if ( $wp_query->have_posts() ) {
+							// The Loop
+							while ($wp_query->have_posts()) : $wp_query->the_post();
+								get_template_part('templates/content', 'carteHome');
+							endwhile;
 
-								// The Loop
-								while ($wp_query->have_posts()) : $wp_query->the_post();
-									?>
-
-									<div data-post="<?php the_ID(); ?>" <?php post_class(); ?> style="">
-
-									<!--
-										<div class="entry-header">
-											<?php
-									  		the_title( '<h3 class="entry-title">', '</h3>' );
-											?>
-										</div>
-									-->
-
-										<div class="entry-content">
-											<?php the_content(); ?>
-										</div><!-- .entry-content -->
-
-									</div>
-
-									<?php
-								endwhile;
-
-							} else {
-								?>
-
-								<div class="post">
-
-									<div class="entry-content">
-										<p>
-											<small>Aucune description actuellement pour ce projet, pour en ajouter une envoyez un mail à l'adresse mail du projet avec comme sujet <em>Description</em>.</small>
-										</p>
-									</div>
-								</div>
-
-								<?php
-							}
 
 						?>
 					 </div>
@@ -101,6 +67,7 @@
 			 </div>
 			 <?php
 
+						}
 
 							wp_reset_postdata();
 

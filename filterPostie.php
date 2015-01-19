@@ -42,13 +42,15 @@
 /*
 add_filter('postie_post', 'filter_title');
 add_filter('postie_post', 'filter_content');
-add_filter('postie_post', 'add_custom_field');
 add_filter('postie_post', 'auto_tag');
 
 add_filter('postie_filter_email', 'change_email');
 */
+add_filter('postie_post', 'add_custom_field');
 
-
+/*
+	Récupérer le plus après l'arobase
+*/
 add_filter('postie_filter_email2', 'plus_filter', 10, 3);
 
 function plus_filter( $from, $toEmail, $replytoEmail) {
@@ -61,36 +63,21 @@ function plus_filter( $from, $toEmail, $replytoEmail) {
   $fromField = $from;
   $toField = $toEmail;
 
-  $posPlus = strpos($toField, '+') + 1;
+  $posPlus = strpos($toField, '+');
 
   if ( $posPlus !== false ) {
-    $toEmailFromPlus = substr($toField, $posPlus);
+    $toEmailFromPlus = substr($toField, $posPlus +1);
 
     $projectTerm = stristr( $toEmailFromPlus, '@', true );
 
 		$project = $projectTerm;
+	} else {
+
+
 	}
 
   return $fromField;
 }
-
-add_filter('postie_post', 'tax_tag');
-
-function tax_tag($post) {
-	global $project;
-  DebugEcho("step-02");
-  DebugEcho("project " . $project );
-
-  $projectField = array( 'projets' =>  array( $project ) );
-  $post['tax_input'] = $projectField;
-
-  return $post;
-}
-
-
-
-
-
 
 /*
 
@@ -99,42 +86,113 @@ function tax_tag($post) {
 
 */
 
-function sticky_or_not($post,$post_part_to_check,$isTerm) {
+function sticky_or_not( $post, $post_part_to_check, $isTerm) {
 
 	DebugEcho("Check Description sticky");
-  DebugEcho("post[post_part_to_check] " . $post[$post_part_to_check] );
-  DebugEcho("isTerm " . $isTerm );
+	DebugEcho("--> post[post_part_to_check] " . $post[$post_part_to_check] );
+	DebugEcho("--> isTerm " . $isTerm );
 
-	if( strcasecmp($post[$post_part_to_check], $isTerm) == 0 ) {
+	if( stripos($post[$post_part_to_check], $isTerm) !== false ) {
 
 		$post['post_status'] = 'publish';
-		$post['is_sticky'] = 'true';
 
-		DebugEcho("stickied");
+		// A FAIRE : le passer en sticky //////////////////////////////////////////////
+		array_push($post['tags_input'], 'featured');
 
-    DebugEcho(("Post postie_post filter BEFORE"));
-    DebugDump($post);
+		DebugEcho("Published / stickied");
+
+	} else {
+
+		$post['post_status'] = 'private';
+		$post['meta_featured'] = 'false';
+		DebugEcho("Private");
 
 	}
 
+	return $post;
 
-/*
-	foreach ($post[$post_part_to_check] as $key=>$cat_or_tag) {
-		if (term_exists($cat_or_tag, $taxonomy_name)) {
-			wp_set_object_terms( $post['ID'], $cat_or_tag, $taxonomy_name, true );
-			unset($post[$post_part_to_check][$key]);
-		}
-	}
-*/
-		return $post;
 }
+
 function make_sticky_descriptions($post) {
+
 	// Check for categories and use in type
 	$post = sticky_or_not($post,'post_title','Description');
 	return $post;
+
 }
 add_filter('postie_post_before', 'make_sticky_descriptions');
 
+/*
+	Check sujet si contient [projet]
+*/
+
+function check_in_mail( $post, $post_part_to_check, $isTerm) {
+	global $project;
+
+	EchoInfo("Check Description projet (#)");
+  EchoInfo("--> post[post_part_to_check] " . $post[$post_part_to_check] );
+  EchoInfo("--> isTerm " . $isTerm );
+
+  EchoInfo("Found ? " . strpos($post[$post_part_to_check], $isTerm) );
+
+	if( strpos($post[$post_part_to_check], $isTerm) !== false ) {
+
+	  $posCrochet = strpos($post[$post_part_to_check], $isTerm) + 1;
+
+    $toTitreFromCrochet = substr($post[$post_part_to_check], $posCrochet);
+
+    $projectTerm = stristr( $toTitreFromCrochet, '#', true );
+
+    $project = $projectTerm;
+
+		DebugEcho("Trouvé un projet dans le sujet intitulé --- ");
+
+		DebugEcho( $project );
+
+    DebugEcho(("---"));
+
+		$post['post_title'] = str_replace( '#' . $project . '#', '', $post[$post_part_to_check] );
+
+	}
+	return $post;
+}
+
+function check_other_project($post) {
+	// Check for categories and use in type
+	$post = check_in_mail($post,'post_title','#');
+	return $post;
+}
+
+add_filter('postie_post_before', 'check_other_project');
+
+
+
+
+/*
+	Ajouter le terme au post
+*/
+add_filter('postie_post_after', 'tax_tag');
+
+function tax_tag($post) {
+	global $project;
+  DebugEcho("step-02");
+  DebugEcho("project " . $project );
+
+/*
+  $projectField = array( 'projets' =>  array( $project ) );
+  $post['tax_input'] = $projectField;
+*/
+
+	if( strlen( $project ) > 0 ) {
+	  EchoInfo( "Ajout au post " . $post['ID'] );
+	  EchoInfo( "Du projet " . $project );
+	  EchoInfo( "##" . $project . "##" );
+		wp_set_object_terms( $post['ID'], array($project), 'projets');
+	  DebugEcho( "Vérification du post ---" );
+	  DebugEcho( $post );
+	}
+  return $post;
+}
 
 
 

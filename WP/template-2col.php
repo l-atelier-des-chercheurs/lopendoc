@@ -12,7 +12,7 @@ Template Name: 2 col (archives)
 		</div>
 
 		<button class="addPost">
-			<h3>Nouveau post</h3>
+			<h3>+</h3>
 		</button>
 
 
