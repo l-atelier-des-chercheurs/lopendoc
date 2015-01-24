@@ -36,6 +36,211 @@ function ajaxRefreshPage() {
 
 }
 
+postViewRoutine = {
+
+	init: function() {
+
+		// fonctions propres à chaque post (a appliquer si infinite scroll)
+
+		$(".entry-content a>img").each(function() {
+			$this = $(this);
+			$this.closest("a").attr("href", $this.attr("src") ).magnificPopup({type:'image'});
+		});
+
+		$(".publish-private-post").click(function(e) {
+
+			// récupérer l'id du post
+			$this = $(this);
+			$thisPost = $this.siblings(".post");
+			thisID = $thisPost.attr("data-id");
+			thisActionUrl = window.location.href;
+			currentStatus = $thisPost.attr("data-status");
+
+			newStatus = "";
+
+			if( currentStatus === "publish" ) {
+				newStatus = "private";
+			} else {
+				newStatus = "publish";
+			}
+
+			//backup
+	/*
+			  $('<form action="comments.php" method="POST">' +
+			    '<input type="hidden" name="aid" value="' + imgnum + '">' +
+			    '</form>'
+	*/
+
+	/*
+			thisForm = $('<form id="update_post_visibility_bis" name="update_post_visibility" method="post" action="' + thisActionUrl + '">' +
+	        '<input value="' + newStatus + '" name="visibility" />' +
+	        '<input name="post_id" value="' + thisID + '" />' +
+	        '<input type="hidden" name="action" value="update_post_visibility" />' +
+	    '</form>');
+
+	    console.log("thisForm : ");
+	    console.log( thisForm );
+
+			thisForm
+				.submit(function() {
+				});
+	*/
+
+			console.log("Submitted ajax post request");
+			console.log("TO : " + thisActionUrl);
+			console.log("post_id : " + thisID);
+			console.log("action : " + "update_post_visibility");
+			console.log("visibility : " + newStatus);
+
+
+			$thisPost.parents(".postContainer").addClass("is-loading");
+
+	     $.ajax({
+	        type: "POST",
+	        url: thisActionUrl,
+	        data: {
+	             post_id: thisID,
+	             action: "update_post_visibility",
+	             visibility: newStatus,
+	        },
+	        success: function(data)
+	        {
+						console.log("SuccessAjax !");
+						console.log("NewStatus !");
+						console.log( newStatus );
+
+						$thisPost.parents(".postContainer").removeClass("is-loading");
+						$thisPost.attr("data-status", newStatus);
+						$thisPost.siblings(".publish-private-post").attr("data-status", newStatus);
+
+	        }
+	    });
+
+			e.preventDefault();
+
+		});
+
+		///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
+
+		$(".post .button-right .edit-post").click( function(e) {
+
+			e.preventDefault();
+
+			// ouvrir dans un nouvel onglet
+
+			console.log("edit-post click");
+
+			var $thisPost = $(this).parents(".post");
+			var pageLink = $thisPost.attr("data-singleurl");
+
+			if( $thisPost.hasClass("is-edited") ) {
+				// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
+
+				console.log("pageLink " + pageLink);
+				$thisPost.find(".save-modifications").addClass("is-disabled");
+
+				$.get( pageLink, function( data ) {
+					$thisPost.removeClass("is-edited");
+					$data = $(data);
+
+					var $thisContent = $data.find('.post .entry-title-and-content').html();
+
+					console.log( "$thisContent");
+					console.log(  $thisContent );
+
+					$thisPost.find(".entry-title-and-content").empty().append($thisContent);
+
+	      });
+
+			} else {
+
+				// sinon
+				$thisPost.addClass("is-edited");
+				$thisPost.find(".entry-header, .entry-content").remove();
+
+				console.log("pageLink = " + pageLink);
+
+				$thisPost.find(".entry-title-and-content").empty().append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
+
+				/************************** ajouter un bouton "Save" a cote de .button-right .edit-post **************************/
+				// trigger un click sur "Mettre a jour" avant tout
+				var $save_button = $thisPost.find(".save-modifications");
+
+				$save_button.removeClass("is-disabled");
+
+				$save_button.on( "click", function() {
+
+					var $thisPost = $(this).parents(".post");
+					$thisPost.find(".edit-frame").contents().find(".fee-save").click();
+
+
+				});
+
+
+	/*
+				url = pageLink;
+				width = $thisPost.width();
+				height = 400;
+
+		    var leftPosition, topPosition;
+		    //Allow for borders.
+		    leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
+		    //Allow for title and status bars.
+		    topPosition = (window.screen.height / 2) - ((height / 2) + 50);
+		    //Open the window.
+		    window.open(url, "Window2", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
+	*/
+
+			}
+
+			return false;
+
+		});
+
+		///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
+
+		$(".post .button-right .remove-post").click( function(e) {
+
+			e.preventDefault();
+
+			var $thisPost = $(this).parents(".post");
+			thisID = $thisPost.attr("data-id");
+
+			thisActionUrl = window.location.href;
+
+			console.log("thisID " + thisID );
+
+			$thisPost.addClass("is-removing");
+
+			$.ajax({
+			  type: "POST",
+			  url: thisActionUrl,
+			  data: {
+			       post_id: thisID,
+			       action: "remove_post"
+			  },
+			  success: function(data)
+			  {
+					console.log("SuccessAjaxPost!");
+					console.log("Removed post!");
+					console.log(data);
+
+					$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
+
+			  }
+			});
+
+
+			return false;
+
+		});
+
+	// fin postViewRoutine.init();
+	},
+
+};
+
+
 var switchEditionMode = {
 	init: function() {
 
@@ -56,7 +261,7 @@ var switchEditionMode = {
 
 // Use this variable to set up the common and page specific functions. If you
 // rename this variable, you will also need to rename the namespace below.
-Roots = {
+var Roots = {
 
   // All pages
   common: {
@@ -65,198 +270,9 @@ Roots = {
 
 			console.log("edit post ajax");
 
-			$(".entry-content a>img").each(function() {
-				$this = $(this);
-				$this.closest("a").attr("href", $this.attr("src") ).magnificPopup({type:'image'});
-			});
-
-			$(".publish-private-post").click(function(e) {
-
-				// récupérer l'id du post
-				$this = $(this);
-				$thisPost = $this.siblings(".post");
-				thisID = $thisPost.attr("data-id");
-				thisActionUrl = window.location.href;
-				currentStatus = $thisPost.attr("data-status");
-
-				newStatus = "";
-
-				if( currentStatus === "publish" ) {
-					newStatus = "private";
-				} else {
-					newStatus = "publish";
-				}
-
-				//backup
-/*
-				  $('<form action="comments.php" method="POST">' +
-				    '<input type="hidden" name="aid" value="' + imgnum + '">' +
-				    '</form>'
-*/
-
-/*
-				thisForm = $('<form id="update_post_visibility_bis" name="update_post_visibility" method="post" action="' + thisActionUrl + '">' +
-            '<input value="' + newStatus + '" name="visibility" />' +
-            '<input name="post_id" value="' + thisID + '" />' +
-            '<input type="hidden" name="action" value="update_post_visibility" />' +
-        '</form>');
-
-        console.log("thisForm : ");
-        console.log( thisForm );
-
-				thisForm
-					.submit(function() {
-					});
-*/
-
-				console.log("Submitted ajax post request");
-				console.log("TO : " + thisActionUrl);
-				console.log("post_id : " + thisID);
-				console.log("action : " + "update_post_visibility");
-				console.log("visibility : " + newStatus);
+			postViewRoutine.init();
 
 
-				$thisPost.parents(".postContainer").addClass("is-loading");
-
-	       $.ajax({
-	          type: "POST",
-	          url: thisActionUrl,
-	          data: {
-	               post_id: thisID,
-	               action: "update_post_visibility",
-	               visibility: newStatus,
-	          },
-	          success: function(data)
-	          {
-							console.log("SuccessAjax !");
-							console.log("NewStatus !");
-							console.log( newStatus );
-
-							$thisPost.parents(".postContainer").removeClass("is-loading");
-							$thisPost.attr("data-status", newStatus);
-							$thisPost.siblings(".publish-private-post").attr("data-status", newStatus);
-
-	          }
-	      });
-
-				e.preventDefault();
-
-			});
-
-			///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
-
-			$(".post .button-right .edit-post").click( function(e) {
-
-				e.preventDefault();
-
-				// ouvrir dans un nouvel onglet
-
-				console.log("edit-post click");
-
-				var $thisPost = $(this).parents(".post");
-				var pageLink = $thisPost.attr("data-singleurl");
-
-				if( $thisPost.hasClass("is-edited") ) {
-					// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
-
-					console.log("pageLink " + pageLink);
-					$thisPost.find(".save-modifications").addClass("is-disabled");
-
-					$.get( pageLink, function( data ) {
-						$thisPost.removeClass("is-edited");
-						$data = $(data);
-
-						var $thisContent = $data.find('.post .entry-title-and-content').html();
-
-						console.log( "$thisContent");
-						console.log(  $thisContent );
-
-						$thisPost.find(".entry-title-and-content").empty().append($thisContent);
-
-		      });
-
-				} else {
-
-					// sinon
-					$thisPost.addClass("is-edited");
-					$thisPost.find(".entry-header, .entry-content").remove();
-
-					console.log("pageLink = " + pageLink);
-
-					$thisPost.find(".entry-title-and-content").empty().append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
-
-					/************************** ajouter un bouton "Save" a cote de .button-right .edit-post **************************/
-					// trigger un click sur "Mettre a jour" avant tout
-					var $save_button = $thisPost.find(".save-modifications");
-
-					$save_button.removeClass("is-disabled");
-
-					$save_button.on( "click", function() {
-
-						var $thisPost = $(this).parents(".post");
-						$thisPost.find(".edit-frame").contents().find(".fee-save").click();
-
-
-					});
-
-
-/*
-					url = pageLink;
-					width = $thisPost.width();
-					height = 400;
-
-			    var leftPosition, topPosition;
-			    //Allow for borders.
-			    leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
-			    //Allow for title and status bars.
-			    topPosition = (window.screen.height / 2) - ((height / 2) + 50);
-			    //Open the window.
-			    window.open(url, "Window2", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
-*/
-
-				}
-
-				return false;
-
-			});
-
-			///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
-
-			$(".post .button-right .remove-post").click( function(e) {
-
-				e.preventDefault();
-
-				var $thisPost = $(this).parents(".post");
-				thisID = $thisPost.attr("data-id");
-
-				thisActionUrl = window.location.href;
-
-				console.log("thisID " + thisID );
-
-				$thisPost.addClass("is-removing");
-
-				$.ajax({
-				  type: "POST",
-				  url: thisActionUrl,
-				  data: {
-				       post_id: thisID,
-				       action: "remove_post"
-				  },
-				  success: function(data)
-				  {
-						console.log("SuccessAjaxPost!");
-						console.log("Removed post!");
-						console.log(data);
-
-						$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
-
-				  }
-				});
-
-
-				return false;
-
-			});
 
 
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
