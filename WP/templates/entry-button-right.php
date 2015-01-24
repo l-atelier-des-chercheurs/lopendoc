@@ -18,6 +18,21 @@
 	}
 	?>
 
+	<svg class="icons is-disabled save-modifications" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve">
+<g id="fond">
+	<path fill="#FCB421" d="M32.1,63.5c17.2,0,31.2-14,31.2-31.2S49.4,1,32.1,1S0.9,15,0.9,32.2S14.9,63.5,32.1,63.5z"/>
+</g>
+<g id="flc">
+	<g>
+
+			<rect x="9.7" y="34.7" transform="matrix(0.7071 0.7071 -0.7071 0.7071 33.6223 -4.0188)" fill="#FFFFFF" width="23.9" height="7.8"/>
+
+			<rect x="19.1" y="29.9" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 88.3815 30.9903)" fill="#FFFFFF" width="37.4" height="7.8"/>
+	</g>
+</g>
+	</svg>
+
 	<svg class="icons edit-post" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve">
 		<g>

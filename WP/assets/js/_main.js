@@ -160,6 +160,7 @@ Roots = {
 					// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
 
 					console.log("pageLink " + pageLink);
+					$thisPost.find(".save-modifications").addClass("is-disabled");
 
 					$.get( pageLink, function( data ) {
 						$thisPost.removeClass("is-edited");
@@ -183,6 +184,21 @@ Roots = {
 					console.log("pageLink = " + pageLink);
 
 					$thisPost.find(".entry-title-and-content").empty().append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
+
+					/************************** ajouter un bouton "Save" a cote de .button-right .edit-post **************************/
+					// trigger un click sur "Mettre a jour" avant tout
+					var $save_button = $thisPost.find(".save-modifications");
+
+					$save_button.removeClass("is-disabled");
+
+					$save_button.on( "click", function() {
+
+						var $thisPost = $(this).parents(".post");
+						$thisPost.find(".edit-frame").contents().find(".fee-save").click();
+
+
+					});
+
 
 /*
 					url = pageLink;
