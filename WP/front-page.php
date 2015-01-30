@@ -15,7 +15,7 @@
  	 $tax_args = array(
  	 	 'orderby' => 'id',
  	 	 'order' => 'DESC',
-//  	 	 'hide_empty' => false
+ 	 	 'hide_empty' => false
 	 );
 	 $terms = get_terms( $tax, $tax_args);
 	 $count = count($terms);
