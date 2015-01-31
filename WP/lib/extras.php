@@ -45,8 +45,6 @@ function google_font(){
 }
 //add_action( 'wp_enqueue_scripts', 'google_font');
 
-
-
 // Register Custom Taxonomy
 function projet_taxonomy() {
 

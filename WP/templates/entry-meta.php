@@ -1,7 +1,7 @@
 <time class="updated" datetime="<?php echo get_the_time('c'); ?>"><?php echo get_the_date(); ?></time>
 <!-- <p class="byline author vcard"><?php echo __('By', 'roots'); ?> <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" rel="author" class="fn"><?php echo get_the_author(); ?></a></p> -->
 
-<div class="tags">
+<div class="tags is-disabled">
 	<svg class="icons tag-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve">
 	<g>
@@ -28,7 +28,7 @@
 <?php
 	if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) :
 ?>
-<div class="comments">
+<div class="comments is-disabled">
 	<svg class="icons comment-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve">
 	<g>

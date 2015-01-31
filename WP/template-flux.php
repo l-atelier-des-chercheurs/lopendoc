@@ -21,7 +21,6 @@ $getallposts = new WP_Query( array(
 			<h3>+</h3>
 		</button>
 
-
 		<?php
 
 			while ($getallposts->have_posts()) : $getallposts->the_post() ?>

@@ -17,7 +17,6 @@
 (function($) {
 
 
-
 function updateView() {
 
 	$("#rightView").empty();
@@ -26,6 +25,157 @@ function updateView() {
 	$("#leftView").find(".post.publish").each(function() {
 		$(this).clone().appendTo( $("#rightView") );
 	});
+
+}
+
+function replacePostWithIframe( $thisPost, pageLink ) {
+
+	$thisPost.addClass("is-edited");
+	$thisPost.find(".entry-header, .entry-content").remove();
+
+	console.log("pageLink = " + pageLink);
+
+	$thisPost.find(".entry-title-and-content").empty().append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
+
+	/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
+	// trigger un click sur "Mettre a jour" avant tout
+	var $save_button = $thisPost.find(".save-modifications");
+
+	$save_button.removeClass("is-disabled");
+
+	$save_button.on( "click", function() {
+
+		var $thisPost = $(this).parents(".post");
+		$thisPost.find(".edit-frame").contents().find(".fee-save").click();
+
+	});
+
+			/*
+	url = pageLink;
+	width = $thisPost.width();
+	height = 400;
+
+  var leftPosition, topPosition;
+  //Allow for borders.
+  leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
+  //Allow for title and status bars.
+  topPosition = (window.screen.height / 2) - ((height / 2) + 50);
+  //Open the window.
+  window.open(url, "Window2", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
+*/
+
+
+
+}
+
+function replaceiFrameWithPost( $thisPost, pageLink ) {
+
+	$thisPost.find(".save-modifications").addClass("is-disabled");
+
+	$.get( pageLink, function( data ) {
+		$thisPost.removeClass("is-edited");
+		$data = $(data);
+
+		var $thisContent = $data.find('.post .entry-title-and-content').html();
+
+		console.log( "$thisContent");
+		console.log(  $thisContent );
+
+		$thisPost.find(".entry-title-and-content").fadeOut(400).empty().append($thisContent).fadeIn(400);
+
+		$thisPost.find(".entry-content:not(.is-sketch):contains(void setup())").each( function() {
+
+			$this = $(this);
+			$this.addClass("is-sketch");
+
+			// récupérer le sketch, le transformer en canvas
+			textToCanvas( $this );
+
+		});
+
+	});
+
+}
+
+function textToCanvas( $this ) {
+
+	$thisPost = $this.parents(".post");
+	thisPostID = $thisPost.attr("data-id");
+
+	// poulet basquaise aux pâtes
+	sketch = $this.text().replace(/«/g, "\"").replace(/»/g, "\"").replace("void setup() {", "void setup() { noLoop();").replace("void setup(){", "void setup(){ noLoop();");
+
+	//.replace(/<br>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '')
+
+	console.log( sketch );
+
+	//sketch = "void setup() { size(200, 200); } void draw() { background(155); }";
+
+	var processingSketch = $("<script type='application/processing'>" + sketch + "</script><canvas id=" + thisPostID + "></canvas>");
+
+
+	//var newCanvas = document.createElement('canvas');
+
+	//$this.prepend("<script src='https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js'></script>");
+
+	$this.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
+
+	$thisCode = $this.find(".thisCode");
+	$thisCode.html( $thisCode.text() );
+
+	SyntaxHighlighter.all();
+
+/*
+<script src="sh/shCore.js"></script>
+<link rel=stylesheet href="sh/shCore.css">
+<script src="sh/shBrushProcessing.js"></script>
+<link rel=stylesheet href="sh/shProcessing2Theme.css">
+<link rel=stylesheet href="sh/customStyleTricodeurInitiation.css">
+<script>SyntaxHighlighter.all();</script>
+*/
+
+	$thisCode.before( processingSketch );
+
+
+  var scripts = document.getElementsByTagName("script");
+  var canvasArray = Array.prototype.slice.call(document.getElementsByTagName("canvas"));
+  var canvas;
+  for (var i = 0, j = 0; i < scripts.length; i++) {
+    if (scripts[i].type === "application/processing") {
+      var src = scripts[i].getAttribute("target");
+      if (src && src.indexOf("#") > -1) {
+        canvas = document.getElementById(src.substr(src.indexOf("#") + 1));
+        if (canvas) {
+          new Processing(canvas, scripts[i].text);
+          for (var k = 0; k< canvasArray.length; k++)
+          {
+            if (canvasArray[k] === canvas) {
+              // remove the canvas from the array so we dont override it in the else
+              canvasArray.splice(k,1);
+            }
+          }
+        }
+      } else {
+        if (canvasArray.length >= j) {
+          new Processing(canvasArray[j], scripts[i].text);
+        }
+        j++;
+      }
+    }
+  }
+
+	//Processing.getInstanceById(canvas).noLoop();
+	$this.find("canvas#" + thisPostID).hover(function() {
+		var thisID = this.id;
+		console.log(thisID);
+		Processing.getInstanceById(thisID).loop();
+	}, function() {
+		var thisID = this.id;
+		Processing.getInstanceById(thisID).noLoop();
+	});
+
+
+
 
 
 }
@@ -40,200 +190,190 @@ postViewRoutine = {
 
 	init: function() {
 
-		// fonctions propres à chaque post (a appliquer si infinite scroll)
+		// fonctions propres à chaque post (a appliquer si infinite scroll), à ne pas appliquer si iframe
 
-		$(".entry-content a>img").each(function() {
-			$this = $(this);
-			$this.closest("a").attr("href", $this.attr("src") ).magnificPopup({type:'image'});
-		});
+		if( !$("body").hasClass("iframe") ) {
 
-		$(".publish-private-post").click(function(e) {
+			$(".entry-content a>img").each(function() {
+				$this = $(this);
+				$this.closest("a").attr("href", $this.attr("src") ).magnificPopup({type:'image'});
+			});
 
-			// récupérer l'id du post
-			$this = $(this);
-			$thisPost = $this.siblings(".post");
-			thisID = $thisPost.attr("data-id");
-			thisActionUrl = window.location.href;
-			currentStatus = $thisPost.attr("data-status");
+			$(".publish-private-post").click(function(e) {
 
-			newStatus = "";
+				// récupérer l'id du post
+				$this = $(this);
+				$thisPost = $this.siblings(".post");
+				thisID = $thisPost.attr("data-id");
+				thisActionUrl = window.location.href;
+				currentStatus = $thisPost.attr("data-status");
 
-			if( currentStatus === "publish" ) {
-				newStatus = "private";
-			} else {
-				newStatus = "publish";
-			}
+				newStatus = "";
 
-			//backup
-	/*
-			  $('<form action="comments.php" method="POST">' +
-			    '<input type="hidden" name="aid" value="' + imgnum + '">' +
-			    '</form>'
-	*/
+				if( currentStatus === "publish" ) {
+					newStatus = "private";
+				} else {
+					newStatus = "publish";
+				}
 
-	/*
-			thisForm = $('<form id="update_post_visibility_bis" name="update_post_visibility" method="post" action="' + thisActionUrl + '">' +
-	        '<input value="' + newStatus + '" name="visibility" />' +
-	        '<input name="post_id" value="' + thisID + '" />' +
-	        '<input type="hidden" name="action" value="update_post_visibility" />' +
-	    '</form>');
+				//backup
+		/*
+				  $('<form action="comments.php" method="POST">' +
+				    '<input type="hidden" name="aid" value="' + imgnum + '">' +
+				    '</form>'
+		*/
 
-	    console.log("thisForm : ");
-	    console.log( thisForm );
+		/*
+				thisForm = $('<form id="update_post_visibility_bis" name="update_post_visibility" method="post" action="' + thisActionUrl + '">' +
+		        '<input value="' + newStatus + '" name="visibility" />' +
+		        '<input name="post_id" value="' + thisID + '" />' +
+		        '<input type="hidden" name="action" value="update_post_visibility" />' +
+		    '</form>');
 
-			thisForm
-				.submit(function() {
+		    console.log("thisForm : ");
+		    console.log( thisForm );
+
+				thisForm
+					.submit(function() {
+					});
+		*/
+
+				console.log("Submitted ajax post request");
+				console.log("TO : " + thisActionUrl);
+				console.log("post_id : " + thisID);
+				console.log("action : " + "update_post_visibility");
+				console.log("visibility : " + newStatus);
+
+
+				$thisPost.parents(".postContainer").addClass("is-loading");
+
+		     $.ajax({
+		        type: "POST",
+		        url: thisActionUrl,
+		        data: {
+		             post_id: thisID,
+		             action: "update_post_visibility",
+		             visibility: newStatus,
+		        },
+		        success: function(data)
+		        {
+							console.log("SuccessAjax !");
+							console.log("NewStatus !");
+							console.log( newStatus );
+
+							$thisPost.parents(".postContainer").removeClass("is-loading");
+							$thisPost.attr("data-status", newStatus);
+							$thisPost.siblings(".publish-private-post").attr("data-status", newStatus);
+
+		        }
+		    });
+
+				e.preventDefault();
+
+			});
+
+			///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
+
+			$(".post .button-right .edit-post").click( function(e) {
+
+				e.preventDefault();
+
+				// ouvrir dans un nouvel onglet
+
+				console.log("edit-post click");
+
+				var $thisPost = $(this).parents(".post");
+				var pageLink = $thisPost.attr("data-singleurl");
+
+				if( $thisPost.hasClass("is-edited") ) {
+					// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
+					replaceiFrameWithPost( $thisPost, pageLink );
+				} else {
+
+					// sinon
+					replacePostWithIframe( $thisPost, pageLink );
+
+
+				}
+
+				return false;
+
+			});
+
+			///////////////////////////////////////////////// click sur supprimer /////////////////////////////////////
+
+			$(".post .button-right .remove-post").click( function(e) {
+
+				e.preventDefault();
+
+				var $thisPost = $(this).parents(".post");
+				thisID = $thisPost.attr("data-id");
+
+				thisActionUrl = window.location.href;
+
+				console.log("thisID " + thisID );
+
+				$thisPost.addClass("is-removing");
+
+				$.ajax({
+				  type: "POST",
+				  url: thisActionUrl,
+				  data: {
+				       post_id: thisID,
+				       action: "remove_post"
+				  },
+				  success: function(data)
+				  {
+						console.log("SuccessAjaxPost!");
+						console.log("Removed post!");
+						console.log(data);
+
+						$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
+
+				  }
 				});
-	*/
-
-			console.log("Submitted ajax post request");
-			console.log("TO : " + thisActionUrl);
-			console.log("post_id : " + thisID);
-			console.log("action : " + "update_post_visibility");
-			console.log("visibility : " + newStatus);
 
 
-			$thisPost.parents(".postContainer").addClass("is-loading");
+				return false;
 
-	     $.ajax({
-	        type: "POST",
-	        url: thisActionUrl,
-	        data: {
-	             post_id: thisID,
-	             action: "update_post_visibility",
-	             visibility: newStatus,
-	        },
-	        success: function(data)
-	        {
-						console.log("SuccessAjax !");
-						console.log("NewStatus !");
-						console.log( newStatus );
-
-						$thisPost.parents(".postContainer").removeClass("is-loading");
-						$thisPost.attr("data-status", newStatus);
-						$thisPost.siblings(".publish-private-post").attr("data-status", newStatus);
-
-	        }
-	    });
-
-			e.preventDefault();
-
-		});
-
-		///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
-
-		$(".post .button-right .edit-post").click( function(e) {
-
-			e.preventDefault();
-
-			// ouvrir dans un nouvel onglet
-
-			console.log("edit-post click");
-
-			var $thisPost = $(this).parents(".post");
-			var pageLink = $thisPost.attr("data-singleurl");
-
-			if( $thisPost.hasClass("is-edited") ) {
-				// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
-
-				console.log("pageLink " + pageLink);
-				$thisPost.find(".save-modifications").addClass("is-disabled");
-
-				$.get( pageLink, function( data ) {
-					$thisPost.removeClass("is-edited");
-					$data = $(data);
-
-					var $thisContent = $data.find('.post .entry-title-and-content').html();
-
-					console.log( "$thisContent");
-					console.log(  $thisContent );
-
-					$thisPost.find(".entry-title-and-content").empty().append($thisContent);
-
-	      });
-
-			} else {
-
-				// sinon
-				$thisPost.addClass("is-edited");
-				$thisPost.find(".entry-header, .entry-content").remove();
-
-				console.log("pageLink = " + pageLink);
-
-				$thisPost.find(".entry-title-and-content").empty().append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
-
-				/************************** ajouter un bouton "Save" a cote de .button-right .edit-post **************************/
-				// trigger un click sur "Mettre a jour" avant tout
-				var $save_button = $thisPost.find(".save-modifications");
-
-				$save_button.removeClass("is-disabled");
-
-				$save_button.on( "click", function() {
-
-					var $thisPost = $(this).parents(".post");
-					$thisPost.find(".edit-frame").contents().find(".fee-save").click();
-
-
-				});
-
-
-	/*
-				url = pageLink;
-				width = $thisPost.width();
-				height = 400;
-
-		    var leftPosition, topPosition;
-		    //Allow for borders.
-		    leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
-		    //Allow for title and status bars.
-		    topPosition = (window.screen.height / 2) - ((height / 2) + 50);
-		    //Open the window.
-		    window.open(url, "Window2", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
-	*/
-
-			}
-
-			return false;
-
-		});
-
-		///////////////////////////////////////////////// click sur éditer /////////////////////////////////////
-
-		$(".post .button-right .remove-post").click( function(e) {
-
-			e.preventDefault();
-
-			var $thisPost = $(this).parents(".post");
-			thisID = $thisPost.attr("data-id");
-
-			thisActionUrl = window.location.href;
-
-			console.log("thisID " + thisID );
-
-			$thisPost.addClass("is-removing");
-
-			$.ajax({
-			  type: "POST",
-			  url: thisActionUrl,
-			  data: {
-			       post_id: thisID,
-			       action: "remove_post"
-			  },
-			  success: function(data)
-			  {
-					console.log("SuccessAjaxPost!");
-					console.log("Removed post!");
-					console.log(data);
-
-					$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
-
-			  }
 			});
 
 
-			return false;
+			console.log( '$(".post .entry-content:contains(void setup())").length = ' + $(".post .entry-content:contains(void setup())").length );
 
-		});
+			// si y a besoin de pjs
+			if( $(".post .entry-content:contains(void setup())").length > 0 ) {
+
+			  var scriptSrc = '//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js';
+
+				var script = document.createElement('script');
+				script.src = scriptSrc;
+
+				script.onload = function() {
+
+					$(".post .entry-content:not(.is-sketch):contains(void setup())").each( function() {
+
+						$this = $(this);
+						$this.addClass("is-sketch");
+
+						// récupérer le sketch, le transformer en canvas
+
+						textToCanvas( $this );
+
+					});
+
+				};
+
+				var head = document.getElementsByTagName('head')[0];
+				head.appendChild(script);
+
+
+				// append SyntaxHighlighter
+
+
+			}
+
+		} // fin 'si pas iframe'
 
 	// fin postViewRoutine.init();
 	},
@@ -292,6 +432,10 @@ var Roots = {
 			$(".refresh-postie").click(function() {
 
 				$this = $(this);
+
+				if( $this.find(".results").length > 0 ) {
+					return false;
+				}
 
 				$this.addClass("is-loading");
 
