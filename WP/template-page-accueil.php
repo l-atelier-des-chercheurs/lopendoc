@@ -1,6 +1,6 @@
 <?php
 /*
-	Page d'accueil : multi projets
+Template Name: Accueil avec cartes
 */
 ?>
 

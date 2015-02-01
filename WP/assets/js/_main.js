@@ -121,7 +121,7 @@ function textToCanvas( $this ) {
 	$this.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
 
 	$thisCode = $this.find(".thisCode");
-	$thisCode.html( $thisCode.text() );
+	$thisCode.html( $thisCode.text().replace(/«/g, "\"").replace(/»/g, "\"") );
 
 	SyntaxHighlighter.all();
 
@@ -480,7 +480,7 @@ var Roots = {
 							// récupérer le nombre de mails parsés
 							$this.find(".results").remove();
 							if ( countNewContent > 0 ) {
-								$this.append(".results").html( countNewContent + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a>");
+								$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
 							}
 
 	          }
