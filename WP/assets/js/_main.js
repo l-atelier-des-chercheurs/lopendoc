@@ -17,17 +17,6 @@
 (function($) {
 
 
-function updateView() {
-
-	$("#rightView").empty();
-
-	var postContent = '';
-	$("#leftView").find(".post.publish").each(function() {
-		$(this).clone().appendTo( $("#rightView") );
-	});
-
-}
-
 function replacePostWithIframe( $thisPost, pageLink ) {
 
 	$thisPost.addClass("is-edited");
@@ -83,13 +72,15 @@ function replaceiFrameWithPost( $thisPost, pageLink ) {
 
 		$thisPost.find(".entry-title-and-content").fadeOut(400).empty().append($thisContent).fadeIn(400);
 
-		$thisPost.find(".entry-content:not(.is-sketch):contains(void setup())").each( function() {
+		console.log( "found " + $thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").length + " canvas");
+		$thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").each( function() {
 
 			$this = $(this);
 			$this.addClass("is-sketch");
 
 			// récupérer le sketch, le transformer en canvas
 			textToCanvas( $this );
+
 
 		});
 
@@ -103,7 +94,7 @@ function textToCanvas( $this ) {
 	thisPostID = $thisPost.attr("data-id");
 
 	// poulet basquaise aux pâtes
-	sketch = $this.text().replace(/«/g, "\"").replace(/»/g, "\"").replace("void setup() {", "void setup() { noLoop();").replace("void setup(){", "void setup(){ noLoop();");
+	sketch = $this.text().replace(/«/g, "\"").replace(/»/g, "\"").replace("void setup() {", "void setup() { noLoop();").replace("void setup(){", "void setup(){ noLoop();").replace("void setup () {", "void setup(){ noLoop();").replace("void setup (){", "void setup(){ noLoop();");
 
 	//.replace(/<br>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '')
 
@@ -342,7 +333,7 @@ postViewRoutine = {
 			console.log( '$(".post .entry-content:contains(void setup())").length = ' + $(".post .entry-content:contains(void setup())").length );
 
 			// si y a besoin de pjs
-			if( $(".post .entry-content:contains(void setup())").length > 0 ) {
+			if( $(".post .entry-content:contains(void setup)").length > 0 ) {
 
 			  var scriptSrc = '//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js';
 
@@ -351,7 +342,7 @@ postViewRoutine = {
 
 				script.onload = function() {
 
-					$(".post .entry-content:not(.is-sketch):contains(void setup())").each( function() {
+					$(".post .entry-content:not(.is-sketch):contains(void setup)").each( function() {
 
 						$this = $(this);
 						$this.addClass("is-sketch");
@@ -434,6 +425,7 @@ var Roots = {
 				$this = $(this);
 
 				if( $this.find(".results").length > 0 ) {
+					location.reload(true);
 					return false;
 				}
 
@@ -459,6 +451,7 @@ var Roots = {
 							var projectTerm = $("article.taxProj").attr("data-term");
 
 							var countNewContent = 0;
+							var countNewContentForProject = 0;
 
 							while ( data.search("##") !== -1 ) {
 								project = data.substring( data.indexOf("##")+2 );
@@ -467,10 +460,12 @@ var Roots = {
 								data = project.substring( project.indexOf("##")+2 );
 
 								if( projectName === projectTerm ) {
+									countNewContentForProject++;
+								} else {
 									countNewContent++;
 								}
 
-								console.log ( "project gotten = " + project);
+								//console.log ( "project gotten = " + project);
 							}
 
 
@@ -478,9 +473,18 @@ var Roots = {
 							$this.removeClass("is-loading");
 
 							// récupérer le nombre de mails parsés
-							$this.find(".results").remove();
 							if ( countNewContent > 0 ) {
-								$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+
+								$this.empty();
+
+								if( countNewContentForProject > 0 ) {
+									$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+								} else {
+
+									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+
+								}
+
 							}
 
 	          }

@@ -161,24 +161,47 @@
 
 	/*********************************************************** CONTENUS *********************/
 
-	while (have_posts()) : the_post();
-	 	$featured =  has_tag('featured');
- 		if( $featured == true ) {
-			continue;
-		}
+	$args = array(
+    'tax_query'         => array(
+        'relation'      => 'AND',
+        array(
+            'taxonomy'  => $tax,
+            'field'     => 'slug',
+            'terms'     => $term,
+        ),
+    ),
+    'post_type'      => 'post', // set the post type to page
+    'posts_per_page' => -1,
+		'order' => 'DESC',
+	);
 
-		get_template_part('templates/content', 'carte');
+	$new_wp_query = new WP_Query($args);
 
-	endwhile;
+	if ( $new_wp_query->have_posts() ) {
 
-	?>
+		// The Loop
+		while ($new_wp_query->have_posts()) : $new_wp_query->the_post();
 
-	  <nav class="post-nav">
-	    <ul class="pager">
-	      <li class="previous"><?php next_posts_link(__('&larr; Older posts', 'roots')); ?></li>
-	      <li class="next"><?php previous_posts_link(__('Newer posts &rarr;', 'roots')); ?></li>
-	    </ul>
-	  </nav>
+		 	$featured =  has_tag('featured');
+	 		if( $featured == true ) {
+				continue;
+			}
+
+			get_template_part('templates/content', 'carte');
+
+		endwhile;
+
+		?>
+		<?php if ($new_wp_query->max_num_pages > 1) : ?>
+		  <nav class="post-nav">
+		    <ul class="pager">
+		      <li class="previous"><?php next_posts_link(__('&larr; Older posts', 'roots')); ?></li>
+		      <li class="next"><?php previous_posts_link(__('Newer posts &rarr;', 'roots')); ?></li>
+		    </ul>
+		  </nav>
+		<?php endif;
+	}
+?>
 
 
 </article>

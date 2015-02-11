@@ -135,5 +135,37 @@ function custom_bloginfo() {
 }
 
 
+// disable on pages
+function front_editor_disable() {
+  global $wp_query;
+
+  if ( is_page() ) {
+    return true;
+   }
+}
+add_filter('front_end_editor_disable', 'front_editor_disable');
 
 
+// project color
+$new_general_setting = new new_general_setting();
+
+class new_general_setting {
+    function new_general_setting( ) {
+        add_action( 'admin_init' , array( &$this , 'register_fields' ) );
+    }
+    function register_fields() {
+        register_setting( 'general', 'primary_color', 'esc_attr' );
+        add_settings_field('primary_color', '<label for="primary_color">'.__('Couleur primaire' , 'primary_color' ).'</label>' , array(&$this, 'fields_html') , 'general' );
+
+        register_setting( 'general', 'secondary_color', 'esc_attr' );
+        add_settings_field('secondary_color', '<label for="secondary_color">'.__('Couleur secondaire' , 'secondary_color' ).'</label>' , array(&$this, 'fields_html2') , 'general' );
+    }
+    function fields_html() {
+        $value1 = get_option( 'primary_color', '' );
+        echo '<input type="text" id="primary_color" name="primary_color" value="' . $value1 . '" />';
+    }
+    function fields_html2() {
+        $value2 = get_option( 'secondary_color', '' );
+        echo '<input type="text" id="secondary_color" name="secondary_color" value="' . $value2 . '" />';
+		}
+}

@@ -10,6 +10,12 @@ Template Name: Accueil avec cartes
 			<h1>Les Projets</h1>
 		</div>
 
+		<div class="topIcons">
+			<div class="refresh-postie">
+				Rafraîchir
+			</div>
+		</div>
+
  <?php
 	 $tax = 'projets';
  	 $tax_args = array(

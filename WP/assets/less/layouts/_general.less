@@ -19,6 +19,8 @@ a:hover {
 	text-decoration: none;
 }
 
+
+
 hr {
 	border-top: 1px solid #ddd;
 }
@@ -35,7 +37,7 @@ body {
 
 .navbar-default {
 
-	background-color: transparent;
+	background-color: #fff;
 	padding-top: 20px;
 	padding-bottom: 20px;
 	margin-bottom: 0;
@@ -91,7 +93,7 @@ body {
 
 
 /*******************************************************************
-	MAIN
+	COMMUN à tous les elements
 *********************************************************************/
 
 .main {
@@ -116,6 +118,27 @@ body {
 	margin: auto;
 }
 
+.topIcons	> * {
+	cursor: pointer;
+	display: inline-block;
+	padding: 4px 2rem;
+	background-color: #fff;
+	transition: all .4s;
+
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.refresh-postie {
+
+	&.is-loading {
+		background-color: rgb(235, 44, 55);
+		color: white;
+	}
+}
+
+
+
 
 /*******************************************************************
 	HOME / wideCol
@@ -123,13 +146,19 @@ body {
 
 .page-template-template-page-accueil {
 
-	font-size: 0;
-
 	.colTitle {
 		padding: 2rem;
 		margin-left: 1rem;
 
 	}
+
+	.topIcons {
+		padding: 2rem 0;
+		margin-left: 1rem;
+		font-size: 14px;
+
+	}
+
 
 	.colonneswrappers {
 
@@ -137,11 +166,11 @@ body {
 		font-size: 14px;
 
 
-		display: inline-block;
+		float: left;
 		vertical-align: top;
 
 		max-height: 600px;
-		overflow: scroll;
+		overflow: hidden;
 
 		margin-right: 1rem;
 		margin-left: 1rem;
@@ -207,22 +236,6 @@ body {
 		margin-left: 29.2%;
 	}
 
-
-	.topIcons	> * {
-		cursor: pointer;
-		display: inline-block;
-		padding: 4px 2rem;
-		background-color: #eee;
-		transition: all .4s;
-	}
-
-	.refresh-postie {
-
-		&.is-loading {
-			background-color: rgb(235, 44, 55);
-			color: white;
-		}
-	}
 
 	.colTitle h1 {
 		.make-sm-column(9);
@@ -808,6 +821,8 @@ body {
 
 .iframe.single-post {
 
+	background-color: #fff;
+
 	.main {
 		margin-bottom: 80px;
 	}
@@ -838,6 +853,10 @@ body {
 		margin:0;
 		border: none;
 
+		.entry-title {
+			width: 80%;
+
+		}
 	}
 
 	.sidebar {
@@ -961,7 +980,7 @@ body {
 	box-shadow: 1px 1px 10px -1px #656565;
 */
 
-	font-size: 0.8em;
+	font-size: 12px;
 
 	h3 {
 		font-size: 1em;
