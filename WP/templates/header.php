@@ -1,5 +1,5 @@
-<header class="banner navbar navbar-default navbar-static-top" role="banner" style="">
-  <div class="container">
+<header class="banner navbar navbar-default navbar-fixed-top" role="banner" style="">
+  <div class="navbar-container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="sr-only">Toggle navigation</span>
@@ -47,17 +47,50 @@
            </g>
         </svg>
         <div class="lopendocInstance">
-			<?php echo custom_bloginfo(); ?>
+					<?php echo custom_bloginfo(); ?>
         </div>
       </a>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">
+
+			<div class="actionsContainer">
+				<ul class="action-button actions">
+					<li class="button switch-edition">
+						Mode édition
+					</li>
+					<li class="button refresh-postie">
+						Rafraîchir
+					</li>
+
+				<?php
+					if ( !is_user_logged_in() ) {
+						?>
+					<li class="button login-field">
+						Inscription / Connexion
+					</li>
+				<?php
+					} else {
+				?>
+					<li class="button deconnexion-field">
+						Déconnexion
+					</li>
+
+				<?php
+					}
+				?>
+
+
+				</ul>
+
+<!--
       <?php
         if (has_nav_menu('primary_navigation')) :
           wp_nav_menu(array('theme_location' => 'primary_navigation', 'menu_class' => 'nav navbar-nav'));
         endif;
       ?>
+-->
+			</div>
     </nav>
   </div>
 </header>

@@ -3,19 +3,6 @@
 	$tax = get_query_var( 'taxonomy' );
 	$term = get_query_var( 'term' );
 
-?>
-
-<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
-
-		<div class='colTitle'>
-		  <h1>
-		    <?php echo roots_title(); ?>
-		  </h1>
-		</div>
-
-
-	<?php
-
 	// si requête POST
   if ('POST' === $_SERVER['REQUEST_METHOD']
       && ! empty($_POST['action'])
@@ -45,30 +32,13 @@
   	} else
 	  if ( $_POST['action'] === 'remove_post' ) {
 			wp_trash_post( $post['ID'] );
+  	} else
+	  if ( $_POST['action'] === 'set_taxonomy' ) {
+			wp_set_object_terms( $post['ID'], array($term), 'projets');
   	}
 
   }
 
-
-
-  if ( is_user_logged_in() ) {
-
-			?>
-
-		<div class="topIcons">
-			<div class="add-post">
-				Ajouter un post
-			</div>
-
-			<div class="switch-edition">
-				Mode édition
-			</div>
-			<div class="refresh-postie">
-				Rafraîchir
-			</div>
-		</div>
-		<?php
-	}
 
 	$args = array(
     'tax_query'         => array(
@@ -126,7 +96,13 @@
 								<header class="entry-header">
 
 								<?php
-									the_title( '<h2 class="entry-title">', '</h2>' );
+									// est Description donc pas d'intérêt
+									//the_title( '<h2 class="entry-title">', '</h2>' );
+
+									echo '<h2 class="entry-title">';
+									echo roots_title( );
+									echo '</h2>';
+
 								?>
 
 								</header><!-- .entry-header -->
@@ -156,8 +132,31 @@
 	}
 
 	wp_reset_query();
+?>
 
-	echo "<hr>";
+	<hr>
+	<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
+
+<?php
+  if ( is_user_logged_in() ) {
+
+			?>
+
+		<div class="topIcons">
+			<div class="button add-post">
+				Ajouter un post
+			</div>
+<!--
+			<div class="switch-edition">
+				Mode édition
+			</div>
+			<div class="refresh-postie">
+				Rafraîchir
+			</div>
+-->
+		</div>
+		<?php
+	}
 
 	/*********************************************************** CONTENUS *********************/
 
@@ -201,6 +200,9 @@
 		  </nav>
 		<?php endif;
 	}
+
+
+
 ?>
 
 

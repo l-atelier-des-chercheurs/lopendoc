@@ -104,11 +104,6 @@ function textToCanvas( $this ) {
 
 	var processingSketch = $("<script type='application/processing'>" + sketch + "</script><canvas id=" + thisPostID + "></canvas>");
 
-
-	//var newCanvas = document.createElement('canvas');
-
-	//$this.prepend("<script src='https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js'></script>");
-
 	$this.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
 
 	$thisCode = $this.find(".thisCode");
@@ -164,24 +159,217 @@ function textToCanvas( $this ) {
 		var thisID = this.id;
 		Processing.getInstanceById(thisID).noLoop();
 	});
+}
+
+function animateLogo() {
+
+	$(".navbar-brand svg").find("rect,circle,polyline,line,path").velocity({
+			scale: 0
+		}, {
+    	duration: 0,
+		});
+
+	$(".navbar-brand svg").velocity({ opacity: 1} );
+	$(".navbar-brand svg").find("rect,circle,polyline,line,path").each(function(i) {
+		$(this).delay(i*20).velocity({
+			scale: 1
+		}, {
+    	duration: 1200,
+    	easing: "spring"
+		});
+	});
+
+}
 
 
+function adjustMainMargintop() {
+	$(".main").css("margin-top", $(".navbar-default").height() );
 
+}
 
+function makeLinksBlank() {
 
+	$(".entry-content a").each( function() {
+		var attr = $(this).attr('target');
+		// For some browsers, `attr` is undefined; for others,
+		// `attr` is false.  Check for both.
+		if (typeof attr !== typeof undefined && attr !== false) {
+		} else {
+			$(this).attr("target","_blank");
+		}
+	});
 }
 
 function ajaxRefreshPage() {
-
 	$("body").addClass("is-loading");
+}
+
+function urlParam(name, url) {
+    if (!url) {
+     url = window.location.href;
+    }
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+    if (!results) {
+        return undefined;
+    }
+    return results[1] || undefined;
+}
+
+function newPost() {
+
+	$("body").addClass("is-overlaid");
+
+	// de fee-adminbar.js
+	wp.ajax.post( 'fee_new', {
+		post_type: 'post',
+		nonce: fee.nonce
+	} ).done( function( url ) {
+
+		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newpost" style="border:0px;width:100%;height:100%;"></iframe>';
+		fillPopOver( iframeAvecLien, $(".button.add-post"), 900, 400);
+		$(".popover").addClass("is-loading");
+
+		// lui attribuer le bon projet
+		var thisActionUrl = window.location.href;
+		var thisID = urlParam('p', url);
+		console.log( "thisID : " + thisID);
+
+     $.ajax({
+        type: "POST",
+        url: thisActionUrl,
+        data: {
+             post_id: thisID,
+             action: "set_taxonomy"
+        },
+        success: function(data)
+        {
+			     $.ajax({
+			        type: "POST",
+			        url: thisActionUrl,
+			        data: {
+			             post_id: thisID,
+			             action: "update_post_visibility",
+			             visibility: "private",
+			        },
+			        success: function(data)
+			        {
+								$(".popover").removeClass("is-loading");
+			        }
+			    });
+
+        }
+    });
+
+	} );
+}
+
+function loginField() {
+
+	$("body").addClass("is-overlaid");
+
+	var loginWindow = $(".login").clone(true);
+
+	fillPopOver( loginWindow, $(".button.login-field"), 300, 300 );
+
+	$(".popover").addClass("is-loading");
+
+	$(".popover").removeClass("is-loading");
 
 }
+
+
+function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
+	var $popover = $(".popover");
+	$popover.html( content);
+
+	$popover.append('<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div>');
+
+	$popover.addClass("is-visible");
+
+	var button = thisbutton;
+	var maxQuickWidth = 900;
+
+	var topSelected = button.offset().top - $(window).scrollTop(),
+	leftSelected = button.offset().left,
+	widthSelected = button.width(),
+	heightSelected = button.height(),
+	windowWidth = $(window).width(),
+	windowHeight = $(window).height(),
+	finalLeft = (windowWidth - finalWidth)/2,
+	finalTop = (windowHeight - finalHeight)/2,
+	quickViewWidth = ( windowWidth * 0.8 < maxQuickWidth ) ? windowWidth * 0.8 : maxQuickWidth ,
+	quickViewLeft = (windowWidth - quickViewWidth)/2;
+
+	$('.popover').css({
+	    "top": topSelected,
+	    "left": leftSelected,
+	    "width": widthSelected,
+	    "height": heightSelected
+	}).velocity({
+		//animate the quick view: animate its width and center it in the viewport
+		//during this animation, only the slider button is visible
+	    'top': finalTop+ 'px',
+	    'left': finalLeft+'px',
+	    'width': finalWidth+'px',
+	    'height': finalHeight+'px'
+	}, 1000, [ 400, 0 ], function(){
+		//animate the quick view: animate its width to the final value
+/*
+		$('.popover').addClass('animate-width').velocity({
+			'left': quickViewLeft+'px',
+	    	'width': quickViewWidth+'px',
+		}, 300, 'ease' ,function(){
+			//show quick view content
+//					$('.cd-quick-view').addClass('add-content');
+		});
+*/
+	}).addClass('is-visible');
+
+	$("body").on('click', function(event){
+		if( $(event.target).is('.close-panel') || $(event.target).is('body.is-overlaid')) {
+			closePopover();
+		}
+	});
+	$(document).keyup(function(event){
+  	if(event.which === '27'){
+			closePopover();
+		}
+	});
+}
+
+
+
+function closePopover() {
+	$("body").removeClass("is-overlaid");
+	$(".popover").removeClass("is-visible").empty();
+
+}
+
+fixedNav = {
+
+	init: function() {
+
+
+
+	},
+
+	update: function() {
+
+
+
+
+
+	}
+};
+
 
 postViewRoutine = {
 
 	init: function() {
 
 		// fonctions propres à chaque post (a appliquer si infinite scroll), à ne pas appliquer si iframe
+
+		makeLinksBlank();
 
 		if( !$("body").hasClass("iframe") ) {
 
@@ -375,9 +563,6 @@ postViewRoutine = {
 var switchEditionMode = {
 	init: function() {
 
-
-
-
 	},
 
 	setSwitch: function() {
@@ -403,20 +588,23 @@ var Roots = {
 
 			postViewRoutine.init();
 
-
-
+			animateLogo();
+			adjustMainMargintop();
 
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 
 			$(".add-post").click(function() {
-				$("#wp-admin-bar-new-post .ab-item").trigger("click");
+
+				// générer la bonne url, remplir le pop-over avec ce contenu quand il sera dispo
+				var newPostURL = newPost();
+
+				// proposer de rafraichir la page pour valider
+
 			});
 
 			///////////////////////////////////////////////// passer en mode édition /////////////////////////////////////////////////
 			$(".switch-edition").click(function() {
-
 				switchEditionMode.setSwitch();
-
 			});
 
 			///////////////////////////////////////////////// rafraichir postie /////////////////////////////////////////////////
@@ -459,13 +647,14 @@ var Roots = {
 
 								data = project.substring( project.indexOf("##")+2 );
 
-								if( projectName === projectTerm ) {
+								if( projectName.toLowerCase() === projectTerm.toLowerCase() ) {
 									countNewContentForProject++;
+									countNewContent++;
 								} else {
 									countNewContent++;
 								}
 
-								//console.log ( "project gotten = " + project);
+								console.log ( "project gotten = " + projectName);
 							}
 
 
@@ -481,7 +670,10 @@ var Roots = {
 									$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
 								} else {
 
-									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+									setTimeout( function() {
+										$this.empty().text("Rafraîchir");
+									}, 2000);
 
 								}
 
@@ -491,6 +683,21 @@ var Roots = {
 	      });
 
 			});
+
+			// click sur déconnexion
+			$(".deconnexion-field").click(function() {
+				var decoURL = $("#wp-logout").attr("href");
+				window.location.href = decoURL;
+			});
+
+			// click sur inscription
+			$(".login-field").click(function() {
+
+				loginField();
+
+
+			});
+
     }
 
   },

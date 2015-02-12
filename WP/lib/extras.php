@@ -21,15 +21,26 @@ function roots_wp_title($title) {
 }
 add_filter('wp_title', 'roots_wp_title', 10);
 
-add_action( 'init', 'blockusers_init' );
-	function blockusers_init() {
-		if ( is_admin() && ! current_user_can( 'administrator' ) &&
-		! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+/**
+ * Check to see if the current page is the login/register page
+ * Use this in conjunction with is_admin() to separate the front-end from the back-end of your theme
+ * @return bool
+ */
+/*
+if ( ! function_exists( 'is_login_page' ) ) {
+  function is_login_page() {
+    return in_array( $GLOBALS['pagenow'], array( 'wp-login.php' ) );
+  }
+}
+*/
+
+function blockusers_init() {
+	if ( (is_admin()) && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 		wp_redirect( home_url() );
 		exit;
 	}
 }
-
+add_action( 'init', 'blockusers_init' );
 
 // image size
 update_option('medium_size_w', 800);
@@ -45,7 +56,10 @@ function google_font(){
 }
 //add_action( 'wp_enqueue_scripts', 'google_font');
 
-// Register Custom Taxonomy
+
+
+
+// Register projets tax
 function projet_taxonomy() {
 
 	$labels = array(
@@ -78,6 +92,46 @@ function projet_taxonomy() {
 }
 // Hook into the 'init' action
 add_action( 'init', 'projet_taxonomy', 0 );
+
+
+
+// register author taxonomy
+function auteur_taxonomy() {
+
+	$labels = array(
+		'name'                       => _x( 'Auteurs', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Auteur', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Auteurs', 'text_domain' ),
+		'all_items'                  => __( 'Tous les auteurs', 'text_domain' ),
+		'parent_item'                => __( 'Auteur parent', 'text_domain' ),
+		'parent_item_colon'          => __( 'Auteur parent:', 'text_domain' ),
+		'new_item_name'              => __( 'Nouvel auteur', 'text_domain' ),
+		'add_new_item'               => __( 'Ajouter un auteur', 'text_domain' ),
+		'edit_item'                  => __( 'Éditer un auteur', 'text_domain' ),
+		'update_item'                => __( 'Mettre à jour un auteur', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Séparer les auteurs avec une virgule', 'text_domain' ),
+		'search_items'               => __( 'Chercher les auteurs', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Ajouter ou enlever un auteur', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choisir parmi les plus utilisés', 'text_domain' ),
+		'not_found'                  => __( 'Pas trouvé', 'text_domain' ),
+	);
+	$args = array(
+		'labels'                     => $labels,
+		'hierarchical'               => false,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'auteur', array( 'post' ), $args );
+}
+// Hook into the 'init' action
+add_action( 'init', 'auteur_taxonomy', 0 );
+
+
+
+
 
 // cacher la barre admin
 function habfna_hide_admin_bar_settings()
@@ -169,3 +223,35 @@ class new_general_setting {
         echo '<input type="text" id="secondary_color" name="secondary_color" value="' . $value2 . '" />';
 		}
 }
+
+function private_or_publish($classes) {
+	if( is_single() ) {
+      $classes[] = get_post_status();
+	}
+	return $classes;
+}
+add_filter('body_class', 'private_or_publish');
+
+
+// login logo wp
+function login_lopendoc() { ?>
+    <style type="text/css">
+        body.login div#login h1 a {
+						background: transparent;
+						background: url("<?php echo get_template_directory_uri(); ?>/assets/img/logo_opendoc_SVG-01.svg");
+						background-size: cover;
+
+						width: 283px;
+						background-repeat: no-repeat;
+
+						margin-bottom: 44px;
+
+						height: 55px;
+						font-size: 24px;
+						color: #000;
+						text-transform: lowercase;
+	        }
+    </style>
+<?php }
+add_action( 'login_enqueue_scripts', 'login_lopendoc' );
+

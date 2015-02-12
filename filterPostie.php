@@ -46,10 +46,18 @@ add_filter('postie_post', 'auto_tag');
 
 add_filter('postie_filter_email', 'change_email');
 */
-add_filter('postie_post', 'add_custom_field');
+//add_filter('postie_post', 'add_custom_field');
+
+
+
+
+
+
 
 /*
+
 	Récupérer le plus après l'arobase
+
 */
 add_filter('postie_filter_email2', 'plus_filter', 10, 3);
 
@@ -78,6 +86,41 @@ function plus_filter( $from, $toEmail, $replytoEmail) {
 
   return $fromField;
 }
+
+
+
+
+/*
+
+	Récupérer le nom de l'expéditeur avant le @
+
+*/
+
+add_filter('postie_filter_email2', 'get_mail_auteur', 10, 3);
+
+function get_mail_auteur( $from, $toEmail, $replytoEmail) {
+	global $auteur;
+  DebugEcho("step-01b");
+  DebugDump("from " . $from);
+  DebugDump("toEmail " . $toEmail);
+  DebugDump("replytoEmail " . $replytoEmail);
+
+  $fromField = $from;
+  $toField = $toEmail;
+
+  $posAt = strpos($fromField, '@');
+
+  if ( $posAt !== false ) {
+    $auteur = substr($fromField, 0, $posAt);
+	}
+
+  return $fromField;
+}
+
+
+
+
+
 
 /*
 
@@ -169,14 +212,20 @@ add_filter('postie_post_before', 'check_other_project');
 
 
 /*
-	Ajouter le terme au post
+
+	Ajouter les termes au post
+
+
 */
 add_filter('postie_post_after', 'tax_tag');
 
 function tax_tag($post) {
 	global $project;
+	global $auteur;
+
   DebugEcho("step-02");
   DebugEcho("project " . $project );
+  DebugEcho("auteur " . $auteur );
 
 /*
   $projectField = array( 'projets' =>  array( $project ) );
@@ -191,6 +240,16 @@ function tax_tag($post) {
 	  DebugEcho( "Vérification du post ---" );
 	  DebugEcho( $post );
 	}
+
+	if( strlen( $auteur ) > 0 ) {
+	  EchoInfo( "Ajout au post " . $post['ID'] );
+	  EchoInfo( "De l'auteur " . $auteur );
+	  EchoInfo( "--" . $auteur . "--" );
+		wp_set_object_terms( $post['ID'], array($auteur), 'auteur');
+	  DebugEcho( "Vérification du post ---" );
+	  DebugEcho( $post );
+	}
+
   return $post;
 }
 
