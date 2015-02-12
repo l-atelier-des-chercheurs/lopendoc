@@ -16,6 +16,30 @@
 
 (function($) {
 
+function createTimeline() {
+
+	// pour chaque post de la page
+	$(".projetContainer").find(".postContainer").each(function() {
+
+		$this = $(this);
+
+		timeinISO = new Date( $this.find("time").attr("datetime") );
+		timeinMS = timeinISO.getTime();
+		console.log(" TIME : " + timeinMS);
+
+
+
+
+	});
+
+
+
+
+}
+
+
+
+
 
 function replacePostWithIframe( $thisPost, pageLink ) {
 
@@ -183,7 +207,7 @@ function animateLogo() {
 
 
 function adjustMainMargintop() {
-	$(".main").css("margin-top", $(".navbar-default").height() );
+	$("body:not(.iframe) .main").css("margin-top", $(".navbar-default").height() );
 
 }
 
@@ -226,7 +250,7 @@ function newPost() {
 	} ).done( function( url ) {
 
 		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newpost" style="border:0px;width:100%;height:100%;"></iframe>';
-		fillPopOver( iframeAvecLien, $(".button.add-post"), 900, 400);
+		fillPopOver( iframeAvecLien, $(".button.add-post"), 900, 600);
 		$(".popover").addClass("is-loading");
 
 		// lui attribuer le bon projet
@@ -375,7 +399,7 @@ postViewRoutine = {
 
 			$(".entry-content a>img").each(function() {
 				$this = $(this);
-				$this.closest("a").attr("href", $this.attr("src") ).magnificPopup({type:'image'});
+				$this.closest("a").magnificPopup({type:'image'});
 			});
 
 			$(".publish-private-post").click(function(e) {
@@ -722,6 +746,8 @@ var Roots = {
 			if( $("body").hasClass("logged-in") ) {
 				$("body").addClass("is-edition");
 			}
+
+			createTimeline();
 
 		}
 	}

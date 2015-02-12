@@ -188,7 +188,10 @@
 
 			get_template_part('templates/content', 'carte');
 
+
 		endwhile;
+
+		//echo 'lastPosttime : ' . $lastPosttime;
 
 		?>
 		<?php if ($new_wp_query->max_num_pages > 1) : ?>
@@ -199,8 +202,8 @@
 		    </ul>
 		  </nav>
 		<?php endif;
-	}
 
+	}
 
 
 ?>
