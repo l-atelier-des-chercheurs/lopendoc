@@ -97,12 +97,7 @@
 
 								<?php
 									// est Description donc pas d'intérêt
-									//the_title( '<h2 class="entry-title">', '</h2>' );
-
-									echo '<h2 class="entry-title">';
-									echo roots_title( );
-									echo '</h2>';
-
+									the_title( '<h2 class="entry-title">', '</h2>' );
 								?>
 
 								</header><!-- .entry-header -->
@@ -135,8 +130,14 @@
 ?>
 
 	<hr>
-	<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
 
+
+	<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
+		<div class="colTitle">
+			<h2 class="entry-title">
+				<?php echo roots_title( ); ?>
+			</h2>
+		</div>
 <?php
   if ( is_user_logged_in() ) {
 

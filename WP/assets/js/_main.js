@@ -37,10 +37,6 @@ function createTimeline() {
 
 }
 
-
-
-
-
 function replacePostWithIframe( $thisPost, pageLink ) {
 
 	$thisPost.addClass("is-edited");
@@ -205,7 +201,6 @@ function animateLogo() {
 
 }
 
-
 function adjustMainMargintop() {
 	$("body:not(.iframe) .main").css("margin-top", $(".navbar-default").height() );
 
@@ -301,7 +296,6 @@ function loginField() {
 
 }
 
-
 function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 	var $popover = $(".popover");
 	$popover.html( content);
@@ -360,8 +354,6 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 		}
 	});
 }
-
-
 
 function closePopover() {
 	$("body").removeClass("is-overlaid");
