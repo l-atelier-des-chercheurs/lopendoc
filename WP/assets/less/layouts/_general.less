@@ -851,61 +851,65 @@ body {
 
 
 // si vu édition ///////////////////////////////////////////////////////////
-.is-edition .taxProj {
+.is-edition {
 
-	.postContainer {
 
-		margin-bottom: 55px;
 
-	}
-
-	.topIcons .switch-edition {
+	.switch-edition {
 		background-color: rgb(235, 44, 55);
 		color: white;
 	}
 
 
+	.taxProj {
 
-	.entry-stuff {
-/*
-		-moz-box-shadow: 3px 1px 15px 1px #cfcfcf;
-		-webkit-box-shadow: 3px 1px 15px 1px #cfcfcf;
-		-o-box-shadow: 3px 1px 15px 1px #cfcfcf;
-		box-shadow: 3px 1px 15px 1px #cfcfcf;
-*/
+		.postContainer {
+
+			margin-bottom: 55px;
+
+		}
 
 
-		box-shadow: 3px 3px 15px 1px #d4d4d4;
+		.entry-stuff {
+	/*
+			-moz-box-shadow: 3px 1px 15px 1px #cfcfcf;
+			-webkit-box-shadow: 3px 1px 15px 1px #cfcfcf;
+			-o-box-shadow: 3px 1px 15px 1px #cfcfcf;
+			box-shadow: 3px 1px 15px 1px #cfcfcf;
+	*/
 
-	}
 
-	.entry-title-and-content {
-		/*border: 2px solid #E6E6E6;*/
-	}
+			box-shadow: 3px 3px 15px 1px #d4d4d4;
 
-	.publish-private-post {
-		opacity: 1;
-	}
+		}
 
-	.post {
+		.entry-title-and-content {
+			/*border: 2px solid #E6E6E6;*/
+		}
 
-		// si privé
-		&[data-status=private] {
-
+		.publish-private-post {
 			opacity: 1;
-			max-height: 4048px;
-			height: auto;
-
 		}
 
+		.post {
 
-		&[data-status=private] {
+			// si privé
+			&[data-status=private] {
+
+				opacity: 1;
+				max-height: 4048px;
+				height: auto;
+
+			}
 
 
+			&[data-status=private] {
+
+			}
 		}
 	}
-
 }
+
 
 
 /* EDIT FEE */
