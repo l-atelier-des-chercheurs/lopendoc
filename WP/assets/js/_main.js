@@ -116,6 +116,10 @@ function textToCanvas( $this ) {
 	// poulet basquaise aux pâtes
 	sketch = $this.text().replace(/«/g, "\"").replace(/»/g, "\"").replace("void setup() {", "void setup() { noLoop();").replace("void setup(){", "void setup(){ noLoop();").replace("void setup () {", "void setup(){ noLoop();").replace("void setup (){", "void setup(){ noLoop();");
 
+	// supprimer le println
+	var reg = /(println(.*?);)/gi;
+	sketch = sketch.replace(reg,"");
+
 	//.replace(/<br>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '')
 
 	console.log( sketch );
@@ -217,10 +221,6 @@ function makeLinksBlank() {
 			$(this).attr("target","_blank");
 		}
 	});
-}
-
-function ajaxRefreshPage() {
-	$("body").addClass("is-loading");
 }
 
 function urlParam(name, url) {
