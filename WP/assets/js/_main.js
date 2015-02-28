@@ -114,7 +114,23 @@ function textToCanvas( $this ) {
 	thisPostID = $thisPost.attr("data-id");
 
 	// poulet basquaise aux pâtes
-	sketch = $this.text().replace(/«/g, "\"").replace(/»/g, "\"").replace("void setup() {", "void setup() { noLoop();").replace("void setup(){", "void setup(){ noLoop();").replace("void setup () {", "void setup(){ noLoop();").replace("void setup (){", "void setup(){ noLoop();");
+	sketch = $this.text();
+
+	var mapObj = {
+	   "«":"\"",
+	   "»":"\"",
+	};
+	var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+	sketch = sketch.replace(re, function(matched){
+		console.log("matched : "  + mapObj[matched]);
+	  return mapObj[matched];
+	});
+
+	sketch = sketch
+		.replace("void setup() {", "void setup() { noLoop();")
+		.replace("void setup(){", "void setup(){ noLoop();")
+		.replace("void setup () {", "void setup(){ noLoop();")
+		.replace("void setup (){", "void setup(){ noLoop();");
 
 	// supprimer le println
 	var reg = /(println(.*?);)/gi;
@@ -132,7 +148,9 @@ function textToCanvas( $this ) {
 	$this.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
 
 	$thisCode = $this.find(".thisCode");
-	$thisCode.html( $thisCode.text().replace(/«/g, "\"").replace(/»/g, "\"") );
+
+	// Code affiché
+	$thisCode.html( $thisCode.text().replace("<","&lt;").replace(">","&gt;").replace(/«/g, "\"").replace(/»/g, "\"") );
 
 	SyntaxHighlighter.all();
 

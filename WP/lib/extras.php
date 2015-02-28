@@ -261,7 +261,54 @@ function login_lopendoc() { ?>
 						color: #000;
 						text-transform: lowercase;
 	        }
+	      body {
+<?php
+  $primaireColor =  get_option( "primary_color" );
+  if( empty($primaireColor) ) $primaireColor = "#EF444E";
+	?>
+
+		     background-color: <?php $primaireColor; ?>;
+		    }
+
     </style>
 <?php }
 add_action( 'login_enqueue_scripts', 'login_lopendoc' );
+
+// admin colorbar wp
+function adminbarcolor_opendoc() { ?>
+
+<?php
+  $primaireColor =  get_option( "primary_color" );
+  if( empty($primaireColor) ) $primaireColor = "#EF444E";
+	?>
+
+    <style type="text/css">
+
+		    #wpadminbar ul#wp-admin-bar-root-default>#wp-admin-bar-wp-logo {
+			  	padding-left: 5px;
+  				background-color: <?php echo $primaireColor; ?> !important;
+			  }
+
+        #wpadminbar #wp-admin-bar-wp-logo > .ab-item {
+						background-color: #e5e5e5 !important;
+						background: url("<?php echo get_template_directory_uri(); ?>/assets/img/logo_opendoc_SVG-01.svg");
+
+						background-position: 50% 50%;
+						background-repeat: no-repeat;
+						padding-left: 20px !important;
+
+						width: 140px;
+						pointer-events: none;
+
+	        }
+        #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon {
+	       	display: none;
+	      }
+	      #wpadminbar ul#wp-admin-bar-root-default>#wp-admin-bar-wp-logo .ab-sub-wrapper {
+		    	display: none;
+		    }
+    </style>
+<?php
+	}
+add_action( 'admin_enqueue_scripts', 'adminbarcolor_opendoc' );
 
