@@ -25,7 +25,7 @@ function createTimeline() {
 
 		timeinISO = new Date( $this.find("time").attr("datetime") );
 		timeinMS = timeinISO.getTime();
-		console.log(" TIME : " + timeinMS);
+		//console.log(" TIME : " + timeinMS);
 
 
 
@@ -122,11 +122,12 @@ function textToCanvas( $this ) {
 
 	//.replace(/<br>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '')
 
-	console.log( sketch );
+	// console.log( sketch );
 
 	//sketch = "void setup() { size(200, 200); } void draw() { background(155); }";
 
-	var processingSketch = $("<script type='application/processing'>" + sketch + "</script><canvas id=" + thisPostID + "></canvas>");
+	var processingScript = $("<script type='application/processing'>" + sketch + "</script>");
+	var processingCanvas = $("<canvas id=" + thisPostID + "></canvas>");
 
 	$this.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
 
@@ -144,34 +145,23 @@ function textToCanvas( $this ) {
 <script>SyntaxHighlighter.all();</script>
 */
 
-	$thisCode.before( processingSketch );
+	$thisCode.before( processingScript );
+	$thisCode.before( processingCanvas );
 
-
-  var scripts = document.getElementsByTagName("script");
-  var canvasArray = Array.prototype.slice.call(document.getElementsByTagName("canvas"));
+  var thisScript = processingScript[0];
+  var thisCanvas = processingCanvas[0];
   var canvas;
-  for (var i = 0, j = 0; i < scripts.length; i++) {
-    if (scripts[i].type === "application/processing") {
-      var src = scripts[i].getAttribute("target");
-      if (src && src.indexOf("#") > -1) {
-        canvas = document.getElementById(src.substr(src.indexOf("#") + 1));
-        if (canvas) {
-          new Processing(canvas, scripts[i].text);
-          for (var k = 0; k< canvasArray.length; k++)
-          {
-            if (canvasArray[k] === canvas) {
-              // remove the canvas from the array so we dont override it in the else
-              canvasArray.splice(k,1);
-            }
-          }
-        }
-      } else {
-        if (canvasArray.length >= j) {
-          new Processing(canvasArray[j], scripts[i].text);
-        }
-        j++;
-      }
-    }
+  if (thisScript.type === "application/processing") {
+    console.log("Trying to P5");
+		try {
+    	new Processing(thisCanvas, thisScript.text);
+		}
+		catch (e) {
+			console.log("GODDAMMIT");
+			$(thisCanvas).before("<div clas='errorMessage sketchNotValid'><small>Le sketch n'a pas pu être chargé car le script contient des erreurs. Corrigez-le en cliquant sur le crayon.</small></div>");
+			$(thisCanvas).remove();
+		}
+    console.log("Pfewww passed");
   }
 
 	//Processing.getInstanceById(canvas).noLoop();
@@ -546,14 +536,15 @@ postViewRoutine = {
 
 				script.onload = function() {
 
-					$(".post .entry-content:not(.is-sketch):contains(void setup)").each( function() {
+					$(".post .entry-content:not(.is-sketch):contains(void setup)").each( function(i) {
 
 						$this = $(this);
 						$this.addClass("is-sketch");
 
-						// récupérer le sketch, le transformer en canvas
+						console.log("textToCanvas pour le " + i);
 
-						textToCanvas( $this );
+						// récupérer le sketch, le transformer en canvas
+						textToCanvas($this);
 
 					});
 
@@ -600,7 +591,14 @@ var Roots = {
     init: function() {
       // JavaScript to be fired on all pages
 
-			console.log("edit post ajax");
+      // désactive les console.log si pas un superadmin
+			if( !$("body").hasClass("superadmin") ) {
+		    logger.disableLogger();
+			}
+
+
+
+			//console.log("edit post ajax");
 
 			postViewRoutine.init();
 
@@ -742,7 +740,7 @@ var Roots = {
 			createTimeline();
 
 		}
-	}
+	},
 
 };
 

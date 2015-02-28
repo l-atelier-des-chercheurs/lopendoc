@@ -210,12 +210,8 @@ add_filter('postie_post_before', 'check_other_project');
 
 
 
-
 /*
-
 	Ajouter les termes au post
-
-
 */
 add_filter('postie_post_after', 'tax_tag');
 

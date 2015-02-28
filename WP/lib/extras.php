@@ -232,6 +232,16 @@ function private_or_publish($classes) {
 }
 add_filter('body_class', 'private_or_publish');
 
+// admin ou pas ajouter class au body
+function superadmin_ornot($classes) {
+	if( current_user_can( 'manage_options' ) ) {
+      $classes[] = 'superadmin';
+	}
+	return $classes;
+}
+add_filter('body_class', 'superadmin_ornot');
+
+
 
 // login logo wp
 function login_lopendoc() { ?>
