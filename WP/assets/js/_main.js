@@ -402,6 +402,12 @@ postViewRoutine = {
 				$this.closest("a").magnificPopup({type:'image'});
 			});
 
+			$(".entry-title").each(function() {
+				if( $(this).text() === "Brouillon auto" ) {
+					$(this).parents(".post").addClass("hidden");
+				}
+			});
+
 			$(".publish-private-post").click(function(e) {
 
 				// récupérer l'id du post
