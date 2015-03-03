@@ -312,3 +312,10 @@ function adminbarcolor_opendoc() { ?>
 	}
 add_action( 'admin_enqueue_scripts', 'adminbarcolor_opendoc' );
 
+// default setting : lien vers image média quand ajout d'image
+function my_gallery_default_type_set_link( $settings ) {
+    $settings['galleryDefaults']['link'] = 'file';
+    return $settings;
+}
+add_filter( 'media_view_settings', 'my_gallery_default_type_set_link');
+
