@@ -51,6 +51,7 @@
   <?php wp_footer(); ?>
 
   <?php get_template_part('templates/popover'); ?>
+  <?php get_template_part('templates/popovergallerie'); ?>
 
 </body>
 </html>

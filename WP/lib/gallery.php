@@ -81,10 +81,11 @@ function roots_gallery($attr) {
   }
 
   $unique = (get_query_var('page')) ? $instance . '-p' . get_query_var('page'): $instance;
-  $output = '<div class="gallery gallery-' . $id . '-' . $unique . '">';
+  $output = '<div class="gallery gallery-' . $id . '-' . $unique . '" itemscope itemtype="http://schema.org/ImageGallery">';
 
   $i = 0;
   foreach ($attachments as $id => $attachment) {
+/*
     switch($link) {
       case 'file':
         $image = wp_get_attachment_link($id, $size, false, false);
@@ -96,14 +97,23 @@ function roots_gallery($attr) {
         $image = wp_get_attachment_link($id, $size, true, false);
         break;
     }
-    $output .= ($i % $columns == 0) ? '<div class="row gallery-row">': '';
-    $output .= '<div class="' . $grid .'">' . $image;
+*/
+    $image = wp_get_attachment_link($id, $size, false, false);
+
+		$image_attributes = wp_get_attachment_image_src( $id, 'full');
+		if( $image_attributes ) {
+			$fullImageWidth = $image_attributes[1];
+			$fullImageHeight = $image_attributes[2];
+		}
+
+		$output .= ($i % $columns == 0) ? '<div class="row gallery-row">': '';
+    $output .= '<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" class="' . $grid .'" data-fullimagesize="' . $fullImageWidth . 'x' . $fullImageHeight . '">' . $image;
 
     if (trim($attachment->post_excerpt)) {
       $output .= '<div class="caption hidden">' . wptexturize($attachment->post_excerpt) . '</div>';
     }
 
-    $output .= '</div>';
+    $output .= '</figure>';
     $i++;
     $output .= ($i % $columns == 0) ? '</div>' : '';
   }

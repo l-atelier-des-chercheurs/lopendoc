@@ -43,10 +43,12 @@ function blockusers_init() {
 add_action( 'init', 'blockusers_init' );
 
 // image size
+update_option('large_size_w', 1600);
+update_option('large_size_h', 1200);
 update_option('medium_size_w', 800);
 update_option('medium_size_h', 600);
-update_option('thumbnail_size_w', 600);
-update_option('thumbnail_size_h', 400);
+update_option('thumbnail_size_w', 400);
+update_option('thumbnail_size_h', 300);
 
 
 // custom typeface
@@ -318,4 +320,3 @@ function my_gallery_default_type_set_link( $settings ) {
     return $settings;
 }
 add_filter( 'media_view_settings', 'my_gallery_default_type_set_link');
-
