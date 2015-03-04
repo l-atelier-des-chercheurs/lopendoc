@@ -401,7 +401,7 @@ postViewRoutine = {
 				var $that = $(this);
 				var $imgSrc = $that.attr("href");
 
-				if( $imgSrc.match(/\.(jpg|png|gif)/i) ) {
+				if( $imgSrc.match(/\.(jpg|png|gif|jpeg)/i) ) {
 					$that.wrap("<div class='singleThumbnail gallery'><figure></figure></div>");
 					var $figure = $that.closest("figure");
 
