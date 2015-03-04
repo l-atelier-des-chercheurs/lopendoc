@@ -6,9 +6,10 @@
 
 
 
-@cprivate : #F2682C;
-@cpublish : rgb(69,193,180);
-@caction : rgb(235,44,55);
+@cprivate : #F2682C; // orange de private
+@cpublish : #45C1B4; // vert de publication
+@caction : #EB2C37; // un rouge
+
 
 @phone-only:    ~"only screen and (max-width: @{screen-xs-max})";
 @tablet:    ~"only screen and (min-width: @{screen-tablet})";
@@ -34,8 +35,14 @@ hr {
 
 
 
-body.is-edition {
-	background-color: #EFEFEF;
+body {
+	background-color: #F9F9F9;
+
+	transition: background-color .8s;
+
+	&.is-edition {
+		background-color: #EFEFEF;
+	}
 }
 
 
@@ -466,7 +473,7 @@ body {
 	}
 
 
-	.colTitle h1 {
+	.colTitle .entry-title {
 		.make-sm-column(9);
 
 		font-size: 2.5em;
@@ -474,7 +481,7 @@ body {
 		font-weight: bold;
 		color: #000;
 
-		padding: 2rem;
+		padding: 4px 2rem;
 		margin-left: 0;
 
 	}
@@ -608,10 +615,15 @@ body {
 	.entry-stuff {
 
 		.make-row;
-		border-radius: 5px;
-		background-color: #fff;
+		border-radius: 0px;
+		background-color: transparent;
 
-		transition: box-shadow 1s ease-out, background-color 6s ease-out;
+		transition: box-shadow 1s ease-out, background-color 1s ease-out;
+
+		.is-edition & {
+			border-radius: 5px;
+			background-color: #fff;
+		}
 
 		.entry-meta {
 
@@ -737,8 +749,8 @@ body {
 
 	}
 
-	&.is-removing {
-		opacity: .7 !important;
+	&.is-removing .entry-stuff{
+		background-color: #999;
 	}
 
 }
@@ -876,7 +888,7 @@ body {
 
 
 	.switch-edition {
-		background-color: rgb(235, 44, 55);
+		background-color: @cpublish;
 		color: white;
 	}
 
@@ -1042,6 +1054,17 @@ body {
 
 	&.hidden {
 		display: none;
+	}
+
+	a {
+
+		img {
+			transition: opacity 2s;
+		}
+		&.is-loading img {
+			opacity: .8;
+		}
+
 	}
 /*
 	.edit-frame {

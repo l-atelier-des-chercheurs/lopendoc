@@ -396,12 +396,50 @@ postViewRoutine = {
 
 		if( !$("body").hasClass("iframe") ) {
 
-			// lancer la gallerie d'image
-			initPhotoSwipeFromDOM('.entry-content .gallery');
+			// transformer en gallerie d'image
+			$("img").parents("a:not(.thumbnail)").each(function() {
+				var $that = $(this);
+				var $imgSrc = $that.attr("href");
 
-			$(".entry-title").each(function() {
-				if( $(this).text() === "Brouillon auto" ) {
-					$(this).parents(".post").addClass("hidden");
+				if( $imgSrc.match(/\.(jpg|png|gif)/i) ) {
+					$that.wrap("<div class='singleThumbnail gallery'><figure></figure></div>");
+					var $figure = $that.closest("figure");
+
+					$that.on("click", function(e) {
+						if( !!$figure.attr( "data-fullimagesize") ) {
+							console.log("has data attr");
+						} else {
+							console.log("no data attr");
+
+							$that.addClass("is-loading");
+
+							e.preventDefault();
+
+	    				var image = new Image();
+							image.src = $imgSrc;
+							image.onload = function() {
+								$that.removeClass("is-loading");
+								console.log("images Loaded : image.naturalWidth = " + image.naturalWidth );
+								$figure.attr( "data-fullimagesize", image.naturalWidth + "x" + image.naturalHeight );
+								$that.trigger("click");
+							};
+
+							return false;
+
+						}
+
+					});
+				}
+
+			});
+
+			// lancer lphoto swipe pour la gallerie d'image
+			initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
+
+
+			$(".entry-title-and-content").each(function() {
+				if( $(this).find(".entry-title").text() === "Brouillon auto" && $(this).find(".entry-content").text().trim() === "" ) {
+					$(this).parents(".postContainer").remove();
 				}
 			});
 
@@ -601,9 +639,9 @@ var switchEditionMode = {
 
 };
 
-var initPhotoSwipeFromDOM = function(gallerySelector) {
+var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 
-    console.log("INIT photoswipe");
+    console.log("INIT photoswipe forgalleries");
 
     // parse slide data (url, title, size ...) from DOM elements
     // (children of gallerySelector)
@@ -629,6 +667,9 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
             }
 
             linkEl = figureEl.children[0]; // <a> element
+
+            console.log("figureEl : " + figureEl );
+            console.log("figureEl.getAttribute('data-fullimagesize') : " + figureEl.getAttribute('data-fullimagesize') );
 
             size = figureEl.getAttribute('data-fullimagesize').split('x');
 
@@ -793,10 +834,9 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     // Parse URL and open gallery if it contains #&pid=3&gid=1
     var hashData = photoswipeParseHash();
     if(hashData.pid > 0 && hashData.gid > 0) {
-        openPhotoSwipe( hashData.pid - 1 ,  galleryElements[ hashData.gid - 1 ], true );
+        //openPhotoSwipe( hashData.pid - 1 ,  galleryElements[ hashData.gid - 1 ], true );
     }
 };
-
 
 
 // Use this variable to set up the common and page specific functions. If you

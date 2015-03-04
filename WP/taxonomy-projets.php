@@ -129,8 +129,6 @@
 	wp_reset_query();
 ?>
 
-	<hr>
-
 
 	<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
 		<div class="colTitle">
