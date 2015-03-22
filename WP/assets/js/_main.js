@@ -296,7 +296,7 @@ function loginField() {
 
 	var loginWindow = $(".login").clone(true);
 
-	fillPopOver( loginWindow, $(".button.login-field"), 300, 300 );
+	fillPopOver( loginWindow, $(".button.login-field"), 300, 380 );
 
 	$(".popover").addClass("is-loading");
 
