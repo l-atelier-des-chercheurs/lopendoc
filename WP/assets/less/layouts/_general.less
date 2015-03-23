@@ -1,11 +1,5 @@
 
 
-
-.banner { }
-
-
-
-
 @cprivate : #F2682C; // orange de private
 @cpublish : #45C1B4; // vert de publication
 @caction : #EB2C37; // un rouge
@@ -85,8 +79,10 @@ body {
 		text-align: left;
 
 		padding-top: 5px;
-
 		padding-bottom: 5px;
+
+	  font-size: 16px;
+	  line-height: 18px;
 
 
 		svg {
@@ -109,19 +105,43 @@ body {
 			}
 		}
 
+
 		.lopendocInstance {
 			display: inline-block;
 			vertical-align: middle;
+			max-width: 360px;
+		}
+
+		.lopendocProjet {
+			display: inline-block;
+			font-weight: bold;
+			vertical-align: middle;
+
 		}
 	}
 }
 
 .navbar-header {
-  .make-sm-column( 7);
+  .make-sm-column( 9);
+
+	.navbar-brand {
+
+		font-size: 16px;
+		line-height: 18px;
+		height: auto;
+		min-height: 50px;
+
+		> * {
+			padding-left: 15px;
+			border-left: 1px solid #eee;
+		}
+
+
+	}
 }
 
 .navbar-default .navbar-collapse {
-  .make-sm-column(5);
+  .make-sm-column(3);
 	float: right;
 
   .actionsContainer {
@@ -318,7 +338,7 @@ body {
 	list-style: none;
 	padding: 0;
 
-	margin: 10px 0;
+	margin: 10px 0 5px 0;
 
 	text-align: right;
 
@@ -328,6 +348,8 @@ body {
 		border-radius: 0.25em;
 		padding: 0 1em;
 		margin: 0;
+		margin-right: 5px;
+		margin-bottom: 5px;
 		height: 35px;
 		line-height: 36px;
 
@@ -1059,13 +1081,14 @@ body {
 	a {
 
 		img {
-			transition: opacity 2s;
+			transition: opacity .4s;
 		}
 		&.is-loading img {
-			opacity: .8;
+			opacity: .6;
 		}
 
 	}
+
 /*
 	.edit-frame {
 	  min-height: 600px;
@@ -1133,7 +1156,7 @@ body {
 
 	#fee-notice-area {
 		position: fixed;
-		top: 50px;
+		top: 60px;
 		right: 0;
 		left: auto;
 		width: 300px;
@@ -1168,9 +1191,16 @@ body {
 .new-post {
 
 	body& {
-		padding:20px;
+		padding:10px 20px;
+	}
+	.button-right {
+		display: block !important;
+
 	}
 
+	.fee-toolbar {
+		display: none;
+	}
 }
 
 

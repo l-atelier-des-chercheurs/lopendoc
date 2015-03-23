@@ -244,6 +244,8 @@ function urlParam(name, url) {
 
 function newPost() {
 
+	console.log("NEW POST");
+
 	$("body").addClass("is-overlaid");
 
 	// de fee-adminbar.js
@@ -976,6 +978,33 @@ var Roots = {
 
     }
   },
+
+  new_post: {
+	  init: function() {
+			/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
+			// trigger un click sur "Mettre a jour" avant tout
+			var $save_button = $(".save-modifications");
+
+			$save_button.removeClass("is-disabled");
+
+			$save_button.on( "click", function() {
+				console.log("clicked save");
+				$("body").find(".fee-publish").click();
+			});
+
+			$(".edit-post").click(function(e) {
+
+				console.log( "Reload page ");
+				$this = $(this);
+				window.top.location.reload(true);
+
+
+				e.preventDefault();
+
+			});
+		}
+	},
+
   // About us page, note the change from about-us to about_us.
   about_us: {
     init: function() {

@@ -18,6 +18,10 @@ Template Name: Column by tags
 
 			$tag_name = $tag->name;
 
+			if( $tag_name == "featured" ) {
+				continue;
+			}
+
 					$args = array(
 						  'tag' 		=> $tag->slug,
 					    'post_type'      => 'post', // set the post type to page
