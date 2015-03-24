@@ -89,7 +89,6 @@ body {
 			width: 200px;
 			display: inline-block;
 			vertical-align: middle;
-			margin-right: 25px;
 
 			@media @phone-only {
 				width: 140px;
@@ -122,7 +121,7 @@ body {
 }
 
 .navbar-header {
-  .make-sm-column( 9);
+  .make-sm-column( 8);
 
 	.navbar-brand {
 
@@ -133,7 +132,12 @@ body {
 
 		> * {
 			padding-left: 15px;
+			padding-right: 15px;
 			border-left: 1px solid #eee;
+
+			&:first-child {
+				border-left: none;
+			}
 		}
 
 
@@ -141,7 +145,7 @@ body {
 }
 
 .navbar-default .navbar-collapse {
-  .make-sm-column(3);
+  .make-sm-column(4);
 	float: right;
 
   .actionsContainer {
