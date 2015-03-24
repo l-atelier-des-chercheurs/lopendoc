@@ -7,7 +7,9 @@ Template Name: Accueil avec cartes
 <div id="wideView">
 
 		<div class='colTitle'>
-			<h1>Les Projets</h1>
+			<h1>
+				<?php echo roots_title( ); ?>
+			</h1>
 		</div>
 
  <?php
@@ -40,9 +42,11 @@ Template Name: Accueil avec cartes
 						//  assigning variables to the loop
 						$wp_query = new WP_Query($args);
 
+						$lastPostDate = $wp_query->posts[0]->post_modified;
+
 			?>
 
-			<div class="colonneswrappers">
+			<div class="colonneswrappers" data-lastpostdate="<?php echo $lastPostDate; ?>">
 				<section  class="colonnes">
 					<header class="page-header">
 							<?php
