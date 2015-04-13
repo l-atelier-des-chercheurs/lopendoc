@@ -54,6 +54,8 @@ function replacePostWithIframe( $thisPost, pageLink ) {
 
 	$save_button.on( "click", function() {
 
+		sendActionToAnalytics("Fin édition d'un post");
+
 		var $thisPost = $(this).parents(".post");
 		$thisPost.find(".edit-frame").contents().find(".fee-save").click();
 
@@ -272,18 +274,18 @@ function newPost() {
         },
         success: function(data)
         {
-			     $.ajax({
-			        type: "POST",
-			        url: thisActionUrl,
-			        data: {
-			             post_id: thisID,
-			             action: "update_post_visibility",
-			             visibility: "private",
-			        },
-			        success: function(data)
-			        {
-								$(".popover").removeClass("is-loading");
-			        }
+			    $.ajax({
+		        type: "POST",
+		        url: thisActionUrl,
+		        data: {
+		             post_id: thisID,
+		             action: "update_post_visibility",
+		             visibility: "private",
+		        },
+		        success: function(data)
+		        {
+							$(".popover").removeClass("is-loading");
+		        }
 			    });
 
         }
@@ -355,6 +357,7 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 
 	$("body").on('click', function(event){
 		if( $(event.target).is('.close-panel') || $(event.target).is('body.is-overlaid')) {
+
 			closePopover();
 		}
 	});
@@ -408,6 +411,9 @@ postViewRoutine = {
 					var $figure = $that.closest("figure");
 
 					$that.on("click", function(e) {
+
+					sendActionToAnalytics("Ouverture d'une image en grand");
+
 						if( !!$figure.attr( "data-fullimagesize") ) {
 							console.log("has data attr");
 						} else {
@@ -458,8 +464,10 @@ postViewRoutine = {
 
 				if( currentStatus === "publish" ) {
 					newStatus = "private";
+					sendActionToAnalytics("Passer un post en privé");
 				} else {
 					newStatus = "publish";
+					sendActionToAnalytics("Passer un post en en public");
 				}
 
 				//backup
@@ -522,6 +530,7 @@ postViewRoutine = {
 
 			$(".post .button-right .edit-post").click( function(e) {
 
+
 				e.preventDefault();
 
 				// ouvrir dans un nouvel onglet
@@ -533,12 +542,12 @@ postViewRoutine = {
 
 				if( $thisPost.hasClass("is-edited") ) {
 					// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
+					sendActionToAnalytics("Fin d'édition d'un post");
 					replaceiFrameWithPost( $thisPost, pageLink );
 				} else {
 
-					// sinon
+					sendActionToAnalytics("Édition d'un post");
 					replacePostWithIframe( $thisPost, pageLink );
-
 
 				}
 
@@ -550,6 +559,8 @@ postViewRoutine = {
 
 			$(".post .button-right .remove-post").click( function(e) {
 
+				sendActionToAnalytics("Suppression d'un post");
+
 				e.preventDefault();
 
 				var $thisPost = $(this).parents(".post");
@@ -557,6 +568,7 @@ postViewRoutine = {
 
 				thisActionUrl = window.location.href;
 
+				console.log("is-removing");
 				console.log("thisID " + thisID );
 
 				$thisPost.addClass("is-removing");
@@ -627,19 +639,6 @@ postViewRoutine = {
 
 };
 
-
-var switchEditionMode = {
-	init: function() {
-
-	},
-
-	setSwitch: function() {
-
-		$("body").toggleClass("is-edition");
-
-	},
-
-};
 
 var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 
@@ -841,6 +840,17 @@ var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 };
 
 
+window.instanceName = $(".navbar-brand").attr("href").substring( $(".navbar-brand").attr("href").indexOf("opendoc.org/") + 12);
+instanceName = instanceName.substring( 0, instanceName.indexOf("\/") );
+
+window.projet = $(".lopendocProjet").text().trim();
+
+function sendActionToAnalytics(thisAction ) {
+	console.log("Sent analytics action : instance = " + instanceName + " projet : "  + projet + " action : " + thisAction);
+	gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
+
+}
+
 // Use this variable to set up the common and page specific functions. If you
 // rename this variable, you will also need to rename the namespace below.
 var Roots = {
@@ -864,20 +874,31 @@ var Roots = {
 
 			$(".add-post").click(function() {
 
+				sendActionToAnalytics( "add-post" );
+
 				// générer la bonne url, remplir le pop-over avec ce contenu quand il sera dispo
 				var newPostURL = newPost();
 
-				// proposer de rafraichir la page pour valider
+				console.log("hello world");
 
 			});
 
 			///////////////////////////////////////////////// passer en mode édition /////////////////////////////////////////////////
 			$(".switch-edition").click(function() {
-				switchEditionMode.setSwitch();
+
+				if( $("body").hasClass("is-edition") ) {
+					sendActionToAnalytics("Annuler la vue édition");
+				} else {
+					sendActionToAnalytics("Passer en vue édition");
+				}
+
+				$("body").toggleClass("is-edition");
 			});
 
 			///////////////////////////////////////////////// rafraichir postie /////////////////////////////////////////////////
 			$(".refresh-postie").click(function() {
+
+				sendActionToAnalytics("Rafraichissement de Postie");
 
 				$this = $(this);
 
@@ -955,12 +976,15 @@ var Roots = {
 
 			// click sur déconnexion
 			$(".deconnexion-field").click(function() {
+				sendActionToAnalytics("Déconnexion");
+
 				var decoURL = $("#wp-logout").attr("href");
 				window.location.href = decoURL;
 			});
 
 			// click sur inscription
 			$(".login-field").click(function() {
+				sendActionToAnalytics("Inscription");
 				loginField();
 			});
 
@@ -979,16 +1003,15 @@ var Roots = {
   page_template_template_page_accueil: {
 	  init: function() {
 
+			$('#wideView img').removeAttr('style');
 
-
-			var $container = $('#wideView #colonnesContainer');
-			$container.packery({
-			  itemSelector: '.colonneswrappers',
-			  gutter: 10
+			$(document).ready(function() {
+				var $container = $('#wideView #colonnesContainer');
+				$container.packery({
+				  itemSelector: '.colonneswrappers',
+				  gutter: 10
+				});
 			});
-
-
-
 		}
 	},
 
@@ -1001,20 +1024,57 @@ var Roots = {
 			$save_button.removeClass("is-disabled");
 
 			$save_button.on( "click", function() {
+
+				sendActionToAnalytics("Enregistrer nouveau post");
 				console.log("clicked save");
 				$("body").find(".fee-publish").click();
 			});
 
 			$(".edit-post").click(function(e) {
 
+				sendActionToAnalytics("Fin édition nouveau post");
 				console.log( "Reload page ");
 				$this = $(this);
 				window.top.location.reload(true);
 
-
 				e.preventDefault();
 
 			});
+
+
+			$(".remove-post").click( function(e) {
+
+				sendActionToAnalytics("Supprimer un post");
+
+				e.preventDefault();
+
+				var $thisPost = $(this).parents(".post");
+				thisID = $thisPost.attr("data-id");
+
+				thisActionUrl = window.location.href;
+
+				$.ajax({
+				  type: "POST",
+				  url: thisActionUrl,
+				  data: {
+				       post_id: thisID,
+				       action: "remove_post"
+				  },
+				  success: function(data)
+				  {
+						console.log( "Reload page ");
+
+						$this = $(this);
+						window.top.location.reload(true);
+
+					}
+				});
+
+
+				return false;
+
+			});
+
 		}
 	},
 

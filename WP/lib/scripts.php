@@ -91,13 +91,13 @@ function roots_google_analytics() { ?>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  })(window,document,'script','//www.google-analytics.com/analytics.js','gaTracker');
 
-  ga('create', 'UA-48162525-3', 'auto');
-  ga('send', 'pageview');
+  gaTracker('create', 'UA-48162525-3', 'auto');
+  gaTracker('send', 'pageview');
 
 </script>
 <?php }
-if (GOOGLE_ANALYTICS_ID && !current_user_can('manage_options') ) {
+if (GOOGLE_ANALYTICS_ID) {
   add_action('wp_footer', 'roots_google_analytics', 20);
 }
