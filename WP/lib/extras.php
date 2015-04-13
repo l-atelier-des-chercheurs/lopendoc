@@ -320,3 +320,106 @@ function my_gallery_default_type_set_link( $settings ) {
     return $settings;
 }
 add_filter( 'media_view_settings', 'my_gallery_default_type_set_link');
+
+/******* ajax stuff *******/
+add_action ( 'wp_head', 'add_frontend_ajax_javascript_file' );
+function add_frontend_ajax_javascript_file(){ ?>
+  <script type="text/javascript">
+    var ajaxurl = <?php echo json_encode( admin_url( "admin-ajax.php" ) ); ?>;
+    var ajaxnonce = <?php echo json_encode( wp_create_nonce( "itr_ajax_nonce" ) ); ?>;
+/*
+    var myarray = <?php echo json_encode( array(
+         'foo' => 'bar',
+         'available' => TRUE,
+         'ship' => array( 1, 2, 3, ),
+       ) ); ?>
+*/
+  </script><?php
+}
+
+
+
+add_action( 'wp_ajax_get_post_information', 'ajax_get_post_information' );
+function ajax_get_post_information()
+{
+    if(!empty($_POST['post_id']))
+    {
+        $post = get_post( $_POST['post_id'] );
+        echo json_encode( $post );
+    }
+
+    die();
+
+/*
+    var data = {
+        'action': 'get_post_information',
+				'post_id': 120
+    };
+
+    $.post(ajaxurl, data, function(response) {
+        alert('Server response from the AJAX URL ' + response);
+    });
+*/
+}
+
+
+// ajouter taxonomy
+add_action( 'wp_ajax_add_taxonomy_to_post', 'ajax_add_taxonomy_to_post' );
+function ajax_add_taxonomy_to_post()
+{
+    if(!empty($_POST['post_id']))
+    {
+				wp_set_object_terms( $_POST['post_id'], $_POST['term'], 'projets');
+				echo "check postid = ".$_POST['post_id'] . " term = " . $_POST['term'];
+    }
+
+    die();
+}
+
+// changer la visibilité du post
+add_action( 'wp_ajax_change_post_visibility', 'ajax_change_post_visibility' );
+function ajax_change_post_visibility()
+{
+
+    if(!empty($_POST['post_id']))
+    {
+		    $post = array();
+		    $post['ID'] = $_POST['post_id'];
+        $post['post_status'] = $_POST['post_status'];
+				wp_update_post($post);
+        $post = get_post( $_POST['post_id'] );
+        echo json_encode( get_post_status($_POST['post_id']) );
+    }
+
+    die();
+}
+
+// supprimer un post
+add_action( 'wp_ajax_remove_post', 'ajax_remove_post' );
+function ajax_remove_post()
+{
+
+    if(!empty($_POST['post_id']))
+    {
+				wp_trash_post( $_POST['post_id'] );
+        echo json_encode( get_post_status($_POST['post_id']) );
+    }
+
+    die();
+}
+
+// ajouter une taxonomie
+add_action( 'wp_ajax_add_tax_term', 'ajax_add_tax_term' );
+function ajax_add_tax_term()
+{
+
+    if(!empty($_POST['tax_term']))
+    {
+			wp_insert_term(
+        $_POST['tax_term'],
+        'projets'
+			);
+    }
+
+    die();
+}
