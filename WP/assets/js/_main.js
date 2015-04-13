@@ -846,8 +846,10 @@ instanceName = instanceName.substring( 0, instanceName.indexOf("\/") );
 window.projet = $(".lopendocProjet").text().trim();
 
 function sendActionToAnalytics(thisAction ) {
-	console.log("Sent analytics action : instance = " + instanceName + " projet : "  + projet + " action : " + thisAction);
-	gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
+	if( typeof gaTracker !== 'undefined' ) {
+		console.log("Sent analytics action : instance = " + instanceName + " projet : "  + projet + " action : " + thisAction);
+		gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
+	}
 
 }
 
@@ -874,7 +876,7 @@ var Roots = {
 
 			$(".add-post").click(function() {
 
-				sendActionToAnalytics( "add-post" );
+				sendActionToAnalytics( "Nouveau post" );
 
 				// générer la bonne url, remplir le pop-over avec ce contenu quand il sera dispo
 				var newPostURL = newPost();
