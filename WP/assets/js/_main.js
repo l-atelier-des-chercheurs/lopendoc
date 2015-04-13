@@ -961,10 +961,7 @@ var Roots = {
 
 			// click sur inscription
 			$(".login-field").click(function() {
-
 				loginField();
-
-
 			});
 
     }
@@ -978,6 +975,22 @@ var Roots = {
 
     }
   },
+
+  page_template_template_page_accueil: {
+	  init: function() {
+
+
+
+			var $container = $('#wideView #colonnesContainer');
+			$container.packery({
+			  itemSelector: '.colonneswrappers',
+			  gutter: 10
+			});
+
+
+
+		}
+	},
 
   new_post: {
 	  init: function() {

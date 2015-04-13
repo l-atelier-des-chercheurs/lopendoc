@@ -22,6 +22,10 @@ Template Name: Accueil avec cartes
 	 $terms = get_terms( $tax, $tax_args);
 	 $count = count($terms);
 
+	?>
+	 <div id="colonnesContainer">
+	<?php
+
 	 if ( $count > 0 ){
 		 foreach ( $terms as $term ) {
 
@@ -58,13 +62,10 @@ Template Name: Accueil avec cartes
 					 <div class="colonnescontent">
 
 						<?php
-
 							if ( $wp_query->have_posts() ) {
-
 								// The Loop
 								while ($wp_query->have_posts()) : $wp_query->the_post();
 									?>
-
 									<div data-post="<?php the_ID(); ?>" <?php post_class(); ?> style="">
 
 									<!--
@@ -109,6 +110,11 @@ Template Name: Accueil avec cartes
 							wp_reset_postdata();
 
 		 }
+
+		?>
+			</div>
+		<?php
+
  }
 
 
