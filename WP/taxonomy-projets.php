@@ -3,6 +3,7 @@
 	$tax = get_query_var( 'taxonomy' );
 	$term = get_query_var( 'term' );
 
+/*
 	// si requête POST
   if ('POST' === $_SERVER['REQUEST_METHOD']
       && ! empty($_POST['action'])
@@ -38,6 +39,7 @@
   	}
 
   }
+*/
 
 
 	$args = array(
@@ -145,14 +147,6 @@
 			<div class="button add-post">
 				Ajouter un post
 			</div>
-<!--
-			<div class="switch-edition">
-				Mode édition
-			</div>
-			<div class="refresh-postie">
-				Rafraîchir
-			</div>
--->
 		</div>
 		<?php
 	}

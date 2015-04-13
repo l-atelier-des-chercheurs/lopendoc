@@ -11,6 +11,9 @@
 		if(window.location.href.indexOf("type=newpost") > -1) {
 			document.getElementsByTagName('body')[0].className += ' new-post';
 		}
+		if(window.location.href.indexOf("type=newproject") > -1) {
+			document.getElementsByTagName('body')[0].className += ' new-project';
+		}
 	</script>
 
 

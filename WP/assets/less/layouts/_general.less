@@ -109,13 +109,16 @@ body {
 			display: inline-block;
 			vertical-align: middle;
 			max-width: 360px;
+			padding-top: 5px;
+			padding-bottom: 5px;
 		}
 
 		.lopendocProjet {
 			display: inline-block;
 			font-weight: bold;
 			vertical-align: middle;
-
+			padding-top: 5px;
+			padding-bottom: 5px;
 		}
 	}
 }
@@ -409,6 +412,33 @@ body {
 		}
 	}
 
+	#nouveauProjet {
+
+		opacity: 	0;
+		height: 	0;
+		width: 	250px;
+
+	  padding: 0;
+		margin-left: 1rem;
+		font-size: 14px;
+
+		textarea {
+			border: 1px solid #ddd;
+		}
+		button {
+			width: 	15px;
+			height: 	15px;
+			border-radius: 0px;
+		}
+
+
+		&.is-visible {
+			opacity: 	1;
+			height: 	60px;
+		}
+
+	}
+
 
 	.colonneswrappers {
 
@@ -433,7 +463,7 @@ body {
 
 		margin-right: 1rem;
 		margin-left: 1rem;
-		margin-bottom: 4rem;
+		margin-bottom: 2rem;
 
 
 		padding-left: 0px;
@@ -617,6 +647,10 @@ body {
 
 	transition: margin-bottom .8s ease-out;
 
+	> p {
+		padding: 20px;
+	}
+
 }
 
 ////////////////////////////// toutes les vues ///////////////////////////////////////////////////////////
@@ -787,7 +821,7 @@ body {
 	}
 
 	&.is-removing .entry-stuff{
-		background-color: #999;
+		background-color: #ddd;
 	}
 
 }
@@ -1203,16 +1237,14 @@ body {
 	APPEL IFRAME : NEW POST
 *********************************************************************/
 
-.new-post {
+.new-post, .new-project {
 
 	body& {
 		padding:10px 20px;
 	}
 	.button-right {
 		display: block !important;
-
 	}
-
 	.fee-toolbar {
 		display: none;
 	}

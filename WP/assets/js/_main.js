@@ -235,7 +235,7 @@ function makeLinksBlank() {
 
 function urlParam(name, url) {
     if (!url) {
-     url = window.location.href;
+    	url = window.location.href;
     }
     var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
     if (!results) {
@@ -265,34 +265,74 @@ function newPost() {
 		var thisID = urlParam('p', url);
 		console.log( "thisID : " + thisID);
 
-     $.ajax({
-        type: "POST",
-        url: thisActionUrl,
-        data: {
-             post_id: thisID,
-             action: "set_taxonomy"
-        },
-        success: function(data)
-        {
-			    $.ajax({
-		        type: "POST",
-		        url: thisActionUrl,
-		        data: {
-		             post_id: thisID,
-		             action: "update_post_visibility",
-		             visibility: "private",
-		        },
-		        success: function(data)
-		        {
-							$(".popover").removeClass("is-loading");
-		        }
-			    });
+		var projName = $(".taxProj").data("term");
 
-        }
+
+
+
+	  var data = {
+        'action': 'add_taxonomy_to_post',
+				'post_id': thisID,
+				'term': projet
+    };
+    $.post(ajaxurl, data, function(response) {
+      //alert('Server response from the AJAX URL ' + response);
+		  var databis = {
+		      'action': 'change_post_visibility',
+					'post_id': thisID,
+					'post_status': 'private'
+		  };
+		  console.log("new call thisID " + thisID + " databis : " + databis);
+		  $.post(ajaxurl, databis, function(response) {
+		    console.log('Server response from the AJAX URL ' + response);
+				$(".popover").removeClass("is-loading");
+		  });
     });
 
-	} );
+
+
+
+
+	});
 }
+
+
+function newProject(projName) {
+
+	$("body").addClass("is-overlaid");
+
+	console.log( "newProject : " + projName);
+
+	// de fee-adminbar.js
+	wp.ajax.post( 'fee_new', {
+		post_type: 'post',
+		nonce: fee.nonce
+	} ).done( function( url ) {
+
+		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newproject" style="border:0px;width:100%;height:100%;"></iframe>';
+		fillPopOver( iframeAvecLien, $("#nouveauProjet"), 900, 600);
+		$(".popover").addClass("is-loading");
+
+		// lui attribuer le bon projet
+		var thisActionUrl = window.location.href;
+		var thisID = urlParam('p', url);
+		console.log( "thisID : " + thisID);
+
+    var data = {
+        'action': 'add_taxonomy_to_post',
+				'post_id': thisID,
+				'term': projName
+    };
+    $.post(ajaxurl, data, function(response) {
+//        alert('Server response from the AJAX URL ' + response);
+			$(".popover").removeClass("is-loading");
+    });
+
+
+	});
+
+}
+
 
 function loginField() {
 
@@ -501,26 +541,18 @@ postViewRoutine = {
 
 				$thisPost.parents(".postContainer").addClass("is-loading");
 
-		     $.ajax({
-		        type: "POST",
-		        url: thisActionUrl,
-		        data: {
-		             post_id: thisID,
-		             action: "update_post_visibility",
-		             visibility: newStatus,
-		        },
-		        success: function(data)
-		        {
-							console.log("SuccessAjax !");
-							console.log("NewStatus !");
-							console.log( newStatus );
-
-							$thisPost.parents(".postContainer").removeClass("is-loading");
-							$thisPost.attr("data-status", newStatus);
-							$thisPost.siblings(".publish-private-post").attr("data-status", newStatus);
-
-		        }
+		    var data = {
+		        'action': 'change_post_visibility',
+						'post_id': thisID,
+						'post_status': newStatus
+		    };
+		    $.post(ajaxurl, data, function(response) {
+					$thisPost.parents(".postContainer").removeClass("is-loading");
+					$thisPost.attr("data-status", response);
+					$thisPost.siblings(".publish-private-post").attr("data-status", response);
+					console.log( response);
 		    });
+
 
 				e.preventDefault();
 
@@ -573,24 +605,18 @@ postViewRoutine = {
 
 				$thisPost.addClass("is-removing");
 
-				$.ajax({
-				  type: "POST",
-				  url: thisActionUrl,
-				  data: {
-				       post_id: thisID,
-				       action: "remove_post"
-				  },
-				  success: function(data)
-				  {
+		    var data = {
+		        'action': 'remove_post',
+						'post_id': thisID
+		    };
+		    $.post(ajaxurl, data, function(response) {
 						console.log("SuccessAjaxPost!");
 						console.log("Removed post!");
-						console.log(data);
+						console.log(response);
 
 						$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
 
-				  }
-				});
-
+		    });
 
 				return false;
 
@@ -843,7 +869,7 @@ var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 window.instanceName = $(".navbar-brand").attr("href").substring( $(".navbar-brand").attr("href").indexOf("opendoc.org/") + 12);
 instanceName = instanceName.substring( 0, instanceName.indexOf("\/") );
 
-window.projet = $(".lopendocProjet").text().trim();
+window.projet = $(".taxProj").data("term");
 
 function sendActionToAnalytics(thisAction ) {
 	if( typeof gaTracker !== 'undefined' ) {
@@ -880,8 +906,6 @@ var Roots = {
 
 				// générer la bonne url, remplir le pop-over avec ce contenu quand il sera dispo
 				var newPostURL = newPost();
-
-				console.log("hello world");
 
 			});
 
@@ -1014,6 +1038,50 @@ var Roots = {
 				  gutter: 10
 				});
 			});
+
+			///////////////////////////////////////////////// ajouter un projet /////////////////////////////////////////////////
+
+			$(".add-project").click(function() {
+
+				// ouvrir un champ formulaire
+				$("#nouveauProjet").addClass("is-visible");
+
+				$("#nouveauProjet button").click( function(e) {
+
+					e.preventDefault();
+
+					sendActionToAnalytics("Nouveau projet ");
+
+					var projName = $("#projectName").val();
+
+					// ajouter en ajax un nouveau terme
+			    var data = {
+			        'action': 'add_tax_term',
+							'tax_term': projName
+			    };
+			    $.post(ajaxurl, data, function(response) {
+						// recharger la page
+
+						console.log( "Reload page ");
+						$this = $(this);
+						window.top.location.reload(true);
+
+					});
+
+
+
+
+/*
+
+					if( projName.length > 0 ) {
+						sendActionToAnalytics( "Nouveau projet" );
+						var newPostURL = newProject(projName);
+					}
+*/
+				});
+			});
+
+
 		}
 	},
 
@@ -1030,6 +1098,7 @@ var Roots = {
 				sendActionToAnalytics("Enregistrer nouveau post");
 				console.log("clicked save");
 				$("body").find(".fee-publish").click();
+
 			});
 
 			$(".edit-post").click(function(e) {
@@ -1053,24 +1122,72 @@ var Roots = {
 				var $thisPost = $(this).parents(".post");
 				thisID = $thisPost.attr("data-id");
 
-				thisActionUrl = window.location.href;
-
-				$.ajax({
-				  type: "POST",
-				  url: thisActionUrl,
-				  data: {
-				       post_id: thisID,
-				       action: "remove_post"
-				  },
-				  success: function(data)
-				  {
+		    var data = {
+		        'action': 'remove_post',
+						'post_id': thisID
+		    };
+		    $.post(ajaxurl, data, function(response) {
 						console.log( "Reload page ");
 
 						$this = $(this);
 						window.top.location.reload(true);
 
-					}
-				});
+		    });
+
+				return false;
+
+			});
+
+		}
+	},
+
+  new_project: {
+	  init: function() {
+			/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
+			// trigger un click sur "Mettre a jour" avant tout
+			var $save_button = $(".save-modifications");
+
+			$save_button.removeClass("is-disabled");
+
+			$save_button.on( "click", function() {
+
+				sendActionToAnalytics("Enregistrer nouveau projet");
+				console.log("clicked save");
+				$("body").find(".fee-publish").click();
+
+			});
+
+			$(".edit-post").click(function(e) {
+
+				sendActionToAnalytics("Fin édition nouveau post");
+				console.log( "Reload page ");
+				$this = $(this);
+				window.top.location.reload(true);
+
+				e.preventDefault();
+
+			});
+
+
+			$(".remove-post").click( function(e) {
+
+				sendActionToAnalytics("Supprimer un post");
+				e.preventDefault();
+
+				var $thisPost = $(this).parents(".post");
+				thisID = $thisPost.attr("data-id");
+
+		    var data = {
+		        'action': 'remove_post',
+						'post_id': thisID
+		    };
+		    $.post(ajaxurl, data, function(response) {
+						console.log( "Reload page ");
+
+						$this = $(this);
+						window.top.location.reload(true);
+
+		    });
 
 
 				return false;

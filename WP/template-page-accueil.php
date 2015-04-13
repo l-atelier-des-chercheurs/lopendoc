@@ -4,6 +4,12 @@ Template Name: Accueil avec cartes
 */
 ?>
 
+<?php
+
+?>
+
+
+
 <div id="wideView">
 
 		<div class='colTitle'>
@@ -12,7 +18,24 @@ Template Name: Accueil avec cartes
 			</h1>
 		</div>
 
- <?php
+	<?php
+	  if ( is_user_logged_in() ) {
+
+				?>
+
+			<div class="topIcons">
+				<div class="button add-project">
+					Ajouter un projet
+				</div>
+			</div>
+			<div id="nouveauProjet">
+        <textarea name="userInput" id="projectName"></textarea>
+        <button>
+        </button>
+			</div>
+			<?php
+		}
+
 	 $tax = 'projets';
  	 $tax_args = array(
  	 	 'orderby' => 'id',
@@ -23,7 +46,7 @@ Template Name: Accueil avec cartes
 	 $count = count($terms);
 
 	?>
-	 <div id="colonnesContainer">
+		<div id="colonnesContainer">
 	<?php
 
 	 if ( $count > 0 ){

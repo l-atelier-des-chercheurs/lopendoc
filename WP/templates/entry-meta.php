@@ -24,16 +24,18 @@
 	</svg>
 	<?php
 		$tags = get_the_tags();
-		$html = '<div class="tag-list">';
-		foreach ( $tags as $tag ) {
-			$tag_link = get_tag_link( $tag->term_id );
+		if ($tags) {
+			$html = '<div class="tag-list">';
+			foreach ( $tags as $tag ) {
+				$tag_link = get_tag_link( $tag->term_id );
 
-			// href='{$tag_link}'
-			$html .= "<a title='{$tag->name} Tag' class='tag-link {$tag->slug}'>";
-			$html .= "{$tag->name}</a>";
+				// href='{$tag_link}'
+				$html .= "<a title='{$tag->name} Tag' class='tag-link {$tag->slug}'>";
+				$html .= "{$tag->name}</a>";
+			}
+			$html .= '</div>';
+			echo $html;
 		}
-		$html .= '</div>';
-		echo $html;
 	?>
 </div>
 <?php
