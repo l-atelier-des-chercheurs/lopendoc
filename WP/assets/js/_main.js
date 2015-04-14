@@ -547,10 +547,12 @@ postViewRoutine = {
 						'post_status': newStatus
 		    };
 		    $.post(ajaxurl, data, function(response) {
+					var str = JSON.parse(response);
+
 					$thisPost.parents(".postContainer").removeClass("is-loading");
-					$thisPost.attr("data-status", response);
-					$thisPost.siblings(".publish-private-post").attr("data-status", response);
-					console.log( response);
+					$thisPost.attr("data-status", str);
+					$thisPost.siblings(".publish-private-post").attr("data-status", str);
+					console.log( "response : " + str);
 		    });
 
 
