@@ -876,7 +876,8 @@ window.projet = $(".taxProj").data("term");
 function sendActionToAnalytics(thisAction ) {
 	if( typeof gaTracker !== 'undefined' ) {
 		console.log("Sent analytics action : instance = " + instanceName + " projet : "  + projet + " action : " + thisAction);
-		gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
+		//gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
+		gaTracker('send', 'event', 'button', 'click', thisAction);
 	}
 
 }
