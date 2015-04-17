@@ -875,9 +875,18 @@ window.projet = $(".taxProj").data("term");
 
 function sendActionToAnalytics(thisAction ) {
 	if( typeof gaTracker !== 'undefined' ) {
-		console.log("Sent analytics action : instance = " + instanceName + " projet : "  + projet + " action : " + thisAction);
+		console.log("Sent analytics action : instance = " + instanceName + "username = " + username + " projet : "  + projet + " action : " + thisAction);
 		//gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
-		gaTracker('send', 'event', 'button', 'click', thisAction);
+/*
+		gaTracker('send', 'event',
+		  'instanceName': instanceName,          // Required.
+		  'user': username,          // Required.
+		  'project': projet,      // Required.
+		  'thisAction': thisAction
+		});
+*/
+		gaTracker('send', 'event', instanceName + "|" + projet + "|" + username, 'click', thisAction);
+		console.log( instanceName + " " + projet + " " + username);
 	}
 
 }

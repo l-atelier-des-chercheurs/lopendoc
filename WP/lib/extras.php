@@ -327,6 +327,18 @@ function add_frontend_ajax_javascript_file(){ ?>
   <script type="text/javascript">
     var ajaxurl = <?php echo json_encode( admin_url( "admin-ajax.php" ) ); ?>;
     var ajaxnonce = <?php echo json_encode( wp_create_nonce( "itr_ajax_nonce" ) ); ?>;
+    var username = "not-logged-in";
+    <?php global $current_user; get_currentuserinfo(); ?>
+		<?php if ( is_user_logged_in() ) {
+			//echo 'Username: ' . $current_user->user_login . "\n"; echo 'User display name: ' . $current_user->display_name . "\n";
+			?>
+				username = "<?php echo $current_user->user_login; ?>";
+			<?php
+			}
+			else {
+				//wp_loginout();
+				}
+			?>
 /*
     var myarray = <?php echo json_encode( array(
          'foo' => 'bar',
