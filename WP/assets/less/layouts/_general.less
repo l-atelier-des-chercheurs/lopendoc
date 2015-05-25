@@ -54,11 +54,12 @@ body {
 	.navbar-container {
 		width: 90%;
 		margin: 0 auto;
+		.clearfix;
+
 	}
 
 
 	@media @tablet-only {
-		padding: 0 20px;
 	}
 
 }
@@ -78,8 +79,8 @@ body {
 		width: 100%;
 		text-align: left;
 
-		padding-top: 5px;
-		padding-bottom: 5px;
+		padding-top: 	10px;
+		padding-bottom: 10px;
 
 	  font-size: 16px;
 	  line-height: 18px;
@@ -161,8 +162,15 @@ body {
 }
 
 
+.timelineContainer {
+
+  border-top: 1px solid #eee;
+
+	.tickPost {
 
 
+	}
+}
 
 
 
@@ -286,9 +294,17 @@ body {
 		}
 	}
 
-	&.is-visible .login {
+	&.is-visible .popoverContainer {
 		visibility: visible;
 		padding:20px;
+	}
+
+	h3 {
+		margin-top: 0;
+	}
+
+	.page-template-template-page-accueil & #nouveauProjet {
+		display: block;
 	}
 
 }
@@ -414,21 +430,35 @@ body {
 
 	#nouveauProjet {
 
+		display: none;
 		opacity: 	0;
 		height: 	0;
-		width: 	250px;
+		width: 	100%;
 
 	  padding: 0;
-		margin-left: 1rem;
-		font-size: 14px;
 
 		textarea {
 			border: 1px solid #ddd;
+			width: 	100%;
 		}
 		button {
-			width: 	15px;
-			height: 	15px;
-			border-radius: 0px;
+			width: 	100%;
+			border:none;
+			border-radius: 0.25em;
+			padding: 0 1em;
+			margin: 0;
+			height: 35px;
+			line-height: 36px;
+
+			cursor: pointer;
+
+			text-align: center;
+			color: #fff;
+
+			-webkit-font-smoothing: antialiased;
+
+			background-color: @cpublish;
+
 		}
 
 
@@ -442,13 +472,9 @@ body {
 
 	.colonneswrappers {
 
-		width: ~"calc(25% - 4rem)";
-		font-size: 14px;
+		width: 250px;
+		max-width: 250px;
 
-
-		@media @tablet-only {
-			width: ~"calc(50% - 2rem)";
-		}
 		@media @phone-only {
 			width: 100%;
 			margin: 0;
@@ -537,6 +563,10 @@ body {
 	.colTitle, .topIcons {
 		.make-row;
 		margin-left: 29.2%;
+
+		@media @phone-only {
+			margin-left: 	0;
+		}
 	}
 
 
@@ -557,7 +587,7 @@ body {
 		.make-sm-column(9);
 
 		font-size: 	1em;
-		line-height: 1.2;
+		line-height: 2;
 		padding: 4px 2rem;
 		margin-left: 0;
 		margin-bottom: 2em;
@@ -582,6 +612,10 @@ body {
 	.topIcons {
 		margin-bottom: 2rem;
 
+		@media @phone-only {
+
+			padding: 4px 2rem;
+  	}
 	}
 
 }
@@ -1353,6 +1387,20 @@ body {
 	z-index: 1201;
 
 }
+.lwa .lwa-username-label, .lwa .lwa-password-label {
+	padding-right: 0;
+}
+
+.lwa-password input, .lwa-username input, .lwa-email input, .lwa-remember-email input {
+	width: 	100%;
+	padding:0;
+}
+
+td.lwa-username-input , td.lwa-password-input {
+	padding-top: 	0;
+	padding-bottom: 	10px;
+
+}
 
 // champ dans la navbar
 .lwa {
@@ -1373,7 +1421,6 @@ body {
 
 	h3 {
 		font-size: 1em;
-		text-decoration: underline;
 		margin-top: 5px;
 		display: none;
 	}

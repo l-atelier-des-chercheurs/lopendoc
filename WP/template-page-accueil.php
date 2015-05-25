@@ -29,9 +29,10 @@ Template Name: Accueil avec cartes
 				</div>
 			</div>
 			<div id="nouveauProjet">
+				<h3>Ajouter un projet</h3>
+				<p>Entrez un nom</p>
         <textarea name="userInput" id="projectName"></textarea>
-        <button>
-        </button>
+        <button>Ajouter et recharger la page</button>
 			</div>
 			<?php
 		}

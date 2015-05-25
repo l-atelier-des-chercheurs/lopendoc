@@ -16,10 +16,41 @@
 
 (function($) {
 
+var mapRange = function(from, to, s) {
+  return to[0] + (s - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
+};
+
+
 function createTimeline() {
 
+
+	var navbarContainer = d3.select( $(".banner")[0]);
+
+	var makeTimeline = navbarContainer.append("svg")
+																	.attr("width", "100%")
+																	.attr("height","15px")
+																	.attr("display", "block")
+																	.attr("class", "timelineContainer")
+																	;
+
+																	adjustMainMargintop();
+
+
+	// récupérer le temps actuel
+	var timeinMSNow = new Date().getTime();
+	var maxtimeinMS;
+
+	$(".projetContainer").find(".postContainer").last().each(function() {
+
+		$this = $(this);
+
+		timeinISO = new Date( $this.find("time").attr("datetime") );
+		maxtimeinMS = timeinISO.getTime();
+
+	});
+
 	// pour chaque post de la page
-	$(".projetContainer").find(".postContainer").each(function() {
+	$(".projetContainer").find(".postContainer").each(function(index) {
 
 		$this = $(this);
 
@@ -27,7 +58,26 @@ function createTimeline() {
 		timeinMS = timeinISO.getTime();
 		//console.log(" TIME : " + timeinMS);
 
+		// faire un pourcentage un placement sur X
+		var timeRangeFrom0to100 = mapRange([timeinMSNow, maxtimeinMS], [0, 100], timeinMS);
 
+		fillColor = $this.find(".publish-private-post").attr("data-status") === "publish" ? "#45C1B4" : "#F2682C";
+
+		makeTimeline.append("circle")
+								.attr("r", 0)
+								.attr("fill", fillColor)
+								.attr("stroke", "transparent")
+								.attr("cx", timeRangeFrom0to100 + "%")
+								.attr("cy", "6.5")
+								.transition()
+								.delay(function() {
+								    return index * 110; // Or whatever you want the delay to be.
+								})
+								.duration(300)
+								.ease("in-out")
+								.attr("r", 3.5)
+
+								;
 
 
 	});
@@ -342,19 +392,16 @@ function loginField() {
 
 	fillPopOver( loginWindow, $(".button.login-field"), 300, 380 );
 
-	$(".popover").addClass("is-loading");
-
-	$(".popover").removeClass("is-loading");
-
 }
 
 function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
-	var $popover = $(".popover");
-	$popover.html( content);
+	var $popover = $(".popover .popoverContainer");
+	$popover.html(content);
 
 	$popover.append('<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div>');
 
 	$popover.addClass("is-visible");
+	$popover.find(".login").css("visibility", "visible");
 
 	var button = thisbutton;
 	var maxQuickWidth = 900;
@@ -1063,11 +1110,22 @@ var Roots = {
 				// ouvrir un champ formulaire
 				$("#nouveauProjet").addClass("is-visible");
 
+				$("body").addClass("is-overlaid");
+
+				var newProjectInputField = $("#nouveauProjet");
+				fillPopOver( newProjectInputField, $(this), 300, 380 );
+
 				$("#nouveauProjet button").click( function(e) {
+
+
+
+
 
 					e.preventDefault();
 
 					sendActionToAnalytics("Nouveau projet ");
+
+
 
 					var projName = $("#projectName").val();
 

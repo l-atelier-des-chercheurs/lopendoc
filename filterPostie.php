@@ -229,6 +229,7 @@ function tax_tag($post) {
 */
 
 	if( strlen( $project ) > 0 ) {
+		$project = str_replace( "-", " ", $project);
 	  EchoInfo( "Ajout au post " . $post['ID'] );
 	  EchoInfo( "Du projet " . $project );
 	  EchoInfo( "##" . $project . "##" );

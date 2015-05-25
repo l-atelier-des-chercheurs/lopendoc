@@ -279,6 +279,7 @@ function login_lopendoc() { ?>
 		     background-color: <?php $primaireColor; ?>;
 		    }
 
+
     </style>
 <?php }
 add_action( 'login_enqueue_scripts', 'login_lopendoc' );
@@ -316,6 +317,10 @@ function adminbarcolor_opendoc() { ?>
 	      #wpadminbar ul#wp-admin-bar-root-default>#wp-admin-bar-wp-logo .ab-sub-wrapper {
 		    	display: none;
 		    }
+
+		    input#mail_addressTC {
+			  	width: 320px;
+			  }
     </style>
 <?php
 	}

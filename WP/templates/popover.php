@@ -1,4 +1,5 @@
 <div class="popover">
+	<div class="popoverContainer"></div>
 </div>
 
 <!--
