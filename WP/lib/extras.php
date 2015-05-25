@@ -215,6 +215,9 @@ class new_general_setting {
 
         register_setting( 'general', 'secondary_color', 'esc_attr' );
         add_settings_field('secondary_color', '<label for="secondary_color">'.__('Couleur secondaire' , 'secondary_color' ).'</label>' , array(&$this, 'fields_html2') , 'general' );
+
+        register_setting( 'general', 'mail_addressTC', 'esc_attr' );
+        add_settings_field('mail_addressTC', '<label for="mail_addressTC">'.__('Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)' , 'mail_addressTC' ).'</label>' , array(&$this, 'fields_html3') , 'general' );
     }
     function fields_html() {
         $value1 = get_option( 'primary_color', '' );
@@ -223,6 +226,10 @@ class new_general_setting {
     function fields_html2() {
         $value2 = get_option( 'secondary_color', '' );
         echo '<input type="text" id="secondary_color" name="secondary_color" value="' . $value2 . '" />';
+		}
+    function fields_html3() {
+        $value3 = get_option( 'mail_addressTC', '' );
+        echo '<input type="text" id="mail_addressTC" name="mail_addressTC" value="' . $value3 . '" />';
 		}
 }
 

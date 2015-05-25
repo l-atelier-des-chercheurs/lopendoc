@@ -1043,13 +1043,18 @@ var Roots = {
 
 			$('#wideView img').removeAttr('style');
 
-			$(document).ready(function() {
-				var $container = $('#wideView #colonnesContainer');
+			var $container = $('#wideView #colonnesContainer');
+			$container.packery({
+			  itemSelector: '.colonneswrappers',
+			  gutter: 10
+			});
+			setTimeout(function() {
 				$container.packery({
 				  itemSelector: '.colonneswrappers',
 				  gutter: 10
 				});
-			});
+
+			}, 500);
 
 			///////////////////////////////////////////////// ajouter un projet /////////////////////////////////////////////////
 

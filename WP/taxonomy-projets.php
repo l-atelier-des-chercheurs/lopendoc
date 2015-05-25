@@ -137,6 +137,20 @@
 			<h2 class="entry-title">
 				<?php echo roots_title( ); ?>
 			</h2>
+			<?php
+			  if ( is_user_logged_in() ) {
+					      $mailToContribute =  get_option( "mail_addressTC" );
+					      if( !empty($mailToContribute) ) {
+									echo "<h3 class='instructions'>";
+						      $mailToContribute = str_replace("leprojet", $term, $mailToContribute);
+						    	echo "Pour contribuer, envoyez un mail à <a href='mailto:" . $mailToContribute . "' target='_blank'>" . $mailToContribute . "</a>, ou cliquez sur le bouton <em>Ajoutez un post</em> ci-dessous.";
+						    	echo "</h3>";
+						    }
+
+
+				}
+			?>
+
 		</div>
 <?php
   if ( is_user_logged_in() ) {
