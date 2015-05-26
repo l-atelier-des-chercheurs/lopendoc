@@ -166,9 +166,8 @@ body {
 
   border-top: 1px solid #eee;
 
-	.tickPost {
-
-
+	body:not(.is-edition) & [data-status=private] {
+		display: none;
 	}
 }
 
@@ -1029,6 +1028,12 @@ body {
 
 			box-shadow: 3px 3px 15px 1px #d4d4d4;
 
+		}
+		.post[data-status=publish] .entry-stuff {
+		    box-shadow: 3px 3px 15px -6px #45C1B4;
+		}
+		.post[data-status=private] .entry-stuff {
+		    box-shadow: 3px 3px 15px -6px #F2682C;
 		}
 
 		.entry-title-and-content {

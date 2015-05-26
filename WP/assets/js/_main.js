@@ -61,9 +61,12 @@ function createTimeline() {
 		// faire un pourcentage un placement sur X
 		var timeRangeFrom0to100 = mapRange([timeinMSNow, maxtimeinMS], [0, 100], timeinMS);
 
-		fillColor = $this.find(".publish-private-post").attr("data-status") === "publish" ? "#45C1B4" : "#F2682C";
+		var dataStatus = $this.find(".publish-private-post").attr("data-status");
+
+		fillColor = dataStatus === "publish" ? "#45C1B4" : "#F2682C";
 
 		makeTimeline.append("circle")
+								.attr("data-status", dataStatus)
 								.attr("r", 0)
 								.attr("fill", fillColor)
 								.attr("stroke", "transparent")
@@ -82,10 +85,59 @@ function createTimeline() {
 
 	});
 
+	ppostVisible = -1;
+	$(window).on('scroll', function () {
 
+		postVisible = whichPostIndexIsVisible(window.pageYOffset);
+		if( postVisible !== ppostVisible ) {
+
+			$('.postContainer').eq(	ppostVisible).removeClass("is-active");
+			makeTimeline.selectAll("circle")
+									.filter(function (d, i) { return i === ppostVisible;})
+									.transition()
+									.duration(300)
+									.attr("r", 3.5);
+
+			$('.postContainer').eq(	postVisible).addClass("is-active");
+			makeTimeline.selectAll("circle")
+									.filter(function (d, i) { return i === postVisible;})
+									.transition()
+									.duration(300)
+									.attr("r", 6.5);
+
+			ppostVisible = postVisible;
+		}
+
+	});
 
 
 }
+
+
+function whichPostIndexIsVisible(modwscrollTop) {
+	var dist =0;
+	var pDist=10000000000;
+	var articleActif;
+	//optimisation : stocker le numéro d'article plutôt que l'article : http://jsperf.com/jquery-each-this-vs-eq-index
+	var numArticleActif;
+
+	var $articles = $('.postContainer');
+	$articles.each( function(index){
+		dist = Math.abs(modwscrollTop - this.offsetTop);
+		if(dist<pDist) {
+			pDist = dist;
+			numArticleActif = index;
+		}
+		dist = Math.abs(modwscrollTop - (this.offsetTop + this.offsetHeight));
+		if(dist<pDist) {
+			pDist = dist;
+			numArticleActif = index;
+		}
+	});
+	//articleActif = $articles.eq(numArticleActif);
+	return numArticleActif;
+}
+
 
 function replacePostWithIframe( $thisPost, pageLink ) {
 
@@ -1287,6 +1339,9 @@ var Roots = {
 			}
 
 			createTimeline();
+
+
+
 
 		}
 	},
