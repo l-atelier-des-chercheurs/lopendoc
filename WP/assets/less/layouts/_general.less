@@ -164,8 +164,6 @@ body {
 
 .timelineContainer {
 
-  border-top: 1px solid #eee;
-
 	body:not(.is-edition) & [data-status=private] {
 		display: none;
 	}
@@ -293,18 +291,19 @@ body {
 		}
 	}
 
-	&.is-visible .popoverContainer {
-		visibility: visible;
+	.popoverContainer {
 		padding:20px;
+	}
+
+	// rendre tous les contenus de popoverContainer block
+	.popoverContainer > * {
+		display: block !important;
 	}
 
 	h3 {
 		margin-top: 0;
 	}
 
-	.page-template-template-page-accueil & #nouveauProjet {
-		display: block;
-	}
 
 }
 
@@ -427,14 +426,11 @@ body {
 		}
 	}
 
-	#nouveauProjet {
+	.nouveauProjet {
 
-		display: none;
-		opacity: 	0;
-		height: 	0;
 		width: 	100%;
-
 	  padding: 0;
+		display: none;
 
 		textarea {
 			border: 1px solid #ddd;
@@ -459,13 +455,6 @@ body {
 			background-color: @cpublish;
 
 		}
-
-
-		&.is-visible {
-			opacity: 	1;
-			height: 	60px;
-		}
-
 	}
 
 
@@ -636,7 +625,6 @@ body {
 
 	.button-right {
 
-		display: inline-block;
 		position: absolute;
 
 		font-size: 0;
@@ -738,6 +726,7 @@ body {
 		.is-edition & {
 			border-radius: 5px;
 			background-color: #fff;
+
 		}
 
 		.entry-meta {
@@ -1006,6 +995,10 @@ body {
 		background-color: @cpublish;
 		color: white;
 	}
+	.button-right {
+		display: inline-block;
+	}
+
 
 
 	.taxProj {
@@ -1184,6 +1177,8 @@ body {
 		}
 		&.is-loading img {
 			opacity: .6;
+
+			// placer un loader css
 		}
 
 	}
@@ -1384,6 +1379,7 @@ body {
 //champ d'inscription
 .lwa-modal {
 	z-index: 1202;
+	margin-left: 	-200px;
 
 }
 

@@ -28,7 +28,7 @@ Template Name: Accueil avec cartes
 					Ajouter un projet
 				</div>
 			</div>
-			<div id="nouveauProjet">
+			<div class="nouveauProjet">
 				<h3>Ajouter un projet</h3>
 				<p>Entrez un nom</p>
         <textarea name="userInput" id="projectName"></textarea>
@@ -116,7 +116,7 @@ Template Name: Accueil avec cartes
 
 									<div class="entry-content">
 										<p>
-											<small>Aucune description actuellement pour ce projet, pour en ajouter une envoyez un mail à l'adresse mail du projet avec comme sujet <em>Description</em>.</small>
+											<small>Aucune description actuellement pour ce projet.</small>
 										</p>
 									</div>
 								</div>

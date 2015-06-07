@@ -27,13 +27,19 @@ function createTimeline() {
 	var navbarContainer = d3.select( $(".banner")[0]);
 
 	var makeTimeline = navbarContainer.append("svg")
-																	.attr("width", "100%")
-																	.attr("height","15px")
+																	.attr("width", "95%")
+																	.attr("margin-left", "2.5%")
+																	.attr("height","20px")
 																	.attr("display", "block")
 																	.attr("class", "timelineContainer")
+																	.attr("style", "overflow:visible; bottom:-14px; position: absolute")
+
 																	;
 
 																	adjustMainMargintop();
+
+
+
 
 
 	// récupérer le temps actuel
@@ -70,20 +76,34 @@ function createTimeline() {
 								.attr("r", 0)
 								.attr("fill", fillColor)
 								.attr("stroke", "transparent")
+								.style("opacity",0.6)
 								.attr("cx", timeRangeFrom0to100 + "%")
-								.attr("cy", "6.5")
+								.attr("cy", "7")
 								.transition()
 								.delay(function() {
 								    return index * 110; // Or whatever you want the delay to be.
 								})
 								.duration(300)
 								.ease("in-out")
-								.attr("r", 3.5)
+								.attr("r", 6.5)
 
 								;
 
 
 	});
+
+
+
+
+	makeTimeline.append("rect")
+							.attr("class", "repere")
+							.attr("x", -2)
+							.attr("y", -6)
+							.attr("width",1)
+							.attr("height", 26)
+							.attr("fill", "#333")
+							.style("opacity",0.9)
+							;
 
 	ppostVisible = -1;
 	$(window).on('scroll', function () {
@@ -96,14 +116,41 @@ function createTimeline() {
 									.filter(function (d, i) { return i === ppostVisible;})
 									.transition()
 									.duration(300)
-									.attr("r", 3.5);
+									.attr("r", 6.5)
+									.style("opacity",0.6)
+
+									;
+
+
 
 			$('.postContainer').eq(	postVisible).addClass("is-active");
+
+			var posXofNewCircle = 0;
+			var colorofNewCircle;
+
 			makeTimeline.selectAll("circle")
-									.filter(function (d, i) { return i === postVisible;})
-									.transition()
-									.duration(300)
-									.attr("r", 6.5);
+										.filter(function (d, i) {
+											if( i === postVisible) {
+												posXofNewCircle = d3.select(this).attr("cx");
+												colorofNewCircle = d3.select(this).attr("fill");
+												return true;
+											}
+										})
+										.transition()
+										.duration(300)
+										.style("opacity",0.9)
+										.attr("r", 8.5);
+
+			console.log( "posXofNewCircle " + posXofNewCircle);
+
+			if ( posXofNewCircle.length > 0 ) {
+				makeTimeline.select(".repere")
+						.transition()
+						.duration(300)
+						.attr("fill", colorofNewCircle)
+						.attr("x", posXofNewCircle)
+						;
+			}
 
 			ppostVisible = postVisible;
 		}
@@ -393,8 +440,6 @@ function newPost() {
 
 
 
-
-
 	});
 }
 
@@ -412,7 +457,7 @@ function newProject(projName) {
 	} ).done( function( url ) {
 
 		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newproject" style="border:0px;width:100%;height:100%;"></iframe>';
-		fillPopOver( iframeAvecLien, $("#nouveauProjet"), 900, 600);
+		fillPopOver( iframeAvecLien, $(".nouveauProjet"), 900, 600);
 		$(".popover").addClass("is-loading");
 
 		// lui attribuer le bon projet
@@ -441,19 +486,31 @@ function loginField() {
 	$("body").addClass("is-overlaid");
 
 	var loginWindow = $(".login").clone(true);
+	console.log( "Start popover with content : " + loginWindow);
 
 	fillPopOver( loginWindow, $(".button.login-field"), 300, 380 );
+
 
 }
 
 function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
-	var $popover = $(".popover .popoverContainer");
-	$popover.html(content);
 
-	$popover.append('<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div>');
+
+
+	var $popover = $(".popover");
+
+	if( $popover.find(".popoverContainer").length === 0) {
+		$(".popover").html( "<div class='popoverContainer'></div>");
+	}
+
+	$popoverContainer = $(".popover .popoverContainer");
+
+	$popoverContainer.html(content);
+
+	$popoverContainer.append('<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div>');
 
 	$popover.addClass("is-visible");
-	$popover.find(".login").css("visibility", "visible");
+	$popoverContainer.find(".login").css("visibility", "visible");
 
 	var button = thisbutton;
 	var maxQuickWidth = 900;
@@ -492,11 +549,10 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 //					$('.cd-quick-view').addClass('add-content');
 		});
 */
-	}).addClass('is-visible');
+	});
 
 	$("body").on('click', function(event){
 		if( $(event.target).is('.close-panel') || $(event.target).is('body.is-overlaid')) {
-
 			closePopover();
 		}
 	});
@@ -510,7 +566,6 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 function closePopover() {
 	$("body").removeClass("is-overlaid");
 	$(".popover").removeClass("is-visible").empty();
-
 }
 
 fixedNav = {
@@ -1001,7 +1056,7 @@ var Roots = {
 
       // désactive les console.log si pas un superadmin
 			if( !$("body").hasClass("superadmin") ) {
-		    logger.disableLogger();
+		    //logger.disableLogger();
 			}
 
 			postViewRoutine.init();
@@ -1160,26 +1215,19 @@ var Roots = {
 			$(".add-project").click(function() {
 
 				// ouvrir un champ formulaire
-				$("#nouveauProjet").addClass("is-visible");
-
 				$("body").addClass("is-overlaid");
 
-				var newProjectInputField = $("#nouveauProjet");
+				var newProjectInputField = $(".nouveauProjet").clone(true);
 				fillPopOver( newProjectInputField, $(this), 300, 380 );
 
-				$("#nouveauProjet button").click( function(e) {
+				$(".popover .nouveauProjet button").click( function(e) {
 
-
-
-
-
+					$popover = $(this).closest(".popover");
 					e.preventDefault();
 
 					sendActionToAnalytics("Nouveau projet ");
 
-
-
-					var projName = $("#projectName").val();
+					var projName = $popover.find("#projectName").val();
 
 					// ajouter en ajax un nouveau terme
 			    var data = {
@@ -1190,8 +1238,9 @@ var Roots = {
 						// recharger la page
 
 						console.log( "Reload page ");
+						console.log( "Response = " + response);
 						$this = $(this);
-						window.top.location.reload(true);
+						//window.top.location.reload(true);
 
 					});
 
