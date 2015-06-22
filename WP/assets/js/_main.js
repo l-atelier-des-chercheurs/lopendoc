@@ -405,7 +405,7 @@ function newPost() {
 		nonce: fee.nonce
 	} ).done( function( url ) {
 
-		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newpost" style="border:0px;width:100%;height:100%;"></iframe>';
+		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newpost" style="border:0px;width:100%;height:550px;"></iframe>';
 		fillPopOver( iframeAvecLien, $(".button.add-post"), 900, 600);
 		$(".popover").addClass("is-loading");
 
@@ -1240,7 +1240,7 @@ var Roots = {
 						console.log( "Reload page ");
 						console.log( "Response = " + response);
 						$this = $(this);
-						//window.top.location.reload(true);
+						window.top.location.reload(true);
 
 					});
 
