@@ -123,7 +123,9 @@
 	} else {
 		?>
 		<div class="descriptionContainer">
-			<p>Aucune description actuellement pour ce projet, pour en ajouter une envoyez un mail à l'adresse mail du projet avec comme sujet le mot <strong>Description</strong>.</p>
+			<p>
+				<?php _e('No description for this project yet. To add one send an email to this project\'s mail with the subject line <strong>Description</strong>.', 'opendoc'); ?>
+			</p>
 		</div>
 		<?php
 	}
@@ -142,8 +144,10 @@
 					      $mailToContribute =  get_option( "mail_addressTC" );
 					      if( !empty($mailToContribute) ) {
 									echo "<h3 class='instructions'>";
-						      $mailToContribute = str_replace("leprojet", $term, $mailToContribute);
-						    	echo "Pour contribuer, envoyez un mail à <a href='mailto:" . $mailToContribute . "' target='_blank'>" . $mailToContribute . "</a>, ou cliquez sur le bouton <em>Ajoutez un post</em> ci-dessous.";
+						      	$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
+						    		_e("To contribute, send an email to ", 'opendoc');
+										echo "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
+						    		_e(", or click on <strong>Add a post</strong>.", 'opendoc');
 						    	echo "</h3>";
 						    }
 
@@ -159,7 +163,7 @@
 
 		<div class="topIcons">
 			<div class="button add-post">
-				Ajouter un post
+				<?php _e('Add a post', 'opendoc'); ?>
 			</div>
 		</div>
 		<?php

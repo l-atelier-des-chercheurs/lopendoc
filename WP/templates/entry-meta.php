@@ -54,7 +54,7 @@
 	</svg>
 
 	<div class="comments-link">
-		<?php comments_popup_link( __( 'Ajouter un commentaire', 'lopendoc' ), __( '1 commentaire', 'lopendoc' ), __( '% commentaires', 'lopendoc' ) ); ?>
+		<?php comments_popup_link( __( 'Add a comment', 'opendoc' ), __( '1 comment', 'opendoc' ), __( '% comments', 'opendoc' ) ); ?>
 	</div>
 
 <!-- <div class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'twentyfourteen' ), __( '1 Comment', 'twentyfourteen' ), __( '% Comments', 'twentyfourteen' ) ); ?></div> -->

@@ -24,7 +24,8 @@
 						<rect x="6.8" y="21.8" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 8.2525 50.0887)" fill="#FBB41D" width="15.3" height="3.1"/>
 					</svg>
 				</div>
-				Passer en privé
+
+				<?php _e('Make this private', 'opendoc'); ?>
 
 			</div>
 			<div class="mode-switcher publish">
@@ -44,7 +45,7 @@
 
 				</div>
 
-				Passer en public
+						<?php _e('Make this public', 'opendoc'); ?>
 
 			</div>
 		</div>

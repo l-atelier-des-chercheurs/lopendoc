@@ -94,7 +94,8 @@ function createTimeline() {
 
 
 
-
+// repère vertical qui traverse la timeline
+/*
 	makeTimeline.append("rect")
 							.attr("class", "repere")
 							.attr("x", -2)
@@ -104,6 +105,7 @@ function createTimeline() {
 							.attr("fill", "#333")
 							.style("opacity",0.9)
 							;
+*/
 
 	ppostVisible = -1;
 	$(window).on('scroll', function () {
@@ -160,6 +162,9 @@ function createTimeline() {
 
 }
 
+function langIsFrench() {
+	return $("html").attr("lang") === "fr-FR";
+}
 
 function whichPostIndexIsVisible(modwscrollTop) {
 	var dist =0;
@@ -443,42 +448,6 @@ function newPost() {
 	});
 }
 
-
-function newProject(projName) {
-
-	$("body").addClass("is-overlaid");
-
-	console.log( "newProject : " + projName);
-
-	// de fee-adminbar.js
-	wp.ajax.post( 'fee_new', {
-		post_type: 'post',
-		nonce: fee.nonce
-	} ).done( function( url ) {
-
-		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newproject" style="border:0px;width:100%;height:100%;"></iframe>';
-		fillPopOver( iframeAvecLien, $(".nouveauProjet"), 900, 600);
-		$(".popover").addClass("is-loading");
-
-		// lui attribuer le bon projet
-		var thisActionUrl = window.location.href;
-		var thisID = urlParam('p', url);
-		console.log( "thisID : " + thisID);
-
-    var data = {
-        'action': 'add_taxonomy_to_post',
-				'post_id': thisID,
-				'term': projName
-    };
-    $.post(ajaxurl, data, function(response) {
-//        alert('Server response from the AJAX URL ' + response);
-			$(".popover").removeClass("is-loading");
-    });
-
-
-	});
-
-}
 
 
 function loginField() {
@@ -1099,6 +1068,10 @@ var Roots = {
 					return false;
 				}
 
+				if( $this.hasClass("is-loading")) {
+					return false;
+				}
+
 				$this.addClass("is-loading");
 
 				thisActionUrl = window.location.href;
@@ -1129,7 +1102,7 @@ var Roots = {
 
 								data = project.substring( project.indexOf("##")+2 );
 
-								if( projectName.toLowerCase() === projectTerm.toLowerCase() ) {
+								if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
 									countNewContentForProject++;
 									countNewContent++;
 								} else {
@@ -1149,10 +1122,20 @@ var Roots = {
 								$this.empty();
 
 								if( countNewContentForProject > 0 ) {
-									$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+									if( langIsFrench() ) {
+										$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+									} else {
+										$this.append("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. <a href=''>Refresh the page.</a></div>");
+
+									}
 								} else {
 
-									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+									if( langIsFrench() ) {
+										$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+									} else {
+										$this.append("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
+									}
+
 									setTimeout( function() {
 										$this.empty().text("Rafraîchir");
 									}, 2000);
@@ -1179,6 +1162,8 @@ var Roots = {
 				sendActionToAnalytics("Inscription");
 				loginField();
 			});
+
+			//$('[data-toggle="tooltip"]').tooltip();
 
     }
 
@@ -1218,7 +1203,7 @@ var Roots = {
 				$("body").addClass("is-overlaid");
 
 				var newProjectInputField = $(".nouveauProjet").clone(true);
-				fillPopOver( newProjectInputField, $(this), 300, 380 );
+				fillPopOver( newProjectInputField, $(this), 300, 200 );
 
 				$(".popover .nouveauProjet button").click( function(e) {
 

@@ -17,6 +17,9 @@ Template Name: Accueil avec cartes
 				<?php echo roots_title( ); ?>
 			</h1>
 		</div>
+		<div class="pageText">
+			<?php echo get_post_field('post_content'); ?>
+		</div>
 
 	<?php
 	  if ( is_user_logged_in() ) {
@@ -25,14 +28,21 @@ Template Name: Accueil avec cartes
 
 			<div class="topIcons">
 				<div class="button add-project">
-					Ajouter un projet
+					<?php _e('Add a project', 'opendoc'); ?>
 				</div>
 			</div>
 			<div class="nouveauProjet">
-				<h3>Ajouter un projet</h3>
-				<p>Entrez un nom</p>
+				<h3>
+					<?php _e('Add a project', 'opendoc'); ?>
+				</h3>
+				<p>
+					<?php _e('Write your project\'s name', 'opendoc'); ?>
+				</p>
+
         <textarea name="userInput" id="projectName"></textarea>
-        <button>Ajouter et recharger la page</button>
+        <button>
+					<?php _e('Add the project', 'opendoc'); ?>
+        </button>
 			</div>
 			<?php
 		}
@@ -116,7 +126,9 @@ Template Name: Accueil avec cartes
 
 									<div class="entry-content">
 										<p>
-											<small>Aucune description actuellement pour ce projet.</small>
+											<small>
+												<?php _e('No description for this project yet.', 'opendoc'); ?>
+											</small>
 										</p>
 									</div>
 								</div>

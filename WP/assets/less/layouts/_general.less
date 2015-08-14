@@ -13,11 +13,10 @@
 
 
 a {
-	color: @text-color;
+	color: #f16f2d;
 }
 
 a:hover {
-	color: #f16f2d;
 	text-decoration: none;
 }
 
@@ -37,6 +36,13 @@ body {
 	&.is-edition {
 		background-color: #EFEFEF;
 	}
+}
+
+.tooltip.top .tooltip-inner {
+    background-color: #45c1b4;
+}
+.tooltip.top .tooltip-arrow {
+      border-top-color: #45c1b4;
 }
 
 
@@ -417,7 +423,12 @@ body {
 		padding: 2rem;
 		margin-left: 1rem;
 		margin-bottom: 2rem;
+	}
 
+	.pageText {
+		padding-left: 2rem;
+		margin-left: 1rem;
+		margin-bottom: 1rem;
 	}
 
 	.topIcons {
@@ -437,8 +448,10 @@ body {
 		display: none;
 
 		textarea {
+			.form-control;
 			border: 1px solid #ddd;
 			width: 	100%;
+			margin-bottom: 	15px;
 		}
 		button {
 			width: 	100%;
@@ -658,6 +671,7 @@ body {
 				height: 0px;
 				opacity: 0;
 				padding: 0;
+				pointer-events: none;
 			}
 
 			.remove-post {
@@ -712,7 +726,7 @@ body {
 	img {
 		max-width: 100%;
 		height:auto;
-		max-height: 400px;
+		max-height: 1280px;
 		width: auto;
 
 		margin-top: 1rem;
@@ -1397,8 +1411,12 @@ body {
 }
 
 .lwa-password input, .lwa-username input, .lwa-email input, .lwa-remember-email input {
+	.form-control;
 	width: 	100%;
-	padding:0;
+
+	input {
+		.form-control;
+	}
 }
 
 td.lwa-username-input , td.lwa-password-input {
@@ -1452,6 +1470,11 @@ td.lwa-username-input , td.lwa-password-input {
 		-webkit-font-smoothing: antialiased;
 
 		background-color: @cpublish;
+
+		&:focus {
+			outline: none;
+			color: #fff;
+		}
 
 	}
 

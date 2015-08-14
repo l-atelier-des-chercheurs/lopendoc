@@ -2,7 +2,9 @@
   <div class="navbar-container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
+        <span class="sr-only">
+					<?php _e('Toggle navigation', 'opendoc'); ?>
+        </span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -60,23 +62,23 @@
 			<div class="actionsContainer">
 				<ul class="action-button actions">
 					<li class="button switch-edition">
-						Mode édition
+						<?php _e('Edit mode', 'opendoc'); ?>
 					</li>
 					<li class="button refresh-postie">
-						Rafraîchir
+						<?php _e('Refresh', 'opendoc'); ?>
 					</li>
 
 				<?php
 					if ( !is_user_logged_in() ) {
 						?>
 					<li class="button login-field">
-						Inscription / Connexion
+						<?php _e('Register/login', 'opendoc'); ?>
 					</li>
 				<?php
 					} else {
 				?>
 					<li class="button deconnexion-field">
-						Déconnexion
+						<?php _e('Logout', 'opendoc'); ?>
 					</li>
 
 				<?php

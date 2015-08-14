@@ -63,16 +63,6 @@ Template Name: Column by tags
 												  <div class="entry-summary">
 
 												    <?php
-/*
-												    $args = array( 'post_type' => 'attachment', 'numberposts' => -1, 'post_status' => null, 'post_parent' => $post->ID );
-												    $attachments = get_posts($args);
-												    if ($attachments) {
-												        foreach ( $attachments as $attachment ) {
-												            the_attachment_link( $attachment->ID , true );
-												        }
-												    }
-*/
-
 															the_content();
 												    ?>
 
