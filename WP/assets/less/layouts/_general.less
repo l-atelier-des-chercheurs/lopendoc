@@ -3,6 +3,7 @@
 @cprivate : #F2682C; // orange de private
 @cpublish : #45C1B4; // vert de publication
 @caction : #EB2C37; // un rouge
+@cfond: #F9F9F9;
 
 
 @phone-only:    ~"only screen and (max-width: @{screen-xs-max})";
@@ -207,6 +208,8 @@ body {
 #wideView {
 	width: 90%;
 	margin: auto;
+	padding-left: @grid-gutter-width/2;
+	padding-right: @grid-gutter-width/2;
 
 	.clearfix;
 }
@@ -217,6 +220,9 @@ body {
 	padding: 4px 2rem;
 	background-color: #fff;
 	transition: all .4s;
+
+	margin: 	@grid-gutter-width;
+	padding: @grid-gutter-width;
 
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
@@ -420,20 +426,18 @@ body {
 .page-template-template-page-accueil {
 
 	.colTitle {
-		padding: 2rem;
-		margin-left: 1rem;
+		margin: 	@grid-gutter-width;
+		padding: @grid-gutter-width;
 		margin-bottom: 2rem;
 	}
 
 	.pageText {
-		padding-left: 2rem;
-		margin-left: 1rem;
+		margin: 	@grid-gutter-width;
+		padding: @grid-gutter-width;
 		margin-bottom: 1rem;
 	}
 
 	.topIcons {
-		padding: 2rem 0;
-		margin-left: 1rem;
 		font-size: 14px;
 
 		@media @phone-only {
@@ -474,17 +478,19 @@ body {
 		}
 	}
 
+	#colonnesContainer {
+	}
+
 
 	.colonneswrappers {
 
-		width: 250px;
-		max-width: 250px;
+		width: 25%;
+		//border: @grid-gutter-width/2 solid @cfond;
 
 		@media @phone-only {
 			width: 100%;
 			margin: 0;
 		}
-
 
 		float: left;
 		vertical-align: top;
@@ -492,21 +498,16 @@ body {
 		max-height: 600px;
 		overflow: hidden;
 
-		margin-right: 1rem;
-		margin-left: 1rem;
-		margin-bottom: 2rem;
-
-
-		padding-left: 0px;
-		padding-right: 0px;
-		padding: 2rem;
-		padding-top: .95rem;
 		min-height: 150px;
-		//border-left: 1px solid #eee;
+		background-color: transparent;
 
-		background-color: #fff;
+		.colonnes {
+			margin: 	@grid-gutter-width;
+			padding: @grid-gutter-width;
+			background-color: #fff;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+		}
 
 	}
 
@@ -1332,6 +1333,8 @@ body {
 			margin-right: 30px;
 			vertical-align: top;
 
+
+
 			.page-header {
 
 					border-bottom: 1px solid #fff;
@@ -1341,15 +1344,6 @@ body {
 
 					.titreProjet {
 						display: inline-block;
-
-						a {
-							color: #333;
-
-							&:hover {
-								color: #666;
-							}
-						}
-
 					}
 					.count {
 						display: inline-block;

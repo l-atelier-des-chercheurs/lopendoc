@@ -17,9 +17,13 @@ Template Name: Accueil avec cartes
 				<?php echo roots_title( ); ?>
 			</h1>
 		</div>
+		<?php
+			$pageInstructions = get_post_field('post_content');
+			if( $pageInstructions) {?>
 		<div class="pageText">
 			<?php echo get_post_field('post_content'); ?>
 		</div>
+		<?php } ?>
 
 	<?php
 	  if ( is_user_logged_in() ) {
@@ -90,7 +94,7 @@ Template Name: Accueil avec cartes
 							<?php
 							    $term_link = get_term_link($term->slug, $tax);
 							    $term_name = str_replace(', ', "</br>", $term->name);
-								echo '<h2 class="titreProjet"><a href="'.$term_link.'">'.$term_name.'</a></h2>';
+								echo '<a href="'.$term_link.'"><h2 class="titreProjet">'.$term_name.'</h2></a>';
 							?>
 					</header>
 					 <div class="colonnescontent">

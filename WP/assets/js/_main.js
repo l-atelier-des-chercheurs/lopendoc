@@ -448,8 +448,6 @@ function newPost() {
 	});
 }
 
-
-
 function loginField() {
 
 	$("body").addClass("is-overlaid");
@@ -1165,6 +1163,13 @@ var Roots = {
 
 			//$('[data-toggle="tooltip"]').tooltip();
 
+			// click sur les tags
+			$(".edit-tags").click( function() {
+
+
+
+			});
+
     }
 
   },
@@ -1183,14 +1188,11 @@ var Roots = {
 			$('#wideView img').removeAttr('style');
 
 			var $container = $('#wideView #colonnesContainer');
-			$container.packery({
-			  itemSelector: '.colonneswrappers',
-			  gutter: 10
-			});
+
 			setTimeout(function() {
 				$container.packery({
 				  itemSelector: '.colonneswrappers',
-				  gutter: 10
+					"percentPosition": true
 				});
 
 			}, 500);
