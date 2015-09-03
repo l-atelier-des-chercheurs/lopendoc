@@ -159,7 +159,7 @@ add_action('init', 'habfna_disable_admin_bar', 9);
 // enlever le Privé
 function the_title_trim($title) {
 	// Might aswell make use of this function to escape attributes
-	$title = attribute_escape($title);
+	$title = esc_attr($title);
 	// What to find in the title
 	$findthese = array(
 		'#Protégé:#', // # is just the delimeter
@@ -250,7 +250,14 @@ function superadmin_ornot($classes) {
 }
 add_filter('body_class', 'superadmin_ornot');
 
-
+// admin ou pas ajouter class au body
+function current_user_loggedin($classes) {
+	if( is_user_logged_in() ) {
+      $classes[] = 'is-edition';
+	}
+	return $classes;
+}
+add_filter('body_class', 'current_user_loggedin');
 
 // login logo wp
 function login_lopendoc() { ?>

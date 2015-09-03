@@ -17,11 +17,9 @@ Template Name: Accueil avec cartes
 				<?php echo roots_title( ); ?>
 			</h1>
 		</div>
-		<?php
-			$pageInstructions = get_post_field('post_content');
-			if( $pageInstructions) {?>
+		<?php if( get_post()->post_content != '') { ?>
 		<div class="pageText">
-			<?php echo get_post_field('post_content'); ?>
+			<?php echo( get_post()->post_content); ?>
 		</div>
 		<?php } ?>
 
@@ -67,6 +65,29 @@ Template Name: Accueil avec cartes
 	 if ( $count > 0 ){
 		 foreach ( $terms as $term ) {
 
+
+						$args = array(
+						  'tax_query' => array(
+						      array(
+						        'taxonomy' => $tax,
+						        'field' => 'slug',
+						        'terms' => $term->slug,
+						      )
+						  ),
+					    'post_type'      => 'post', // set the post type to page
+					    'posts_per_page' => 1,
+							'order' => 'DESC',
+						);
+						$get_last_post = new WP_Query($args);
+						$lastPostDate = '';
+						if ( $get_last_post->have_posts() ) {
+							// The Loop
+							while ( $get_last_post->have_posts()) : $get_last_post->the_post();
+								$lastPostDate = get_the_modified_date('U');
+							endwhile;
+						}
+
+
 						$args = array(
 						  'tax_query' => array(
 						      array(
@@ -80,15 +101,11 @@ Template Name: Accueil avec cartes
 							'order' => 'DESC',
 							'tag' => 'featured'
 						);
-
-						//  assigning variables to the loop
-						$wp_query = new WP_Query($args);
-
-						$lastPostDate = $wp_query->posts[0]->post_modified;
+						$get_description = new WP_Query($args);
 
 			?>
 
-			<div class="colonneswrappers" data-lastpostdate="<?php echo $lastPostDate; ?>">
+			<div class="colonneswrappers" data-lastpostdate="<?php if( $lastPostDate!= '') echo $lastPostDate; ?>">
 				<section  class="colonnes">
 					<header class="page-header">
 							<?php
@@ -100,9 +117,11 @@ Template Name: Accueil avec cartes
 					 <div class="colonnescontent">
 
 						<?php
-							if ( $wp_query->have_posts() ) {
+							if ( $get_description->have_posts() ) {
 								// The Loop
-								while ($wp_query->have_posts()) : $wp_query->the_post();
+								while ( $get_description->have_posts()) : $get_description->the_post();
+
+// 									echo "plop : " . get_the_modified_date();
 									?>
 									<div data-post="<?php the_ID(); ?>" <?php post_class(); ?> style="">
 

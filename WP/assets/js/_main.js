@@ -20,6 +20,15 @@ var mapRange = function(from, to, s) {
   return to[0] + (s - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
 };
 
+var startDetectEnregistrementNewPost = function() {
+    setTimeout(function () {
+			if( $("#fee-notice-area .updated").length > 0) {
+				window.top.location.reload();
+			} else {
+				startDetectEnregistrementNewPost();
+			}
+    }, 1000);
+};
 
 function createTimeline() {
 
@@ -194,26 +203,22 @@ function whichPostIndexIsVisible(modwscrollTop) {
 function replacePostWithIframe( $thisPost, pageLink ) {
 
 	$thisPost.addClass("is-edited");
-	$thisPost.find(".entry-header, .entry-content").remove();
 
-	console.log("pageLink = " + pageLink);
-
-	$thisPost.find(".entry-title-and-content").empty().append('<iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe>');
+	var $blocOuMettreliframe = $thisPost.find(".entry-stuff");
+	$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-4by3"><iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe></div>');
 
 	/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
 	// trigger un click sur "Mettre a jour" avant tout
 	var $save_button = $thisPost.find(".save-modifications");
-
 	$save_button.removeClass("is-disabled");
-
 	$save_button.on( "click", function() {
 
 		sendActionToAnalytics("Fin édition d'un post");
-
-		var $thisPost = $(this).parents(".post");
+		var $thisPost = $(this).closest(".post");
 		$thisPost.find(".edit-frame").contents().find(".fee-save").click();
 
 	});
+
 
 			/*
 	url = pageLink;
@@ -241,23 +246,23 @@ function replaceiFrameWithPost( $thisPost, pageLink ) {
 		$thisPost.removeClass("is-edited");
 		$data = $(data);
 
-		var $thisContent = $data.find('.post .entry-title-and-content').html();
+		var $thisContent = $data.find('.post .entry-stuff').html();
 
 		console.log( "$thisContent");
 		console.log(  $thisContent );
 
-		$thisPost.find(".entry-title-and-content").fadeOut(400).empty().append($thisContent).fadeIn(400);
+
+		var $blocOuMettrelepost = $thisPost.find(".entry-stuff");
+
+		$blocOuMettrelepost.fadeOut(400).empty().append($thisContent).fadeIn(400);
 
 		console.log( "found " + $thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").length + " canvas");
-		$thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").each( function() {
 
+		$thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").each( function() {
 			$this = $(this);
 			$this.addClass("is-sketch");
-
 			// récupérer le sketch, le transformer en canvas
 			textToCanvas( $this );
-
-
 		});
 
 	});
@@ -410,7 +415,7 @@ function newPost() {
 		nonce: fee.nonce
 	} ).done( function( url ) {
 
-		var iframeAvecLien = '<iframe class="edit-frame" src="' + url + '?fee=visible&type=newpost" style="border:0px;width:100%;height:550px;"></iframe>';
+		var iframeAvecLien = '<div class="embed-responsive embed-responsive-4by3"><iframe class="edit-frame" src="' + url + '?fee=visible&type=newpost" style="border:0px;width:100%;height:600px;"></iframe></div>';
 		fillPopOver( iframeAvecLien, $(".button.add-post"), 900, 600);
 		$(".popover").addClass("is-loading");
 
@@ -474,7 +479,7 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 
 	$popoverContainer.html(content);
 
-	$popoverContainer.append('<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div>');
+// 	$popoverContainer.append('<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div>');
 
 	$popover.addClass("is-visible");
 	$popoverContainer.find(".login").css("visibility", "visible");
@@ -607,7 +612,7 @@ postViewRoutine = {
 
 
 			$(".entry-title-and-content").each(function() {
-				if( $(this).find(".entry-title").text() === "Brouillon auto" && $(this).find(".entry-content").text().trim() === "" ) {
+				if( ($(this).find(".entry-title").text() === "Brouillon auto" || $(this).find(".entry-title").text() === "Auto draft") && $(this).find(".entry-content").text().trim() === "" ) {
 					$(this).parents(".postContainer").remove();
 				}
 			});
@@ -685,14 +690,13 @@ postViewRoutine = {
 
 			$(".post .button-right .edit-post").click( function(e) {
 
-
 				e.preventDefault();
 
 				// ouvrir dans un nouvel onglet
 
 				console.log("edit-post click");
 
-				var $thisPost = $(this).parents(".post");
+				var $thisPost = $(this).closest(".post");
 				var pageLink = $thisPost.attr("data-singleurl");
 
 				if( $thisPost.hasClass("is-edited") ) {
@@ -1161,14 +1165,8 @@ var Roots = {
 				loginField();
 			});
 
-			//$('[data-toggle="tooltip"]').tooltip();
+			$('[data-toggle="tooltip"]').tooltip();
 
-			// click sur les tags
-			$(".edit-tags").click( function() {
-
-
-
-			});
 
     }
 
@@ -1187,14 +1185,24 @@ var Roots = {
 
 			$('#wideView img').removeAttr('style');
 
-			var $container = $('#wideView #colonnesContainer');
-
 			setTimeout(function() {
-				$container.packery({
+				var $container = $('#wideView #colonnesContainer');
+			  var pckry = new Packery( $container[0], {
+			    columnWidth: 350,
 				  itemSelector: '.colonneswrappers',
-					"percentPosition": true
-				});
+			  });
+			  var itemElems = pckry.getItemElements();
 
+/*
+			  // for each item element
+			  for ( var i=0, len = itemElems.length; i < len; i++ ) {
+			    var elem = itemElems[i];
+			    // make element draggable with Draggabilly
+			    var draggie = new Draggabilly( elem );
+			    // bind Draggabilly events to Packery
+			    pckry.bindDraggabillyEvents( draggie );
+			  }
+*/
 			}, 500);
 
 			///////////////////////////////////////////////// ajouter un projet /////////////////////////////////////////////////
@@ -1258,20 +1266,11 @@ var Roots = {
 
 			$save_button.on( "click", function() {
 
-				sendActionToAnalytics("Enregistrer nouveau post");
-				console.log("clicked save");
+				console.log("clicked save post");
 				$("body").find(".fee-publish").click();
-
-			});
-
-			$(".edit-post").click(function(e) {
-
 				sendActionToAnalytics("Fin édition nouveau post");
-				console.log( "Reload page ");
-				$this = $(this);
-				window.top.location.reload(true);
+				startDetectEnregistrementNewPost();
 
-				e.preventDefault();
 
 			});
 
@@ -1315,7 +1314,7 @@ var Roots = {
 			$save_button.on( "click", function() {
 
 				sendActionToAnalytics("Enregistrer nouveau projet");
-				console.log("clicked save");
+				console.log("clicked save projet");
 				$("body").find(".fee-publish").click();
 
 			});
@@ -1369,15 +1368,17 @@ var Roots = {
 
   tax_projets: {
 	 	init: function() {
-
-			if( $("body").hasClass("logged-in") ) {
-				$("body").addClass("is-edition");
-			}
-
 			createTimeline();
+		}
+	},
 
+	single_post: {
+	 	init: function() {
+		 	console.log("init single_post");
 
-
+			$(".edit-categories").on("click", function() {
+				$(".fee-button-categories").click();
+			});
 
 		}
 	},

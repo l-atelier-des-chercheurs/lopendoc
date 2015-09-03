@@ -32,52 +32,10 @@
 
 				$wp_query->the_post();
 
-			  $ID = get_the_ID();
-			  $status = get_post_status($ID);
-
 				?>
 
 				<div class="descriptionContainer">
-
-					<section class="post" data-post="<?php echo $ID; ?>" <?php post_class(); ?> data-status="<?php echo $status; ?>" data-id="<?php echo $ID ?>" data-action="<?php echo esc_url(home_url('')); ?>/edit-page" data-singleurl="<?php echo esc_url( get_permalink() ); ?>">
-
-					<?php
-					if ( is_user_logged_in() ) {
-							?>
-
-								<?php get_template_part('templates/entry-button-right'); ?>
-
-					<?php
-					}
-					?>
-
-						<div class="entry-stuff">
-
-							<div class="entry-meta">
-								<?php get_template_part('templates/entry-meta'); ?>
-							</div><!-- .entry-meta -->
-
-							<div class="entry-title-and-content">
-								<header class="entry-header">
-
-								<?php
-									// est Description donc pas d'intérêt
-									the_title( '<h2 class="entry-title">', '</h2>' );
-								?>
-
-								</header><!-- .entry-header -->
-
-								<div class="entry-content">
-									<?php the_content(); ?>
-								</div>
-							</div>
-
-						</div>
-
-
-
-					</section>
-
+					<?php get_template_part('templates/content-carte'); ?>
 				</div>
 
 		<?php
@@ -92,7 +50,6 @@
 		</div>
 		<?php
 	}
-
 	wp_reset_query();
 ?>
 
@@ -116,10 +73,10 @@
 			?>
 
 		</div>
-<?php
-  if ( is_user_logged_in() ) {
-			?>
 
+		<?php
+		  if ( is_user_logged_in() ) {
+		?>
 		<div class="topIcons">
 			<div class="button add-post">
 				<?php _e('Add a post', 'opendoc'); ?>
@@ -157,7 +114,20 @@
 				continue;
 			}
 
-			get_template_part('templates/content', 'carte');
+		  $ID = get_the_ID();
+		  $status = get_post_status($ID);
+			?>
+
+			<div class="postContainer">
+				<?php
+				if ( is_user_logged_in() ) {
+					get_template_part('templates/content-modules/private-publish');
+				}
+				get_template_part('templates/content-carte');
+				?>
+			</div>
+			<?php
+
 		}
 
 		if ($new_wp_query->max_num_pages > 1) { ?>

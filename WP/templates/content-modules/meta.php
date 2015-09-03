@@ -12,8 +12,8 @@
 
 
 
-<div class="tags edit-tags">
-	<svg class="icons tag-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<div class="categories edit-categories">
+	<svg class="icons category-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve">
 	<g>
 		<path fill="#F2682C" d="M32.1,1.2c8.4,0,16.2,3.1,22.2,9c5.9,5.9,9.2,13.6,9.2,22c0,8.3-3.2,16.1-9.1,22c-5.9,5.8-13.7,9.1-22,9.1
@@ -23,16 +23,17 @@
 	</g>
 	</svg>
 	<?php
-		$tags = get_the_tags();
+		$tags = get_the_category();
 		if ($tags) {
-			$html = '<div class="tag-list">';
+			$html = '<div class="category-list">';
 			foreach ( $tags as $tag ) {
-				$tag_link = get_tag_link( $tag->term_id );
+// 				$tag_link = get_category( $tag->term_id );
 
-				// href='{$tag_link}'
-				$html .= "<a title='{$tag->name} Tag' class='tag-link {$tag->slug}'>";
+				$html .= "<a title='{$tag->name} Category' class='category-link {$tag->slug}'>";
 				$html .= "{$tag->name}</a>";
 			}
+
+			$html .= '<span class="edit-me">edit</span>';
 			$html .= '</div>';
 			echo $html;
 		}

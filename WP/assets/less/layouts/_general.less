@@ -39,11 +39,42 @@ body {
 	}
 }
 
-.tooltip.top .tooltip-inner {
-    background-color: #45c1b4;
+
+.makeToolTipColored( @color) {
+	[data-toggle-tooltip-color="@{color}"] {
+
+		& + .tooltip > .tooltip-arrow {
+			[data-placement="left"]& {
+				border-left-color: @color;
+			}
+			[data-placement="top"]& {
+				border-top-color: @color;
+			}
+			[data-placement="bottom"]& {
+				border-bottom-color: @color;
+			}
+			[data-placement="right"]& {
+				border-right-color: @color;
+			}
+		}
+	}
+	[data-toggle-tooltip-color="@{color}"] + .tooltip > .tooltip-inner {background-color: @color;}
 }
-.tooltip.top .tooltip-arrow {
-      border-top-color: #45c1b4;
+.makeToolTipColored( #293275);
+.makeToolTipColored( #f2682c);
+.makeToolTipColored( #ef474b);
+.makeToolTipColored( #fcb421);
+.makeToolTipColored( #fbb41d);
+
+
+*::selection {
+  background: #eee;
+}
+*::-moz-selection {
+  background: #eee;
+}
+*::-webkit-selection {
+  background: #eee;
 }
 
 
@@ -217,12 +248,12 @@ body {
 .topIcons	> * {
 	cursor: pointer;
 	display: inline-block;
-	padding: 4px 2rem;
 	background-color: #fff;
 	transition: all .4s;
 
-	margin: 	@grid-gutter-width;
+	margin: 0;
 	padding: @grid-gutter-width;
+
 
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
@@ -297,18 +328,20 @@ body {
 	  top: 0;
 		right: 0;
 		margin: 10px;
-
 	}
 
 	&.is-loading {
 		.spinner {
 			opacity: 1;
-
 		}
 	}
 
 	.popoverContainer {
-		padding:20px;
+		padding:@grid-gutter-width;
+
+		.embed-responsive {
+			margin: -@grid-gutter-width;
+		}
 	}
 
 	// rendre tous les contenus de popoverContainer block
@@ -326,10 +359,9 @@ body {
 .spinner {
   width: 20px;
   height: 20px;
-  opacity: 0;
+	opacity: 0;
 
   position: relative;
-  margin: 100px auto;
 
   transition: opacity .4s ease-out;
 }
@@ -339,7 +371,6 @@ body {
   height: 100%;
   border-radius: 50%;
   background-color: @cprivate;
-  opacity: 0.6;
   position: absolute;
   top: 0;
   left: 0;
@@ -484,8 +515,7 @@ body {
 
 	.colonneswrappers {
 
-		width: 25%;
-		//border: @grid-gutter-width/2 solid @cfond;
+		width: 350px;
 
 		@media @phone-only {
 			width: 100%;
@@ -495,7 +525,7 @@ body {
 		float: left;
 		vertical-align: top;
 
-		max-height: 600px;
+		max-height: 700px;
 		overflow: hidden;
 
 		min-height: 150px;
@@ -554,9 +584,26 @@ body {
 
 }
 
-.descriptionContainer section.post {
-	width: 100%;
-	margin-left: 0 !important;
+.descriptionContainer {
+
+  background-color: #fff;
+  padding-left: 8px;
+  padding-right: 8px;
+
+	section.post {
+		width: 100%;
+		margin-left: 0 !important;
+
+
+		.button-right {
+			right: 0;
+	    left: auto;
+
+	    .icons {
+		  	display: block;
+		  }
+		}
+	}
 }
 
 .projetContainer {
@@ -584,7 +631,7 @@ body {
 		font-weight: bold;
 		color: #000;
 
-		padding: 4px 2rem;
+		padding: @grid-gutter-width;
 		margin-left: 0;
 
 	}
@@ -602,6 +649,7 @@ body {
 
 	.post {
 		.make-sm-column(9);
+		z-index: 10;
 	}
 
 	.colTitle {
@@ -636,6 +684,8 @@ body {
 .button-right {
 	display: none;
 
+	transition: opacity .4s;
+
 }
 
 // si loggedin ///////////////////////////////////////////////////////////
@@ -647,14 +697,18 @@ body {
 
 		font-size: 0;
 
-		right: 0;
+		left: 100%;
+
+		margin-left: 	5px;
+		margin-top: 8px;
+
 		z-index: 1;
 
 		.icons {
 
-			width: 53px;
-			height: 53px;
-			padding: 10px;
+			width: 48px;
+			height: 48px;
+			padding: 5px;
 
 			margin: 0;
 
@@ -743,7 +797,6 @@ body {
 		transition: box-shadow 1s ease-out, background-color 1s ease-out;
 
 		.is-edition & {
-			border-radius: 5px;
 			background-color: #fff;
 
 		}
@@ -759,7 +812,7 @@ body {
 			text-align: left;
 			text-transform: none;
 
-			padding: 1.7rem 1rem 0 2rem;
+			padding: (@grid-gutter-width/2) * 2 (@grid-gutter-width/2) * 3;
 
 			> * {
 				display: block;
@@ -770,24 +823,29 @@ body {
 					height: 24px;
 					margin-top: 8px;
 			}
-			.tags {
+			.categories {
 
 				&.is-disabled {
 				 opacity: .4;
 
-					.tag-icon {
+					.category-icon {
 						cursor: auto;
 						path {
 						}
 					}
 
 				}
-				.tag-icon {
+				.category-icon {
 				}
-				.tag-list {
-					a.tag-link {
+				.category-list {
+
+					a.category-link {
 						display: block;
 
+					}
+
+					.edit-me {
+						color: @cprivate;
 					}
 				}
 			}
@@ -822,8 +880,11 @@ body {
 		.entry-title-and-content {
 
 			.make-sm-column(10);
-			padding: 2rem;
-			padding-top: .95rem;
+			padding-top: @grid-gutter-width/2;
+
+			padding: @grid-gutter-width @grid-gutter-width;
+			margin: 0;
+			border-left: 1px solid #eee;
 
 			min-height: 200px;
 			max-height: 3920px;
@@ -831,7 +892,7 @@ body {
 
 			.entry-title {
 
-				width: 90%;
+				width: 100%;
 				font-size: 3rem;
 
 				margin: 0;
@@ -844,36 +905,46 @@ body {
 			.fee-content-original {
 				display: none;
 			}
-		}
-	}
 
-	.entry-title-and-content {
-		padding: 1rem 2rem;
-		margin: 1rem 0;
-		border-left: 1px solid #eee;
+
+		}
 	}
 
 	// si en cours d'édit
 	&.is-edited {
 
+/*
 		iframe {
 
 			min-height: 70vh;
 
 
 		}
+*/
 
 
 		.edit-post {
 			transform: rotate(180deg);
+		}
 
+		.remove-post {
+			display: none;
 		}
 
 
 	}
 
-	&.is-removing .entry-stuff{
-		background-color: #ddd;
+	&.is-removing {
+
+		pointer-events: none;
+
+		.button-right {
+			opacity: 0;
+		}
+
+		.entry-stuff {
+
+		}
 	}
 
 }
@@ -924,7 +995,7 @@ body {
 		margin-bottom: 0px;
 		margin-bottom: 5px;
 		display: block;
-		width: 100%;
+
 
 		svg {
 			overflow: visible;
@@ -956,7 +1027,10 @@ body {
 
 		top: 0;
 
-
+		.spinner {
+			opacity: 0;
+			z-index: 	9;
+		}
 	}
 
 
@@ -965,6 +1039,17 @@ body {
 		left:0;
 		text-align: left;
 		color: @cprivate;
+
+
+		.spinner {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+		}
+		.icons {
+		    margin-left: 0;
+		    margin-right: auto;
+		}
 
 		.icons svg {
 			left: 0;
@@ -976,6 +1061,16 @@ body {
 		right: 0;
 		text-align: right;
 		color: @cpublish;
+
+		.spinner {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+		}
+		.icons {
+		    margin-right: 0;
+		    margin-left: auto;
+		}
 
 		.icons svg {
 			right: 0;
@@ -1007,8 +1102,6 @@ body {
 
 // si vu édition ///////////////////////////////////////////////////////////
 .is-edition {
-
-
 
 	.switch-edition {
 		background-color: @cpublish;
@@ -1078,16 +1171,24 @@ body {
 
 
 /* EDIT FEE */
-
 .fee-toolbar {
 	bottom: 0px !important;
 	border: none;
 	background: transparent;
 	box-shadow: none;
+
+	.fee-save {
+		visibility: hidden;
+	}
+
+	.fee-publish-options {
+		visibility: hidden;
+	}
 }
 
 .wp-core-ui {
 
+/*
 	[for="fee-post-status"] {
 		display: none;
 	}
@@ -1095,14 +1196,17 @@ body {
 	[for="fee-post-visibility"] {
 		display: none;
 	}
-
-	[data-dismiss="modal"] {
-		padding:5px;
-	}
+*/
 
 }
 
 
+.embed-responsive {
+
+	.edit-frame {
+		background-color: #fff;
+	}
+}
 
 /*
 // BOUTONS PUBLICATIONS
@@ -1152,22 +1256,22 @@ body {
 	cursor: pointer;
 }
 
+.publish-private-post .icons {
+  transition: transform .5s ease-out;
+  transform: scale(1);
+  transform-origin: center center;
 
-// pendant le chargement public/private
-.is-loading {
 
-	.publish-private-post {
-
-		&[data-status=private] {
-			opacity: .4;
-		}
-		&[data-status=publish] {
-			opacity: .4;
-		}
-	}
 }
 
+.is-loading .publish-private-post  {
+	.spinner {
+		opacity: 1;
+	}
+	.icons {
 
+	}
+}
 
 // tous les posts, partout
 
@@ -1194,11 +1298,6 @@ body {
 		img {
 			transition: opacity .4s;
 		}
-		&.is-loading img {
-			opacity: .6;
-
-			// placer un loader css
-		}
 
 	}
 
@@ -1218,7 +1317,12 @@ body {
 
 .iframe.single-post {
 
+	padding: 0;
 	background-color: #fff;
+
+	#wideView {
+		width: 	100%;
+	}
 
 	.main {
 		margin-top: 0;
@@ -1237,9 +1341,11 @@ body {
 		display: none;
 	}
 
+/*
 	.entry-meta {
 		display: none;
 	}
+*/
 
 	.post {
 		margin:0;
@@ -1247,34 +1353,45 @@ body {
 	}
 
 	.entry-title-and-content {
-		padding:0;
-		margin:0;
+
 		border: none;
 
 		.entry-title {
-			width: 80%;
+			width: 100%;
 
 		}
+	}
+
+	.fee-title, .fee-content {
+    border-bottom: 1px solid #ccc;
+   }
+
+	.fee-button-categories {
+		display: none;
 	}
 
 	.sidebar {
 		display: none;
 	}
 
+/*
 	&:not(.show-editor) {
 		.fee-toolbar {
 			display: none;
 		}
 	}
+*/
 
 	#fee-notice-area {
 		position: fixed;
-		top: 60px;
+		top: 10px;
 		right: 0;
 		left: auto;
 		width: 300px;
 		height: 50px;
 		z-index: 10000;
+
+		pointer-events: none;
 	}
 
 	.fee-url {
@@ -1308,12 +1425,31 @@ body {
 	}
 	.button-right {
 		display: block !important;
+		right: 0;
+		left: auto;
+
+		.icons {
+			display: block;
+		}
+
+		.edit-post {
+			display: none;
+		}
+	}
+
+
+	.entry-stuff {
+		width: ~"calc(100% - 48px)";
+	}
+
+	#fee-notice-area {
+		right: 48px !important;
 	}
 	.fee-toolbar {
 		display: none;
 	}
-}
 
+}
 
 
 /*******************************************************************

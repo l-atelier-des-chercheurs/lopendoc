@@ -61,13 +61,18 @@
 
 			<div class="actionsContainer">
 				<ul class="action-button actions">
+					<?php
+					if (is_user_logged_in()) {
+						?>
 					<li class="button switch-edition">
 						<?php _e('Edit mode', 'opendoc'); ?>
 					</li>
 					<li class="button refresh-postie">
 						<?php _e('Refresh', 'opendoc'); ?>
 					</li>
-
+				<?php
+					}
+				?>
 				<?php
 					if ( !is_user_logged_in() ) {
 						?>
@@ -80,7 +85,6 @@
 					<li class="button deconnexion-field">
 						<?php _e('Logout', 'opendoc'); ?>
 					</li>
-
 				<?php
 					}
 				?>

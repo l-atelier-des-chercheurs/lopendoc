@@ -42,7 +42,7 @@ $getallposts = new WP_Query( array(
 					?>
 
 					<div class="entry-meta">
-						<?php get_template_part('templates/entry-meta'); ?>
+						<?php get_template_part('templates/content-modules/entry-meta'); ?>
 					</div><!-- .entry-meta -->
 
 				</header><!-- .entry-header -->
