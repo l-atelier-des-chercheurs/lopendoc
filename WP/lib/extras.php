@@ -44,11 +44,11 @@ add_action( 'admin_init', 'blockusers_init' );
 
 // image size
 update_option('large_size_w', 1600);
-update_option('large_size_h', 1200);
+update_option('large_size_h', '');
 update_option('medium_size_w', 800);
-update_option('medium_size_h', 600);
+update_option('medium_size_h', '');
 update_option('thumbnail_size_w', 400);
-update_option('thumbnail_size_h', 300);
+update_option('thumbnail_size_h', '');
 
 
 // custom typeface

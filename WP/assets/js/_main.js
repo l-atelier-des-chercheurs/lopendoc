@@ -56,7 +56,7 @@ jQuery.fn.the_filters = function(){
 
 				self.showIntervenants();
 
-				self.updatePackery();
+				self.updateIsotope();
 
 			});
 
@@ -90,7 +90,8 @@ jQuery.fn.the_filters = function(){
 								motsClesFicheArray = motsClesFiche.split(" ");
 								// si ça fit
 
-								console.log( "motsClesFicheArray : " + motsClesFicheArray);
+								console.log( "motsClesFicheArray : " + motsClesFicheArray[0]);
+
 								console.log( "activetags.diff(motsClesFicheArray) : " + activetags.diff(motsClesFicheArray));
 
 								if( activetags.diff(motsClesFicheArray).length > 0) {
@@ -98,11 +99,18 @@ jQuery.fn.the_filters = function(){
 									// mettre en surbrillance son tag
 									$(this).find(".category-list span").each(function() {
 										motsClesTag = $(this).attr("data-categorie");
-										if( $.inArray( motsClesTag, activetags)) {
+
+
+										console.log( "Activation du mot-clé dans la vignette --- ");
+										console.log( "motsClesTag = " + motsClesTag);
+
+
+										if( $.inArray( motsClesTag, activetags) > -1) {
 											$(this).addClass("is-active");
 										} else {
 											$(this).removeClass("is-active");
 										}
+
 									});
 
 								} else {
@@ -116,9 +124,17 @@ jQuery.fn.the_filters = function(){
 
 
 	};
-	this.updatePackery = function() {
+	this.updateIsotope = function() {
 
-		var $container = $('#colonnesContainer');
+		if( $(".colonneswrappers.is-shown").length > 0) {
+			$('#colonnesContainer').isotope({
+				filter: '.is-shown'
+			});
+		} else {
+			$('#colonnesContainer').isotope({
+				filter: ''
+			});
+		}
 /*
 	  $container.packery( 'remove', $(".colonneswrappers.is-shown") );
 		$container.packery( 'appended', $(".colonneswrappers.is-shown") );
@@ -1285,23 +1301,38 @@ var Roots = {
 			$('.colonnes img').removeAttr('style');
 
 			setTimeout(function() {
-				var $container = $('#colonnesContainer');
+/*
 
 				tinysort($("#colonnesContainer .colonneswrappers"), {
 					attr: 'data-lastpostdate',
 					order: 'desc',
 				});
+*/
 
+/*
 			  var pckry = new Packery( $container[0], {
 				  itemSelector: '#colonnesContainer .colonneswrappers',
 			  });
-
-			  var itemElems = pckry.getItemElements();
+*/
 
 			  $("body").addClass("is-loaded");
 
+				$('#colonnesContainer').isotope({
+
+				  layoutMode: 'packery',
+				  itemSelector: '.colonneswrappers',
+				  percentPosition: true,
+				  sortAscending: false,
+
+				  getSortData: {
+				    number: '[data-lastpostdate] parseInt'
+				  },
+				  sortBy : 'number'
+				});
+
 
 /*
+			  var itemElems = pckry.getItemElements();
 			  // for each item element
 			  for ( var i=0, len = itemElems.length; i < len; i++ ) {
 			    var elem = itemElems[i];

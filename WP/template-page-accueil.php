@@ -22,7 +22,7 @@ Template Name: Accueil avec cartes
 			</div>
 		<?php } ?>
 		<div class='category-list category-filters'>
-    	<?php	_e("Filtrer par catégorie de projet : ", 'opendoc'); ?>
+    	<?php	_e("Filter by categories: ", 'opendoc'); ?>
 
 		</div>
 <?php
@@ -82,7 +82,7 @@ Template Name: Accueil avec cartes
 					  'order' => 'DESC',
 					);
 					$get_last_post = new WP_Query($args);
-					$lastPostDate = '';
+					$lastPostDate = '1000000000';
 					$lastPostDateHuman = '';
 					if ( $get_last_post->have_posts() ) {
 						// The Loop
@@ -160,9 +160,9 @@ Template Name: Accueil avec cartes
 									</div><!-- .entry-content -->
 
 									<div class="entry-meta">
-										<?php if( $lastPostDateHuman!= '') { ?>
+										<?php if( $lastPostDateHuman !== '') { ?>
 											<span class="modDate">
-												<?php _e('Last modification : ', 'opendoc'); ?>
+												<?php _e('Last edited on ', 'opendoc'); ?>
 												<?php echo $lastPostDateHuman;?>
 											</span>
 										<?php } ?>
@@ -195,6 +195,16 @@ Template Name: Accueil avec cartes
 										</small>
 									</p>
 								</div>
+
+								<div class="entry-meta">
+									<?php if( $lastPostDateHuman !== '') { ?>
+										<span class="modDate">
+											<?php _e('Last edited on ', 'opendoc'); ?>
+											<?php echo $lastPostDateHuman;?>
+										</span>
+									<?php } ?>
+								</div>
+
 							</div>
 
 							<?php
