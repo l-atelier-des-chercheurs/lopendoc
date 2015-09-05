@@ -44,7 +44,7 @@
 	} else {
 		?>
 		<div class="descriptionContainer">
-			<p>
+			<p class="absence_de_description">
 				<?php _e('No description for this project yet. To add one send an email to this project\'s mail with the subject line <strong>Description</strong>.', 'opendoc'); ?>
 			</p>
 		</div>
@@ -54,28 +54,35 @@
 ?>
 
 	<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
-		<div class="colTitle">
-			<h2 class="entry-title">
-				<?php echo roots_title( ); ?>
-			</h2>
+
+
+	<div class='colTitle'>
+		<h1 class="entry-title">
+			<?php echo roots_title( ); ?>
+		</h1>
+	</div>
+	<?php
+	if ( is_user_logged_in() ) {
+	  $mailToContribute =  get_option( "mail_addressTC" );
+    if( !empty($mailToContribute) ) {
+		?>
+		<div class="pageText">
 			<?php
-			  if ( is_user_logged_in() ) {
-		      $mailToContribute =  get_option( "mail_addressTC" );
-		      if( !empty($mailToContribute) ) {
-						echo "<h3 class='instructions'>";
-			      	$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
-			    		_e("To contribute, send an email to ", 'opendoc');
-							echo "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
-			    		_e(", or click on <strong>Add a post</strong>.", 'opendoc');
-			    	echo "</h3>";
-			    }
-				}
-			?>
-
+				echo "<p class='instructions'>";
+      	$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
+    		_e("To contribute, send an email to ", 'opendoc');
+				echo "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
+    		_e(", or click on <strong>Add a post</strong>.", 'opendoc');
+	    	echo "</p>";
+	    ?>
 		</div>
+	<?php
+		}
+	}
+	?>
 
-		<?php
-		  if ( is_user_logged_in() ) {
+	<?php
+	if ( is_user_logged_in() ) {
 		?>
 		<div class="topIcons">
 			<div class="button add-post">

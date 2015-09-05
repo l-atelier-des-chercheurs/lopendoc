@@ -30,6 +30,107 @@ var startDetectEnregistrementNewPost = function() {
     }, 1000);
 };
 
+// voir http://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
+Array.prototype.diff = function(arr2) {
+    var ret = [];
+    this.sort();
+    arr2.sort();
+    for(var i = 0; i < this.length; i += 1) {
+        if(arr2.indexOf( this[i] ) > -1){
+            ret.push( this[i] );
+        }
+    }
+    return ret;
+};
+
+jQuery.fn.the_filters = function(){
+	var self = this;
+
+	this.init = function(){
+		if($(this.selector).length){
+
+			$(this).find(".category-term").bind("tap", function() {
+
+				$(this).toggleClass("is-active");
+				$(".category-term").not($(this)).removeClass("is-active");
+
+				self.showIntervenants();
+
+				self.updatePackery();
+
+			});
+
+		}
+	};
+
+
+	this.showIntervenants = function() {
+				// 1. récupérer tous ".filtre" et pusher dans un array
+
+					var activetags = [];
+					$(".category-filters .category-term.is-active").each(function() {
+						activetags.push( $(this).attr("data-categorie"));
+					});
+
+					console.log( "activetags : " + activetags.toString());
+
+					// aucun tag actif : désactiver tout
+					if( activetags.length === 0) {
+ 						$(".colonneswrappers").removeClass("is-shown");
+						$(".colonneswrappers").find(".category-list span").removeClass("is-active");
+					} else {
+
+						// 2. comparer les data-motscles de chaque intervenant avec cet array. Si un des termes correspond, lui ajouter is-active s'il ne l'a pas
+						// sinon, lui retirer
+
+						$(".colonneswrappers").each( function() {
+							motsClesFiche = $(this).find("[data-allcategories]").attr("data-allcategories");
+
+							if( motsClesFiche !== undefined) {
+								motsClesFicheArray = motsClesFiche.split(" ");
+								// si ça fit
+
+								console.log( "motsClesFicheArray : " + motsClesFicheArray);
+								console.log( "activetags.diff(motsClesFicheArray) : " + activetags.diff(motsClesFicheArray));
+
+								if( activetags.diff(motsClesFicheArray).length > 0) {
+									$(this).addClass("is-shown");
+									// mettre en surbrillance son tag
+									$(this).find(".category-list span").each(function() {
+										motsClesTag = $(this).attr("data-categorie");
+										if( $.inArray( motsClesTag, activetags)) {
+											$(this).addClass("is-active");
+										} else {
+											$(this).removeClass("is-active");
+										}
+									});
+
+								} else {
+									$(this).removeClass("is-shown");
+								}
+							} else {
+								$(this).removeClass("is-shown");
+							}
+						});
+					}
+
+
+	};
+	this.updatePackery = function() {
+
+		var $container = $('#colonnesContainer');
+/*
+	  $container.packery( 'remove', $(".colonneswrappers.is-shown") );
+		$container.packery( 'appended', $(".colonneswrappers.is-shown") );
+	  $container.packery();
+*/
+
+
+	};
+	this.init();
+
+};
+
 function createTimeline() {
 
 
@@ -45,7 +146,6 @@ function createTimeline() {
 
 																	;
 
-																	adjustMainMargintop();
 
 
 
@@ -1033,7 +1133,6 @@ var Roots = {
 			postViewRoutine.init();
 
 			animateLogo();
-			adjustMainMargintop();
 
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 
@@ -1183,15 +1282,24 @@ var Roots = {
   page_template_template_page_accueil: {
 	  init: function() {
 
-			$('#wideView img').removeAttr('style');
+			$('.colonnes img').removeAttr('style');
 
 			setTimeout(function() {
-				var $container = $('#wideView #colonnesContainer');
+				var $container = $('#colonnesContainer');
+
+				tinysort($("#colonnesContainer .colonneswrappers"), {
+					attr: 'data-lastpostdate',
+					order: 'desc',
+				});
+
 			  var pckry = new Packery( $container[0], {
-			    columnWidth: 350,
-				  itemSelector: '.colonneswrappers',
+				  itemSelector: '#colonnesContainer .colonneswrappers',
 			  });
+
 			  var itemElems = pckry.getItemElements();
+
+			  $("body").addClass("is-loaded");
+
 
 /*
 			  // for each item element
@@ -1204,6 +1312,18 @@ var Roots = {
 			  }
 */
 			}, 500);
+
+
+			var elements = ($(".category-list [data-categorie]").toArray());
+			categories = [];
+			for(var i=0;typeof(elements[i])!=='undefined';) {
+				if( $.inArray(elements[i].outerHTML, categories) === -1) {
+					categories.push( elements[i].outerHTML);
+				}
+				i++;
+			}
+			$(".category-filters").append( categories.toString() );
+			$(".category-filters").the_filters();
 
 			///////////////////////////////////////////////// ajouter un projet /////////////////////////////////////////////////
 
@@ -1369,6 +1489,11 @@ var Roots = {
   tax_projets: {
 	 	init: function() {
 			createTimeline();
+
+			// si click sur le bouton "edit", alors lancer l'action d'éditer
+			$("body").on( "click", ".edit-me", function() {
+				$(this).parents(".post").find(".edit-post").trigger("click");
+			});
 		}
 	},
 
@@ -1377,6 +1502,7 @@ var Roots = {
 		 	console.log("init single_post");
 
 			$(".edit-categories").on("click", function() {
+				$(".category-list a").remove();
 				$(".fee-button-categories").click();
 			});
 

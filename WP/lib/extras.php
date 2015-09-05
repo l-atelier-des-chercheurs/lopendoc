@@ -36,11 +36,11 @@ if ( ! function_exists( 'is_login_page' ) ) {
 
 function blockusers_init() {
 	if ( (is_admin()) && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-		//wp_redirect( home_url() );
-		//exit;
+		wp_redirect( home_url() );
+		exit;
 	}
 }
-add_action( 'init', 'blockusers_init' );
+add_action( 'admin_init', 'blockusers_init' );
 
 // image size
 update_option('large_size_w', 1600);
@@ -59,6 +59,24 @@ function google_font(){
 //add_action( 'wp_enqueue_scripts', 'google_font');
 
 
+
+function doorbell_io() {
+	ob_start();
+	?>
+<script type="text/javascript">
+    window.doorbellOptions = {
+        appKey: '2nmWabMvrp56nplrTF4KZhKSWLTQ2WEmiaMCj8g5la7bTLVKqNkx3I4km9gG9R63'
+    };
+    (function(d, t) {
+        var g = d.createElement(t);g.id = 'doorbellScript';g.type = 'text/javascript';g.async = true;g.src = 'https://embed.doorbell.io/button/2120?t='+(new Date().getTime());(d.getElementsByTagName('head')[0]||d.getElementsByTagName('body')[0]).appendChild(g);
+    }(document, 'script'));
+</script>
+
+	<?php
+	$out = ob_get_clean();
+	echo $out;
+}
+add_action( 'wp_enqueue_scripts', 'doorbell_io');
 
 
 // Register projets tax

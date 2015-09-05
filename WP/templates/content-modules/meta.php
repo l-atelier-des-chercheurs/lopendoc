@@ -1,4 +1,7 @@
-<time class="updated" datetime="<?php echo get_the_time('c'); ?>"><?php echo get_the_date(); ?></time>
+<time class="updated" datetime="<?php echo get_the_time('c'); ?>"><?php
+	echo _e("Added on ", 'opendoc');
+	echo get_the_date(); ?>
+</time>
 <!-- <p class="byline author vcard"><?php echo __('By', 'roots'); ?> <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" rel="author" class="fn"><?php echo get_the_author(); ?></a></p> -->
 
 <?php
@@ -9,8 +12,6 @@
 		echo '</div>';
 	}
 ?>
-
-
 
 <div class="categories edit-categories">
 	<svg class="icons category-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
