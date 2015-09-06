@@ -23,7 +23,6 @@ Template Name: Accueil avec cartes
 		<?php } ?>
 		<div class='category-list category-filters'>
     	<?php	_e("Filter by categories: ", 'opendoc'); ?>
-
 		</div>
 <?php
   if ( is_user_logged_in() ) {
@@ -61,7 +60,7 @@ Template Name: Accueil avec cartes
  $count = count($terms);
 
 ?>
-	<div id="colonnesContainer">
+	<div id="colonnesContainer" class="filter-elements">
 <?php
 
  if ( $count > 0 ){
@@ -138,7 +137,7 @@ Template Name: Accueil avec cartes
 									foreach ( $tags as $tag ) {
 						// 				$tag_link = get_category( $tag->term_id );
 
-										$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}''>";
+										$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}'>";
 										$htmlTags .= "{$tag->name}</span>";
 										$alltags .= $tag->slug . " ";
 									}

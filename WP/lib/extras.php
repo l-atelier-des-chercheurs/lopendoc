@@ -53,8 +53,7 @@ update_option('thumbnail_size_h', '');
 
 // custom typeface
 function google_font(){
-	echo "<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>","\n";
-	echo "<link href='http://fonts.googleapis.com/css?family=Share:400,400italic,700,700italic' rel='stylesheet' type='text/css'>","\n";
+	echo "<link href='http://fonts.googleapis.com/css?family=Work+Sans:400,600' rel='stylesheet' type='text/css'>","\n";
 }
 //add_action( 'wp_enqueue_scripts', 'google_font');
 
@@ -219,6 +218,10 @@ function front_editor_disable() {
 }
 add_filter('front_end_editor_disable', 'front_editor_disable');
 
+add_action( 'init', 'my_custom_init' );
+function my_custom_init() {
+	remove_post_type_support( 'page', 'front-end-editor' );
+}
 
 // project color
 $new_general_setting = new new_general_setting();

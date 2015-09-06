@@ -49,17 +49,31 @@ jQuery.fn.the_filters = function(){
 	this.init = function(){
 		if($(this.selector).length){
 
-			$(this).find(".category-term").bind("tap", function() {
+			console.log("the_filters start");
 
+			var elements = ($(".filter-elements .category-list [data-categorie]").toArray());
+
+			categories = [];
+			for(var i=0;typeof(elements[i])!=='undefined';) {
+				if( $.inArray(elements[i].outerHTML, categories) === -1) {
+					categories.push( elements[i].outerHTML);
+				}
+				i++;
+			}
+			$(this).append( categories.join(" ") );
+
+
+			$(this).find(".category-term").bind("tap", function() {
 				$(this).toggleClass("is-active");
 				$(".category-term").not($(this)).removeClass("is-active");
-
 				self.showIntervenants();
-
 				self.updateIsotope();
-
 			});
 
+			// tap sur le tag d'un projet
+			$(".colonnes .category-term").bind("tap", function() {
+				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
+			});
 		}
 	};
 
@@ -75,51 +89,99 @@ jQuery.fn.the_filters = function(){
 					console.log( "activetags : " + activetags.toString());
 
 					// aucun tag actif : désactiver tout
-					if( activetags.length === 0) {
- 						$(".colonneswrappers").removeClass("is-shown");
-						$(".colonneswrappers").find(".category-list span").removeClass("is-active");
-					} else {
 
-						// 2. comparer les data-motscles de chaque intervenant avec cet array. Si un des termes correspond, lui ajouter is-active s'il ne l'a pas
-						// sinon, lui retirer
+					// s'il y a des colonnes wrappers
+					if( $(".filter-elements .colonneswrappers").length > 0) {
+						if( activetags.length === 0) {
+	 						$(".filter-elements .colonneswrappers").removeClass("is-shown");
+							$(".filter-elements .colonneswrappers").find(".category-list span").removeClass("is-active");
+						} else {
 
-						$(".colonneswrappers").each( function() {
-							motsClesFiche = $(this).find("[data-allcategories]").attr("data-allcategories");
+							// 2. comparer les data-motscles de chaque intervenant avec cet array. Si un des termes correspond, lui ajouter is-active s'il ne l'a pas
+							// sinon, lui retirer
 
-							if( motsClesFiche !== undefined) {
-								motsClesFicheArray = motsClesFiche.split(" ");
-								// si ça fit
+							$(".colonneswrappers").each( function() {
+								motsClesFiche = $(this).find("[data-allcategories]").attr("data-allcategories");
 
-								console.log( "motsClesFicheArray : " + motsClesFicheArray[0]);
+								if( motsClesFiche !== undefined) {
+									motsClesFicheArray = motsClesFiche.split(" ");
+									// si ça fit
 
-								console.log( "activetags.diff(motsClesFicheArray) : " + activetags.diff(motsClesFicheArray));
+									console.log( "motsClesFicheArray : " + motsClesFicheArray[0]);
 
-								if( activetags.diff(motsClesFicheArray).length > 0) {
-									$(this).addClass("is-shown");
-									// mettre en surbrillance son tag
-									$(this).find(".category-list span").each(function() {
-										motsClesTag = $(this).attr("data-categorie");
+									console.log( "activetags.diff(motsClesFicheArray) : " + activetags.diff(motsClesFicheArray));
 
-
-										console.log( "Activation du mot-clé dans la vignette --- ");
-										console.log( "motsClesTag = " + motsClesTag);
+									if( activetags.diff(motsClesFicheArray).length > 0) {
+										$(this).addClass("is-shown");
+										// mettre en surbrillance son tag
+										$(this).find(".category-list span").each(function() {
+											motsClesTag = $(this).attr("data-categorie");
 
 
-										if( $.inArray( motsClesTag, activetags) > -1) {
-											$(this).addClass("is-active");
-										} else {
-											$(this).removeClass("is-active");
-										}
+											console.log( "Activation du mot-clé dans la vignette --- ");
+											console.log( "motsClesTag = " + motsClesTag);
 
-									});
 
+											if( $.inArray( motsClesTag, activetags) > -1) {
+												$(this).addClass("is-active");
+											} else {
+												$(this).removeClass("is-active");
+											}
+
+										});
+
+									} else {
+										$(this).removeClass("is-shown");
+									}
 								} else {
 									$(this).removeClass("is-shown");
 								}
-							} else {
-								$(this).removeClass("is-shown");
-							}
-						});
+							});
+						}
+					}
+
+					// s'il y a des posts
+					if( $(".filter-elements .postContainer").length > 0) {
+
+						if( activetags.length === 0) {
+	 						$(".filter-elements .postContainer").removeClass("is-filtered");
+							$(".filter-elements .postContainer").find(".category-list span").removeClass("is-active");
+						} else {
+
+							$(".postContainer").each( function() {
+								motsClesFiche = $(this).find("[data-allcategories]").attr("data-allcategories");
+
+								if( motsClesFiche !== undefined) {
+									motsClesFicheArray = motsClesFiche.split(" ");
+									// si ça fit
+
+									if( activetags.diff(motsClesFicheArray).length > 0) {
+										$(this).removeClass("is-filtered");
+
+										// mettre en surbrillance son tag
+										$(this).find(".category-list span").each(function() {
+											motsClesTag = $(this).attr("data-categorie");
+
+											console.log( "motsClesTag = " + motsClesTag);
+
+											if( $.inArray( motsClesTag, activetags) > -1) {
+												$(this).addClass("is-active");
+											} else {
+												$(this).removeClass("is-active");
+											}
+
+										});
+
+									} else {
+										$(this).addClass("is-filtered");
+									}
+								} else {
+									$(this).addClass("is-filtered");
+								}
+							});
+
+						}
+
 					}
 
 
@@ -473,17 +535,17 @@ function textToCanvas( $this ) {
 function animateLogo() {
 
 	$(".navbar-brand svg").find("rect,circle,polyline,line,path").velocity({
-			scale: 0
+			scale: 0.5
 		}, {
     	duration: 0,
 		});
 
 	$(".navbar-brand svg").velocity({ opacity: 1} );
 	$(".navbar-brand svg").find("rect,circle,polyline,line,path").each(function(i) {
-		$(this).delay(i*20).velocity({
+		$(this).delay(i*40).velocity({
 			scale: 1
 		}, {
-    	duration: 1200,
+    	duration: 800,
     	easing: "spring"
 		});
 	});
@@ -1143,12 +1205,19 @@ var Roots = {
 
       // désactive les console.log si pas un superadmin
 			if( !$("body").hasClass("superadmin") ) {
-		    //logger.disableLogger();
+		    logger.disableLogger();
 			}
 
 			postViewRoutine.init();
 
 			animateLogo();
+
+
+			if( $(".category-filters").length > 0) {
+				$(".category-filters").the_filters();
+			} else {
+				$(".category-filters").remove();
+			}
 
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 
@@ -1309,17 +1378,10 @@ var Roots = {
 				});
 */
 
-/*
-			  var pckry = new Packery( $container[0], {
-				  itemSelector: '#colonnesContainer .colonneswrappers',
-			  });
-*/
-
 			  $("body").addClass("is-loaded");
 
-				$('#colonnesContainer').isotope({
-
-				  layoutMode: 'packery',
+				var pckry = $('#colonnesContainer').isotope({
+				  layoutMode: 'fitRows',
 				  itemSelector: '.colonneswrappers',
 				  percentPosition: true,
 				  sortAscending: false,
@@ -1330,8 +1392,13 @@ var Roots = {
 				  sortBy : 'number'
 				});
 
-
 /*
+			  var pckry = new Packery( $('#colonnesContainer')[0], {
+				  itemSelector: '#colonnesContainer .colonneswrappers',
+			  });
+*/
+
+
 			  var itemElems = pckry.getItemElements();
 			  // for each item element
 			  for ( var i=0, len = itemElems.length; i < len; i++ ) {
@@ -1341,20 +1408,49 @@ var Roots = {
 			    // bind Draggabilly events to Packery
 			    pckry.bindDraggabillyEvents( draggie );
 			  }
-*/
+
+
+			  // show item order after layout
+			  function orderItems() {
+			    var itemElems = pckry.getItemElements();
+			    for ( var i=0, len = itemElems.length; i < len; i++ ) {
+			      var elem = itemElems[i];
+			      setText( elem, i + 1 );
+			    }
+			  }
+
+			  pckry.on( 'layoutComplete', orderItems );
+			  pckry.on( 'dragItemPositioned', orderItems );
+
+
+
+
+
+
 			}, 500);
 
 
-			var elements = ($(".category-list [data-categorie]").toArray());
-			categories = [];
-			for(var i=0;typeof(elements[i])!=='undefined';) {
-				if( $.inArray(elements[i].outerHTML, categories) === -1) {
-					categories.push( elements[i].outerHTML);
-				}
-				i++;
-			}
-			$(".category-filters").append( categories.toString() );
-			$(".category-filters").the_filters();
+/*
+		  var sortOrder = []; // global variable for saving order, used later
+		  var storedSortOrder = localStorage.getItem('sortOrder');
+		  if ( storedSortOrder ) {
+		    storedSortOrder = JSON.parse( storedSortOrder );
+		    // create a hash of items by their tabindex
+		    var itemsByTabIndex = {};
+		    var tabIndex;
+		    for ( var i=0, len = pckry.items.length; i < len; i++ ) {
+		      var item = pckry.items[i];
+		      tabIndex = $( item.element ).attr('tabindex');
+		      itemsByTabIndex[ tabIndex ] = item;
+		    }
+		    // overwrite packery item order
+		    i = 0; len = storedSortOrder.length;
+		    for (; i < len; i++ ) {
+		      tabIndex = storedSortOrder[i];
+		      pckry.items[i] = itemsByTabIndex[ tabIndex ];
+		    }
+	    }
+*/
 
 			///////////////////////////////////////////////// ajouter un projet /////////////////////////////////////////////////
 

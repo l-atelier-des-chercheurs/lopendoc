@@ -53,7 +53,7 @@
 	wp_reset_query();
 ?>
 
-	<article class="projetContainer taxProj" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
+	<article class="projetContainer taxProj filter-elements" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
 
 
 	<div class='colTitle'>
@@ -76,11 +76,14 @@
 	    	echo "</p>";
 	    ?>
 		</div>
+
 	<?php
 		}
 	}
 	?>
-
+	<div class='category-list category-filters'>
+  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
+	</div>
 	<?php
 	if ( is_user_logged_in() ) {
 		?>

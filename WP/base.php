@@ -4,7 +4,7 @@
 
 <script>
 
-	document.body.className = document.body.className.replace('no-js','js');
+	document.documentElement.className = document.documentElement.className.replace('no-js','js');
 
 		if( window.top !== window.self ) {
 			document.getElementsByTagName('body')[0].className += ' iframe';
@@ -20,7 +20,6 @@
 		}
 	</script>
 
-<!--
   <div class="thisGrid">
     <div class="thisContainer">
       <div class="thisRow">
@@ -41,7 +40,6 @@
       </div>
     </div>
   </div>
--->
 
   <?php
     do_action('get_header');
