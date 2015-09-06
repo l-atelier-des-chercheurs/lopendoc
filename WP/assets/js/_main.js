@@ -74,6 +74,10 @@ jQuery.fn.the_filters = function(){
 			$(".colonnes .category-term").bind("tap", function() {
 				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
 			});
+			// tap sur le tag d'un projet
+			$(".postContainer .category-term").bind("tap", function() {
+				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
+			});
 		}
 	};
 
@@ -145,6 +149,7 @@ jQuery.fn.the_filters = function(){
 
 						if( activetags.length === 0) {
 	 						$(".filter-elements .postContainer").removeClass("is-filtered");
+	 						$(".filter-elements .postContainer").slideDown();
 							$(".filter-elements .postContainer").find(".category-list span").removeClass("is-active");
 						} else {
 
@@ -157,6 +162,7 @@ jQuery.fn.the_filters = function(){
 
 									if( activetags.diff(motsClesFicheArray).length > 0) {
 										$(this).removeClass("is-filtered");
+										$(this).slideDown();
 
 										// mettre en surbrillance son tag
 										$(this).find(".category-list span").each(function() {
@@ -174,9 +180,11 @@ jQuery.fn.the_filters = function(){
 
 									} else {
 										$(this).addClass("is-filtered");
+										$(this).slideUp();
 									}
 								} else {
 									$(this).addClass("is-filtered");
+									$(this).slideUp();
 								}
 							});
 
@@ -1206,6 +1214,10 @@ var Roots = {
       // désactive les console.log si pas un superadmin
 			if( !$("body").hasClass("superadmin") ) {
 		    logger.disableLogger();
+			} else {
+				$(".navbar").on("click", function() {
+					$(".thisGrid").toggle();
+				});
 			}
 
 			postViewRoutine.init();
@@ -1351,7 +1363,6 @@ var Roots = {
 
 			$('[data-toggle="tooltip"]').tooltip();
 
-
     }
 
   },
@@ -1381,7 +1392,7 @@ var Roots = {
 			  $("body").addClass("is-loaded");
 
 				var pckry = $('#colonnesContainer').isotope({
-				  layoutMode: 'fitRows',
+				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
 				  percentPosition: true,
 				  sortAscending: false,
@@ -1392,39 +1403,7 @@ var Roots = {
 				  sortBy : 'number'
 				});
 
-/*
-			  var pckry = new Packery( $('#colonnesContainer')[0], {
-				  itemSelector: '#colonnesContainer .colonneswrappers',
-			  });
-*/
-
-
-			  var itemElems = pckry.getItemElements();
-			  // for each item element
-			  for ( var i=0, len = itemElems.length; i < len; i++ ) {
-			    var elem = itemElems[i];
-			    // make element draggable with Draggabilly
-			    var draggie = new Draggabilly( elem );
-			    // bind Draggabilly events to Packery
-			    pckry.bindDraggabillyEvents( draggie );
-			  }
-
-
-			  // show item order after layout
-			  function orderItems() {
-			    var itemElems = pckry.getItemElements();
-			    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-			      var elem = itemElems[i];
-			      setText( elem, i + 1 );
-			    }
-			  }
-
-			  pckry.on( 'layoutComplete', orderItems );
-			  pckry.on( 'dragItemPositioned', orderItems );
-
-
-
-
+				// permettre de pinner les éléments
 
 
 			}, 500);

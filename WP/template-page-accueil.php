@@ -76,7 +76,6 @@ Template Name: Accueil avec cartes
 					      )
 					  ),
 				    'post_type'      => 'post', // set the post type to page
-				    'posts_per_page' => 1,
 					  'orderby'=> 'modified',
 					  'order' => 'DESC',
 					);
@@ -88,6 +87,7 @@ Template Name: Accueil avec cartes
 						while ( $get_last_post->have_posts()) : $get_last_post->the_post();
 							$lastPostDate = get_the_modified_date('U');
 							$lastPostDateHuman = get_the_modified_date();
+							break;
 						endwhile;
 					}
 

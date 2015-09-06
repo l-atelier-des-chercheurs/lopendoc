@@ -38,7 +38,7 @@
 <?php
 	if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) :
 ?>
-<div class="comments">
+<div class="comments is-disabled">
 	<svg class="icons comment-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve">
 	<g>

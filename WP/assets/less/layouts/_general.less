@@ -4,7 +4,14 @@
 @cpublish : #45C1B4; // vert de publication
 @caction : #EF474B; // un rouge
 @cfond: #F9F9F9;
-@cgrey: #eee;
+@clightgrey: #eee;
+
+@cblue: #2299C2;
+@cgrey: #5A5A5A;
+@cdarkgrey: #3C3C3C;
+@cpink: #FF8FAE;
+@cyellow: #FCF463;
+
 
 
 @phone-only:    ~"only screen and (max-width: @{screen-xs-max})"; // @screen-xs-max
@@ -15,7 +22,7 @@
 
 
 a {
-	color: @cprivate;
+	color: inherit;
 }
 
 a:hover, a:focus {
@@ -185,7 +192,7 @@ button{
 
 
 hr {
-	border-top: 1px solid #ddd;
+	border-top: 1px solid @cgrey;
 }
 
 small,.small {
@@ -241,13 +248,13 @@ body {
 
 
 *::selection {
-  background: @cgrey;
+  background: @clightgrey;
 }
 *::-moz-selection {
-  background: @cgrey;
+  background: @clightgrey;
 }
 *::-webkit-selection {
-  background: @cgrey;
+  background: @clightgrey;
 }
 
 
@@ -274,8 +281,8 @@ label#doorbell-feedback-label {
 	margin-top: 80px;
 }
 
-body:not( .superadmin) .thisGrid {
-	display: none !important;
+.thisGrid.thisGrid.thisGrid {
+	display: none;
 }
 
 
@@ -299,6 +306,7 @@ body:not( .superadmin) .thisGrid {
 			.make-row;
 
 			.navbar-header {
+				.make-xs-column(12);
 				.make-md-column(8);
 				height: 	65px;
 
@@ -307,17 +315,17 @@ body:not( .superadmin) .thisGrid {
 					display: block;
 
 					#logo_opendoc {
-						.make-sm-column(3);
+						.make-xs-column(3);
 						.vaMid2014;
 					}
 					.lopendocInstance {
-						.make-sm-column-push(3);
-						.make-sm-column(4);
+						.make-xs-column-push(3);
+						.make-xs-column(4);
 						.vaMid2014;
 					}
 					.lopendocProjet {
-						.make-sm-column-push(7);
-						.make-sm-column(4);
+						.make-xs-column-push(7);
+						.make-xs-column(4);
 						.vaMid2014;
 					}
 
@@ -326,7 +334,8 @@ body:not( .superadmin) .thisGrid {
 			}
 
 			.navbar-collapse {
-			  .make-sm-column(4);
+				.make-xs-column(12);
+			  .make-md-column(4);
 
 			  .actionsContainer {
 					.make-row;
@@ -367,10 +376,10 @@ body:not( .superadmin) .thisGrid {
 		}
 	}
 	.lopendocInstance {
-		border-left: 1px solid @cgrey;
+		border-left: 1px solid @clightgrey;
 	}
 	.lopendocProjet {
-		border-left: 1px solid @cgrey;
+		border-left: 1px solid @clightgrey;
 	}
 
 
@@ -616,7 +625,11 @@ body {
 
 		-webkit-font-smoothing: antialiased;
 
-		background-color: @cgrey;
+		background-color: @clightgrey;
+
+		&:last-child {
+			margin-right: 	0;
+		}
 	}
 
 }
@@ -668,8 +681,7 @@ body {
 	.category-term {
 
 		display: inline-block;
-		background-color: fade(@cprivate, 10);
-		color: @cprivate;
+		background-color: @clightgrey;
 		padding: 4px;
 		margin: 4px;
 
@@ -678,7 +690,7 @@ body {
 		text-transform: uppercase;
 
 		&.is-active {
-			background-color: @cprivate;
+			background-color: @caction;
 			color: #fff;
 		}
 	}
@@ -720,7 +732,7 @@ body {
 
 		textarea {
 			.form-control;
-			border: 1px solid #ddd;
+			border: 1px solid @cgrey;
 			width: 	100%;
 			margin-bottom: 	15px;
 		}
@@ -756,7 +768,7 @@ body {
 		float: left;
 		vertical-align: top;
 
-		max-height: 700px;
+		max-height: 900px;
 		overflow: hidden;
 
 		min-height: 150px;
@@ -769,12 +781,12 @@ body {
 			margin: 0;
 		}
 
+
+
 		.colonnes {
 			margin-bottom:	@grid-gutter-width/2;
 			background-color: #fff;
 	    border-radius: 2px;
-
-	    background: linear-gradient(bottom, rgba(247,247,247,.94), rgba(255,255,255,1));
 
 			.bxshd-buttons;
 		}
@@ -818,7 +830,7 @@ body {
 
 
 	.headerProject {
-    border-bottom: 1px solid @cgrey;
+    border-bottom: 1px solid @clightgrey;
     transition: background-color .4s .0s ease-in;
 
 		&:hover {
@@ -847,9 +859,9 @@ body {
 
 
 	.modDate {
-		display: block;
 		.small;
-		color: @cprivate;
+		display: block;
+		color: @cdarkgrey;
 		margin-bottom: 	4px;
 	}
 
@@ -1054,7 +1066,7 @@ body {
 
 	// si filtre (page projet)
 	&.is-filtered {
-		display: none;
+
 	}
 
 }
@@ -1933,7 +1945,7 @@ td.lwa-username-input , td.lwa-password-input {
 		color: #000;
 
 		-webkit-font-smoothing: antialiased;
-		background-color: @cgrey;
+		background-color: @clightgrey;
 	}
 
 	.lwa-links-register {
