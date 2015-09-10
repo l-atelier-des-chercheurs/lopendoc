@@ -2,7 +2,7 @@
 <?php
 	$tags = get_the_category();
 	if ($tags) {
-		$htmlTags = '<div class="category-list">';
+		$htmlTags = '<div class="category-list fee-categories">';
 		$alltags = '';
 		foreach ( $tags as $tag ) {
 // 				$tag_link = get_category( $tag->term_id );

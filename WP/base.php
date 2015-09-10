@@ -18,6 +18,9 @@
 		if(window.location.href.indexOf("type=newproject") > -1) {
 			document.getElementsByTagName('body')[0].className += ' new-project';
 		}
+		if(window.location.href.indexOf("type=description") > -1) {
+			document.getElementsByTagName('body')[0].className += ' is-description';
+		}
 	</script>
 
   <div class="thisGrid">

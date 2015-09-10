@@ -51,6 +51,7 @@ update_option('thumbnail_size_w', 400);
 update_option('thumbnail_size_h', '');
 
 
+
 // custom typeface
 function google_font(){
 	echo "<link href='http://fonts.googleapis.com/css?family=Work+Sans:400,600' rel='stylesheet' type='text/css'>","\n";
@@ -223,6 +224,15 @@ function my_custom_init() {
 }
 add_action( 'init', 'my_custom_init' );
 
+
+// Add post thumbnails
+// http://codex.wordpress.org/Post_Thumbnails
+// http://codex.wordpress.org/Function_Reference/set_post_thumbnail_size
+// http://codex.wordpress.org/Function_Reference/add_image_size
+add_theme_support('post-thumbnails');
+set_post_thumbnail_size( 1200, 800, true );
+
+
 // project color
 $new_general_setting = new new_general_setting();
 
@@ -262,23 +272,6 @@ function private_or_publish($classes) {
 }
 add_filter('body_class', 'private_or_publish');
 
-// admin ou pas ajouter class au body
-function superadmin_ornot($classes) {
-	if( current_user_can( 'manage_options' ) ) {
-      $classes[] = 'superadmin';
-	}
-	return $classes;
-}
-add_filter('body_class', 'superadmin_ornot');
-
-// admin ou pas ajouter class au body
-function current_user_loggedin($classes) {
-	if( is_user_logged_in() ) {
-      $classes[] = 'is-edition';
-	}
-	return $classes;
-}
-add_filter('body_class', 'current_user_loggedin');
 
 // login logo wp
 function login_lopendoc() { ?>
@@ -422,7 +415,7 @@ function ajax_add_taxonomy_to_post()
     if(!empty($_POST['post_id']))
     {
 				wp_set_object_terms( $_POST['post_id'], $_POST['term'], 'projets');
-				echo "check postid = ".$_POST['post_id'] . " term = " . $_POST['term'];
+				//echo "check postid = ".$_POST['post_id'] . " term = " . $_POST['term'];
     }
 
     die();
@@ -475,3 +468,147 @@ function ajax_add_tax_term()
 
     die();
 }
+
+
+
+// ajouter et supprimer des éditeurs à la description d'une taxonomy
+// _opendoc_projecteditors à post Description
+// _opendocprojecteditors_
+
+add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
+function ajax_edit_projet_authors()
+{
+    if(!empty($_POST['post_id']))
+    {
+		    $post = array();
+				wp_set_object_terms( $_POST['post_id'], $_POST['post_authors'], 'auteur');
+        echo json_encode( wp_get_post_terms( $_POST['post_id'], 'auteur'));
+    }
+
+    die();
+}
+
+
+
+
+
+
+
+function user_can_edit() {
+
+	// si super admin ou admin
+	if( current_user_can('administrator')) {
+		return true;
+	}
+
+	// si logged in
+	if( is_user_logged_in() ) {
+		// si auteur
+		if( current_user_can('author')) {
+			// si editor
+			if( can_user_edit()) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function can_user_edit() {
+
+	if( isset($GLOBALS["editor"]) && $GLOBALS["editor"] == true) {
+		return true;
+	}
+
+	$tax = get_query_var( 'taxonomy' );
+	$term = get_query_var( 'term' );
+	$args = array(
+    'tax_query'         => array(
+        'relation'      => 'AND',
+        array(
+            'taxonomy'  => $tax,
+            'field'     => 'slug',
+            'terms'     => $term,
+        ),
+        array(
+            'taxonomy'  => 'post_tag',
+            'field'     => 'slug',
+            'terms'     => 'featured'
+        ),
+    ),
+    'post_type'      => 'post', // set the post type to page
+    'posts_per_page' => 1,
+		'order' => 'DESC',
+	);
+	$descriptionQuery = new WP_Query($args);
+
+	if ( $descriptionQuery->have_posts() ) {
+		// The Loop
+		while( $descriptionQuery->have_posts() ) {
+			$descriptionQuery->the_post();
+
+			$auteurs = wp_get_post_terms( get_the_ID(), 'auteur');
+			$currentuserlogin = wp_get_current_user()->user_login;
+
+			if( !empty($auteurs) ) {
+				$auteursName = array_pop( $auteurs ) -> name;
+				$auteursArray = explode(',', $auteursName);
+			}
+			$users = get_users('role=author');
+
+		  foreach ($users as $user) {
+				$userlogin =  $user->user_login;
+
+				$ifchecked = '';
+
+				if( !empty($auteursArray) ) {
+				  foreach ($auteursArray as $auteur) {
+
+		/*
+						echo "auteur : ";
+						echo $auteur . "</br>";
+						echo "userlogin : " ;
+						echo $userlogin . "</br>";
+						echo "</br></br>";
+		*/
+
+						if( $auteur == $userlogin) {
+							$ifchecked = 'checked="checked" ';
+
+							if( $userlogin == $currentuserlogin) {
+								$GLOBALS["editor"] = true;
+								return true;
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	return false;
+}
+
+
+// admin ou pas ajouter class au body
+function superadmin_ornot($classes) {
+	if( current_user_can('manage_options') ) {
+      $classes[] = 'is-admin';
+	}
+	if( current_user_can('superadmin') ) {
+      $classes[] = 'is-superadmin';
+	}
+	return $classes;
+}
+add_filter('body_class', 'superadmin_ornot');
+
+// admin ou pas ajouter class au body
+function current_user_loggedin($classes) {
+	if( is_user_logged_in() && can_user_edit() ) {
+      $classes[] = 'is-edition';
+	}
+	return $classes;
+}
+add_filter('body_class', 'current_user_loggedin');
+

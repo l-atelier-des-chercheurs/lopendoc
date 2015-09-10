@@ -22,8 +22,15 @@ Template Name: Accueil avec cartes
 			</div>
 		<?php } ?>
 		<div class='category-list category-filters'>
-    	<?php	_e("Filter by categories: ", 'opendoc'); ?>
+			<span class="legende">
+		  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
+			</span>
+
+			<span class="contenu">
+			</span>
 		</div>
+
+
 <?php
   if ( is_user_logged_in() ) {
 
@@ -116,13 +123,7 @@ Template Name: Accueil avec cartes
 			<?php if( $lastPostDate!= '') { ?> data-lastpostdate=" <?php echo $lastPostDate; } ?>"
 				>
 			<section  class="colonnes">
-					<a href="<?php echo $term_link; ?>">
-					<header class="headerProject">
-							<?php
-								echo '<h2 class="titreProjet">'.$term_name.'</h2>';
-							?>
-					</header>
-				</a>
+
 				 <div class="colonnescontent">
 
 					<?php
@@ -133,7 +134,13 @@ Template Name: Accueil avec cartes
 								$tags = get_the_category();
 								if ($tags) {
 									$htmlTags = '<div class="category-list">';
+									$htmlTags .= '<span class="legende">';
+									$htmlTags .= __('Categories: ', 'opendoc');
+									$htmlTags .= '</span>';
+									$htmlTags .= '<span class="contenu">';
+
 									$alltags = '';
+
 									foreach ( $tags as $tag ) {
 						// 				$tag_link = get_category( $tag->term_id );
 
@@ -141,33 +148,61 @@ Template Name: Accueil avec cartes
 										$htmlTags .= "{$tag->name}</span>";
 										$alltags .= $tag->slug . " ";
 									}
+									$htmlTags .= '</span>';
 									$htmlTags .= '</div>';
 								}
+
+
+								$description_content = get_the_content();
+								$img = "";
+
+								if( has_post_thumbnail()) {
+									$post_thumbnail_id = get_post_thumbnail_id( );
+									$img = wp_get_attachment_image_src( $post_thumbnail_id, 'medium');
+									$img = $img[0];
+								}
+
 								?>
+
+								<a href="<?php echo $term_link; ?>">
+									<?php if( $img != "") { ?>
+										<div class="headerImg" style="background-image: url(<?php echo $img; ?>)">
+											<?php echo '<img src="' . $img . '">'; ?>
+										</div>
+									<?php } ?>
+								</a>
+
 								<div data-post="<?php the_ID(); ?>" <?php post_class(); ?> data-allcategories="<?php echo $alltags; ?>" style="">
 
-								<!--
-									<div class="entry-header">
-										<?php
-								  		the_title( '<h3 class="entry-title">', '</h3>' );
-										?>
-									</div>
-								-->
+									<a href="<?php echo $term_link; ?>">
+										<header class="headerProject">
+												<?php
+													echo '<h2 class="titreProjet">'.$term_name.'</h2>';
+												?>
+										</header>
+									</a>
 
 									<div class="entry-content">
-										<?php the_content(); ?>
+										<?php
+											echo $description_content;
+										?>
 									</div><!-- .entry-content -->
 
 									<div class="entry-meta">
 										<?php if( $lastPostDateHuman !== '') { ?>
-											<span class="modDate">
-												<?php _e('Last edited on ', 'opendoc'); ?>
-												<?php echo $lastPostDateHuman;?>
-											</span>
+											<div class="modDate">
+												<span class="legende">
+													<?php _e('Last edit: ', 'opendoc'); ?>
+												</span>
+												<span class="contenu">
+													<?php echo $lastPostDateHuman;?>
+												</span>
+											</div>
+										<?php }
+										if( $tags != '') {
+												?>
+											<?php echo $htmlTags; ?>
 										<?php } ?>
-										<?php
-											echo $htmlTags;
-										?>
 									</div>
 
 
@@ -180,6 +215,13 @@ Template Name: Accueil avec cartes
 							?>
 
 							<div class="post">
+									<a href="<?php echo $term_link; ?>">
+										<header class="headerProject">
+												<?php
+													echo '<h2 class="titreProjet">'.$term_name.'</h2>';
+												?>
+										</header>
+									</a>
 
 								<div class="entry-content">
 									<p>

@@ -23,7 +23,6 @@ var mapRange = function(from, to, s) {
 var startDetectEnregistrementNewPost = function() {
     setTimeout(function () {
 			if( $("#fee-notice-area .updated").length > 0) {
-				window.top.location.reload();
 			} else {
 				startDetectEnregistrementNewPost();
 			}
@@ -51,7 +50,7 @@ jQuery.fn.the_filters = function(){
 
 			console.log("the_filters start");
 
-			var elements = ($(".filter-elements .category-list [data-categorie]").toArray());
+			var elements = ($(".filter-elements>:not(.descriptionContainer) .category-list [data-categorie]").toArray());
 
 			categories = [];
 			for(var i=0;typeof(elements[i])!=='undefined';) {
@@ -389,9 +388,16 @@ function whichPostIndexIsVisible(modwscrollTop) {
 function replacePostWithIframe( $thisPost, pageLink ) {
 
 	$thisPost.addClass("is-edited");
-
 	var $blocOuMettreliframe = $thisPost.find(".entry-stuff");
-	$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-4by3"><iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe></div>');
+
+	// si on edit une description
+	if( $thisPost.parent().is(".descriptionContainer")) {
+		console.log("PLOP ");
+		$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-16by9"><iframe class="edit-frame" src="' + pageLink + '#edit=true&type=description" style="border:0px;width:100%;height:100%;"></iframe></div>');
+	} else {
+		$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-4by3"><iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe></div>');
+	}
+
 
 	/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
 	// trigger un click sur "Mettre a jour" avant tout
@@ -404,6 +410,8 @@ function replacePostWithIframe( $thisPost, pageLink ) {
 		$thisPost.find(".edit-frame").contents().find(".fee-save").click();
 
 	});
+
+	//$(".edit-frame").contents().find("#categorychecklist [checked='checked']").parent().toArray()
 
 
 			/*
@@ -631,10 +639,17 @@ function newPost() {
 		  $.post(ajaxurl, databis, function(response) {
 		    console.log('Server response from the AJAX URL ' + response);
 				$(".popover").removeClass("is-loading");
-		  });
+		  }).done(function() {
+    alert( "second success" );
+  })
+  .fail(function() {
+    alert( "error" );
+  })
+  .always(function() {
+    alert( "finished" );
+});
+
     });
-
-
 
 	});
 }
@@ -650,6 +665,32 @@ function loginField() {
 
 
 }
+
+function updateProjectAuthors( newauthors, thisID) {
+
+	console.log('edit_projet_authors : ');
+	console.log('thisID : ' + thisID);
+	console.log('newauthors : ' + newauthors);
+  var data = {
+      'action': 'edit_projet_authors',
+			'post_id': thisID,
+			'post_authors': newauthors
+  };
+  $.post(ajaxurl, data, function(response) {
+    console.log('Server response from the AJAX URL ' + response);
+  });
+
+}
+
+
+
+
+
+
+
+
+
+
 
 function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 
@@ -797,9 +838,9 @@ postViewRoutine = {
 			initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
 
 
-			$(".entry-title-and-content").each(function() {
-				if( ($(this).find(".entry-title").text() === "Brouillon auto" || $(this).find(".entry-title").text() === "Auto draft") && $(this).find(".entry-content").text().trim() === "" ) {
-					$(this).parents(".postContainer").remove();
+			$(".post").each(function() {
+				if( ($(this).find(".entry-title").text() === "Brouillon auto" || $(this).find(".entry-title").text() === "Auto draft") && $(this).find(".entry-content").text().trim() === "" && $(this).find(".post-thumbnail").length === 0) {
+					//$(this).parents(".postContainer").remove();
 				}
 			});
 
@@ -858,6 +899,7 @@ postViewRoutine = {
 						'post_id': thisID,
 						'post_status': newStatus
 		    };
+
 		    $.post(ajaxurl, data, function(response) {
 					var str = JSON.parse(response);
 
@@ -1212,10 +1254,10 @@ var Roots = {
       // JavaScript to be fired on all pages
 
       // désactive les console.log si pas un superadmin
-			if( !$("body").hasClass("superadmin") ) {
+			if( !$("body").hasClass("is-superadmin") ) {
 		    logger.disableLogger();
 			} else {
-				$(".navbar").on("click", function() {
+				$(".content-info").append("<button style='color: #ccc;'>showgrid</button>").on("click", function() {
 					$(".thisGrid").toggle();
 				});
 			}
@@ -1226,7 +1268,7 @@ var Roots = {
 
 
 			if( $(".category-filters").length > 0) {
-				$(".category-filters").the_filters();
+				$(".category-filters .contenu").the_filters();
 			} else {
 				$(".category-filters").remove();
 			}
@@ -1252,6 +1294,29 @@ var Roots = {
 				}
 
 				$("body").toggleClass("is-edition");
+			});
+
+
+			///////////////////////////////////////////////// éditer les auteurs d'un projet /////////////////////////////////////////////////
+
+			$(".editProjetAuteurs").each( function(e) {
+
+				$parent = $(this);
+
+				$(this).find(".submit-updateAuthors").click(function() {
+
+					descriptionID = $(".descriptionContainer .post").attr("data-id");
+
+					sendActionToAnalytics( "Édition des auteurs d'un projet" );
+
+					nomsAuteurs = [];
+					$parent.find("input:checked").each( function() {
+						nomsAuteurs.push( $(this).val());
+					});
+					listAllAuthors = nomsAuteurs.toString();
+					console.log("authors : " + listAllAuthors);
+					updateProjectAuthors( listAllAuthors, descriptionID);
+				});
 			});
 
 			///////////////////////////////////////////////// rafraichir postie /////////////////////////////////////////////////
@@ -1495,7 +1560,10 @@ var Roots = {
 				console.log("clicked save post");
 				$("body").find(".fee-publish").click();
 				sendActionToAnalytics("Fin édition nouveau post");
-				startDetectEnregistrementNewPost();
+
+				$(document).on('fee-after-save', function() {
+					window.top.location.reload();
+				});
 
 
 			});
@@ -1612,6 +1680,19 @@ var Roots = {
 				$(".fee-button-categories").click();
 			});
 
+			// mettre à jour les categories quand on ferme le pop-up (maintenant pris en charge par FEE grace à la catégorie fee-categories
+/*
+			$( '.fee-category-modal' ).on( 'hide.bs.modal', function() {
+					var _categories = [];
+
+					$('#categorychecklist input[name="post_category[]"]:checked').each( function() {
+						_categories.push( '<span class="category-term">' + $(this).parent().text() + '</span>' );
+					});
+
+					console.log( "_categories : " + _categories);
+					$(".category-list").html( _categories);
+			});
+*/
 		}
 	},
 

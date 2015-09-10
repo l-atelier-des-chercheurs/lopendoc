@@ -7,10 +7,11 @@
 @clightgrey: #eee;
 
 @cblue: #2299C2;
-@cgrey: #5A5A5A;
+@cgrey: #727272;
 @cdarkgrey: #3C3C3C;
 @cpink: #FF8FAE;
 @cyellow: #FCF463;
+
 
 
 
@@ -178,11 +179,16 @@ button{
 
 
 .legende {
-	p {
-		text-align: right;
-		.textImageCaption;
-	}
+	font-style: italic;
+	line-height: 1.6;
+	color: @cgrey;
 }
+.contenu {
+	font-weight: 	bold;
+	line-height: 1.6;
+	color: @cgrey;
+}
+
 .image{
 	img{
 		z-index: 1;
@@ -197,6 +203,12 @@ hr {
 
 small,.small {
   font-size: 80%;
+}
+
+.legende {
+
+
+
 }
 
 
@@ -278,7 +290,7 @@ label#doorbell-feedback-label {
 
 .wrap {
 	.container;
-	margin-top: 80px;
+	margin-top: 100px;
 }
 
 .thisGrid.thisGrid.thisGrid {
@@ -301,6 +313,12 @@ label#doorbell-feedback-label {
 	.navbar-container {
 		.container;
 
+		.navbar-toggle {
+	    margin-top:    		@grid-gutter-width/2;
+	    margin-bottom: 		@grid-gutter-width/2;
+	    z-index: 	15;
+		}
+
 		.navbar-row {
 
 			.make-row;
@@ -309,10 +327,14 @@ label#doorbell-feedback-label {
 				.make-xs-column(12);
 				.make-md-column(8);
 				height: 	65px;
+		    margin-top:    		@grid-gutter-width/4;
+		    margin-bottom: 		@grid-gutter-width/4;
 
 				.navbar-brand {
 					.make-row;
 					display: block;
+			    margin-top:    		@grid-gutter-width/4;
+			    margin-bottom: 		@grid-gutter-width/4;
 
 					#logo_opendoc {
 						.make-xs-column(3);
@@ -339,6 +361,8 @@ label#doorbell-feedback-label {
 
 			  .actionsContainer {
 					.make-row;
+			    margin-top:    		@grid-gutter-width/4;
+			    margin-bottom: 		@grid-gutter-width/4;
 
 					.actions {
 						.make-sm-column(12);
@@ -601,7 +625,7 @@ body {
 	list-style: none;
 	padding: 0;
 
-	margin: 15px 0 5px 0;
+	margin:@grid-gutter-width/4 0;
 
 	padding-right: 	0;
 
@@ -611,10 +635,10 @@ body {
 
 		display: inline-block;
 		border-radius: 0.25em;
-		padding: 0 1em;
-		margin: 0;
-		margin-right: @grid-gutter-width/2;
-		margin-bottom: 5px;
+
+		padding: 0 @grid-gutter-width/4;
+		margin: @grid-gutter-width/4 @grid-gutter-width/4;
+
 		height: 35px;
 		line-height: 36px;
 
@@ -671,23 +695,32 @@ body {
 
 .category-list {
 
+	ul {
+		padding: 	0;
+		margin: 0;
+	}
 
-	.entry-meta & {
-		margin-left: 	-8px;
+	a {
+		color: inherit;
 	}
 
 
-
-	.category-term {
+	.category-term, li {
 
 		display: inline-block;
 		background-color: @clightgrey;
-		padding: 4px;
-		margin: 4px;
+		color: #000;
+
+    padding: 6px 12px 4px 6px;
+		margin: 0px;
 
 		cursor: pointer;
 
 		text-transform: uppercase;
+
+    line-height: 1;
+
+		font-weight: 	normal;
 
 		&.is-active {
 			background-color: @caction;
@@ -820,6 +853,24 @@ body {
 		}
 	}
 
+	.headerImg {
+	    width: 100%;
+	    height: 0;
+	    padding-bottom: 66%;
+	    overflow: hidden;
+
+	    background-position: center;
+	    -webkit-background-size: cover;
+	    background-size: cover;
+	    background-repeat: 	no-repeat;
+	}
+	.headerImg img {
+	    width: 100%;
+	    height: auto;
+
+	    opacity: 0;
+	}
+
 	.thumbnail, .wp-caption {
 		margin-bottom: 	0;
 	}
@@ -844,6 +895,8 @@ body {
 			text-transform: uppercase;
 			font-weight: bold;
 			margin: 0;
+
+			color: @text-color;
 		}
 	}
 	.entry-content {
@@ -859,10 +912,6 @@ body {
 
 
 	.modDate {
-		.small;
-		display: block;
-		color: @cdarkgrey;
-		margin-bottom: 	4px;
 	}
 
 
@@ -887,11 +936,27 @@ body {
 	  background-color: #fff;
 	  padding-left: @grid-gutter-width/2;
 	  padding-right: @grid-gutter-width/2;
+	  margin-bottom: 	@grid-gutter-width;
 
-		section.post {
-			width: 100%;
-			margin-left: 0 !important;
+		.post {
+			.make-row;
 
+			.post-thumbnail {
+
+				display: block;	// activer la thumbnail sur les descriptions
+
+				.make-md-column(5);
+				padding-left: 0;
+    		margin-bottom: 0;
+			}
+
+			.entry-meta {
+				.make-md-column(2);
+			}
+
+			.entry-title-and-content {
+				.make-md-column(5);
+			}
 
 			.button-right {
 				right: 0;
@@ -930,7 +995,7 @@ body {
 
 	.projetContainer {
 
-		.post {
+		.postContainer .post {
 			.make-sm-column(9);
 			z-index: 10;
 		}
@@ -1040,7 +1105,7 @@ body {
 
 }
 
-////////////////////////////// toutes les vues ///////////////////////////////////////////////////////////
+////////////////////////////// toutes les vues, pas la description ///////////////////////////////////////////////////////////
 
 .postContainer {
 
@@ -1059,15 +1124,28 @@ body {
 		.make-md-column(11);
 		position: absolute;
 	}
+
 	.post {
 		.make-md-column-offset(2);
 		.make-md-column(9);
+	}
+	.post[data-status=publish] {
+		.make-sm-column-offset(2);
+	}
+
+
+	.js & .post[data-status=private] {
+		max-height: 0;
+		min-height: 0;
+		margin: 0;
+		opacity: 0;
 	}
 
 	// si filtre (page projet)
 	&.is-filtered {
 
 	}
+
 
 }
 
@@ -1096,6 +1174,29 @@ body {
 		.is-edition & {
 			background-color: #fff;
 
+		}
+
+		.post-thumbnail {
+
+			display: none;	// masque le thumbnail, sauf pour description
+
+			background-color: @clightgrey;
+			margin-bottom: 	@grid-gutter-width/2;
+
+			.fee-insert-thumbnail {
+				display: none;
+			}
+
+			img {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+
+
+			.fee-thumbnail {
+				min-height: 50px;
+
+			}
 		}
 
 		.entry-meta {
@@ -1134,6 +1235,7 @@ body {
 
 				}
 				.category-icon {
+					display: block;
 				}
 			}
 
@@ -1374,17 +1476,6 @@ body {
 // si pas édition
 .taxProj {
 
-	.post[data-status=publish] {
-		.make-sm-column-offset(2);
-	}
-
-
-	.js & .post[data-status=private] {
-		max-height: 0;
-		min-height: 0;
-		margin: 0;
-		opacity: 0;
-	}
 
 }
 
@@ -1474,6 +1565,13 @@ body {
 	}
 }
 
+.fee-on {
+	.fee-insert-thumbnail {
+		display: block !important;
+	}
+
+}
+
 .wp-core-ui {
 
 /*
@@ -1494,7 +1592,12 @@ body {
 	.edit-frame {
 		background-color: #fff;
 	}
+
+  &.embed-responsive-4by1 {
+    padding-bottom: 25%;
+  }
 }
+
 
 /*
 // BOUTONS PUBLICATIONS
@@ -1688,14 +1791,6 @@ body {
 	}
 
 
-/*
-	&:not(.show-editor) {
-		.fee-toolbar {
-			display: none;
-		}
-	}
-*/
-
 	#fee-notice-area {
 		position: fixed;
 		top: 10px;
@@ -1724,6 +1819,42 @@ body {
 		}
 	}
 
+	// si on édite la description d'un post, reprendre la disposition par tier
+	&.is-description {
+
+		.post {
+			.make-row;
+
+			.post-thumbnail {
+
+				display: block;
+
+				.make-md-column(5);
+				padding-left: 0;
+    		margin-bottom: 0;
+
+			}
+
+			.entry-meta {
+				.make-md-column(2);
+			}
+
+			.entry-title-and-content {
+				.make-md-column(5);
+			}
+
+			.button-right {
+				right: 0;
+		    left: auto;
+
+		    .icons {
+			  	display: block;
+			  }
+			}
+		}
+
+	}
+
 }
 
 
@@ -1739,7 +1870,7 @@ body {
 	}
 	.button-right {
 		display: block !important;
-		right: 0;
+		right: @grid-gutter-width;
 		left: auto;
 
 		.icons {
@@ -1763,6 +1894,29 @@ body {
 		display: none;
 	}
 
+}
+
+.fee-insert-thumbnail {
+	background: transparent;
+	position: absolute;
+	z-index: 9998;
+	top: 0;
+	left: 0;
+	font-size: 16px;
+	line-height: 20px;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	padding-left: 5px;
+	opacity: 0.5;
+	cursor: pointer;
+	-webkit-transition: opacity 0.1s ease-in 0;
+	-moz-transition: opacity 0.1s ease-in 0;
+	transition: opacity 0.1s ease-in 0;
+	outline: none;
+
+	margin: 	@grid-gutter-width/2;
 }
 
 

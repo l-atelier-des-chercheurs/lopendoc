@@ -2,14 +2,21 @@
 			  $ID = get_the_ID();
 			  $status = get_post_status($ID);
 ?>
-<section class="post" data-post="<?php $ID; ?>" <?php post_class(); ?> data-status="<?php echo $status; ?>" data-id="<?php echo $ID ?>" data-action="<?php echo esc_url(home_url('')); ?>/edit-page" data-singleurl="<?php echo esc_url( get_permalink() ); ?>">
+<article class="post" data-post="<?php $ID; ?>" <?php post_class(); ?> data-status="<?php echo $status; ?>" data-id="<?php echo $ID ?>" data-action="<?php echo esc_url(home_url('')); ?>/edit-page" data-singleurl="<?php echo esc_url( get_permalink() ); ?>">
 
 <?php
-if ( is_user_logged_in() ) {
+if ( user_can_edit() ) {
 	get_template_part('templates/content-modules/button-right');
 }
 ?>
 	<div class="entry-stuff">
+
+		<?php if( has_post_thumbnail() ) { ?>
+			<div class="post-thumbnail">
+				<?php the_post_thumbnail(); ?>
+			</div>
+		<?php } ?>
+
 		<div class="entry-meta">
 			<?php get_template_part('templates/content-modules/meta'); ?>
 		</div><!-- .entry-meta -->
@@ -26,4 +33,4 @@ if ( is_user_logged_in() ) {
 
 	</div>
 
-</section>
+</article>
