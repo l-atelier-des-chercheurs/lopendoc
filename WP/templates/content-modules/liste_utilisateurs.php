@@ -1,56 +1,35 @@
-<?php
-	global $post;
-  $users = get_users('role=author');
-?>
-
 <div class="editProjetAuteurs">
 	<ul action=''>
 		<?php
 
-		$auteurs = wp_get_post_terms( get_the_ID(), 'auteur');
-		$currentuserlogin = wp_get_current_user()->user_login;
-
-		if( !empty($auteurs) ) {
-			$auteursName = array_pop( $auteurs ) -> name;
-			$auteursArray = explode(',', $auteursName);
+		$users = get_users('role=author');
+	  foreach ($users as $user) {
+			$userID = $user->ID;
+			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+			echo "userID : " . $userID . " hasProjects " . $hasProject ;
+			echo "</br>";
 		}
 
 	  foreach ($users as $user) {
-			$userlogin =  $user->user_login;
+			$userID = $user->ID;
+			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+			$userProjects = explode(',', $hasProject);
+
 
 			$ifchecked = '';
-
-			if( !empty($auteursArray) ) {
-			  foreach ($auteursArray as $auteur) {
-
-	/*
-					echo "auteur : ";
-					echo $auteur . "</br>";
-					echo "userlogin : " ;
-					echo $userlogin . "</br>";
-					echo "</br></br>";
-	*/
-
-					if( $auteur == $userlogin) {
-						$ifchecked = 'checked="checked" ';
-
-						if( $userlogin == $currentuserlogin) {
-							$GLOBALS["editor"] = true;
-						}
-					}
-				}
+			if( in_array( $term, $userProjects)) {
+				$ifchecked = 'checked="checked" ';
 			}
-
-			// ajouter et supprimer des éditeurs à la description d'une taxonomy
-			// _opendoc_projecteditors à post Description
-			// _opendocprojecteditors_
-
-			echo '<input type="checkbox" name="author" value="' . $userlogin . '" ' . $ifchecked . '>' . $user->nickname . '<br>';
+			echo '<div class="checkbox"><label>';
+			echo '<input type="checkbox" name="author" value="' . $userID . '" ' . $ifchecked . '>' . $user->nickname;
+			echo '</label></div>';
 			unset($ifchecked);
-	  } ?>
+		}
+
+	?>
 	</ul>
 	<button type="button" class=" submit-updateAuthors">
-	Ajouter/supprimer des éditeurs au projet
+		Ajouter/suprimer des éditeurs au projet
 	</button>
 </div>
 

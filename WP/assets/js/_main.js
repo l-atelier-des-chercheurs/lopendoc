@@ -625,6 +625,7 @@ function newPost() {
 
 	  var data = {
         'action': 'add_taxonomy_to_post',
+				'security': ajaxnonce,
 				'post_id': thisID,
 				'term': projet
     };
@@ -632,6 +633,7 @@ function newPost() {
       //alert('Server response from the AJAX URL ' + response);
 		  var databis = {
 		      'action': 'change_post_visibility',
+					'security': ajaxnonce,
 					'post_id': thisID,
 					'post_status': 'private'
 		  };
@@ -639,15 +641,7 @@ function newPost() {
 		  $.post(ajaxurl, databis, function(response) {
 		    console.log('Server response from the AJAX URL ' + response);
 				$(".popover").removeClass("is-loading");
-		  }).done(function() {
-    alert( "second success" );
-  })
-  .fail(function() {
-    alert( "error" );
-  })
-  .always(function() {
-    alert( "finished" );
-});
+		  });
 
     });
 
@@ -668,16 +662,19 @@ function loginField() {
 
 function updateProjectAuthors( newauthors, thisID) {
 
+
 	console.log('edit_projet_authors : ');
-	console.log('thisID : ' + thisID);
+	console.log('nomProjet : ' + nomProjet);
 	console.log('newauthors : ' + newauthors);
   var data = {
       'action': 'edit_projet_authors',
-			'post_id': thisID,
-			'post_authors': newauthors
+			'projet': nomProjet,
+			'security': ajaxnonce,
+			'newauthors': newauthors
   };
   $.post(ajaxurl, data, function(response) {
-    console.log('Server response from the AJAX URL ' + response);
+    console.log('Server response from the AJAX URL : ' + response);
+		$(".editProjetAuteurs").css("opacity", 1);
   });
 
 }
@@ -896,6 +893,7 @@ postViewRoutine = {
 
 		    var data = {
 		        'action': 'change_post_visibility',
+						'security': ajaxnonce,
 						'post_id': thisID,
 						'post_status': newStatus
 		    };
@@ -962,6 +960,7 @@ postViewRoutine = {
 
 		    var data = {
 		        'action': 'remove_post',
+						'security': ajaxnonce,
 						'post_id': thisID
 		    };
 		    $.post(ajaxurl, data, function(response) {
@@ -970,7 +969,6 @@ postViewRoutine = {
 						console.log(response);
 
 						$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
-
 		    });
 
 				return false;
@@ -1255,7 +1253,7 @@ var Roots = {
 
       // désactive les console.log si pas un superadmin
 			if( !$("body").hasClass("is-superadmin") ) {
-		    logger.disableLogger();
+		    //logger.disableLogger();
 			} else {
 				$(".content-info").append("<button style='color: #ccc;'>showgrid</button>").on("click", function() {
 					$(".thisGrid").toggle();
@@ -1304,6 +1302,8 @@ var Roots = {
 				$parent = $(this);
 
 				$(this).find(".submit-updateAuthors").click(function() {
+
+					$parent.fadeTo( "fast" , 0.5);
 
 					descriptionID = $(".descriptionContainer .post").attr("data-id");
 
@@ -1518,6 +1518,7 @@ var Roots = {
 					// ajouter en ajax un nouveau terme
 			    var data = {
 			        'action': 'add_tax_term',
+							'security': ajaxnonce,
 							'tax_term': projName
 			    };
 			    $.post(ajaxurl, data, function(response) {
@@ -1580,6 +1581,7 @@ var Roots = {
 
 		    var data = {
 		        'action': 'remove_post',
+						'security': ajaxnonce,
 						'post_id': thisID
 		    };
 		    $.post(ajaxurl, data, function(response) {
@@ -1635,6 +1637,7 @@ var Roots = {
 
 		    var data = {
 		        'action': 'remove_post',
+						'security': ajaxnonce,
 						'post_id': thisID
 		    };
 		    $.post(ajaxurl, data, function(response) {

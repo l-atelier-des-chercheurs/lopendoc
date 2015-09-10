@@ -247,6 +247,9 @@ class new_general_setting {
         register_setting( 'general', 'secondary_color', 'esc_attr' );
         add_settings_field('secondary_color', '<label for="secondary_color">'.__('Couleur secondaire' , 'secondary_color' ).'</label>' , array(&$this, 'fields_html2') , 'general' );
 
+        register_setting( 'general', 'wp_custom_nonce', 'esc_attr' );
+        add_settings_field('wp_custom_nonce', '<label for="wp_custom_nonce">'.__('Chaîne de sécurité pour vérifier l\'origine des requêtes ajax' , 'wp_custom_nonce' ).'</label>' , array(&$this, 'fields_html4') , 'general' );
+
         register_setting( 'general', 'mail_addressTC', 'esc_attr' );
         add_settings_field('mail_addressTC', '<label for="mail_addressTC">'.__('Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)' , 'mail_addressTC' ).'</label>' , array(&$this, 'fields_html3') , 'general' );
     }
@@ -261,6 +264,10 @@ class new_general_setting {
     function fields_html3() {
         $value3 = get_option( 'mail_addressTC', '' );
         echo '<input type="text" id="mail_addressTC" name="mail_addressTC" value="' . $value3 . '" />';
+		}
+    function fields_html4() {
+        $value4 = get_option( 'wp_custom_nonce', '' );
+        echo '<input type="text" id="wp_custom_nonce" name="wp_custom_nonce" value="' . $value4 . '" />';
 		}
 }
 
@@ -359,13 +366,17 @@ add_action ( 'wp_head', 'add_frontend_ajax_javascript_file' );
 function add_frontend_ajax_javascript_file(){ ?>
   <script type="text/javascript">
     var ajaxurl = <?php echo json_encode( admin_url( "admin-ajax.php" ) ); ?>;
-    var ajaxnonce = <?php echo json_encode( wp_create_nonce( "itr_ajax_nonce" ) ); ?>;
+    var ajaxnonce = <?php echo json_encode( wp_create_nonce( get_option( "wp_custom_nonce" ) ) ); ?>;
     var username = "not-logged-in";
+    var userid = "";
+    var nomProjet = "<?php echo get_query_var( 'term' ); ?>";
+
     <?php global $current_user; get_currentuserinfo(); ?>
 		<?php if ( is_user_logged_in() ) {
 			//echo 'Username: ' . $current_user->user_login . "\n"; echo 'User display name: ' . $current_user->display_name . "\n";
 			?>
 				username = "<?php echo $current_user->user_login; ?>";
+				userID = "<?php echo $current_user->ID; ?>";
 			<?php
 			}
 			else {
@@ -412,7 +423,7 @@ function ajax_get_post_information()
 add_action( 'wp_ajax_add_taxonomy_to_post', 'ajax_add_taxonomy_to_post' );
 function ajax_add_taxonomy_to_post()
 {
-    if(!empty($_POST['post_id']))
+    if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 				wp_set_object_terms( $_POST['post_id'], $_POST['term'], 'projets');
 				//echo "check postid = ".$_POST['post_id'] . " term = " . $_POST['term'];
@@ -426,7 +437,7 @@ add_action( 'wp_ajax_change_post_visibility', 'ajax_change_post_visibility' );
 function ajax_change_post_visibility()
 {
 
-    if(!empty($_POST['post_id']))
+    if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
 		    $post = array();
 		    $post['ID'] = $_POST['post_id'];
@@ -444,7 +455,7 @@ add_action( 'wp_ajax_remove_post', 'ajax_remove_post' );
 function ajax_remove_post()
 {
 
-    if(!empty($_POST['post_id']))
+    if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 				wp_trash_post( $_POST['post_id'] );
         echo json_encode( get_post_status($_POST['post_id']) );
@@ -458,7 +469,7 @@ add_action( 'wp_ajax_add_tax_term', 'ajax_add_tax_term' );
 function ajax_add_tax_term()
 {
 
-    if(!empty($_POST['tax_term']))
+    if(!empty($_POST['tax_term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 			wp_insert_term(
         $_POST['tax_term'],
@@ -478,11 +489,56 @@ function ajax_add_tax_term()
 add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
 function ajax_edit_projet_authors()
 {
-    if(!empty($_POST['post_id']))
+    error_log("debug ajout meta autheur");
+    error_log("projet ? " . $_POST['projet']);
+    error_log("validité nonce ? " . check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ));
+
+    if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
-		    $post = array();
-				wp_set_object_terms( $_POST['post_id'], $_POST['post_authors'], 'auteur');
-        echo json_encode( wp_get_post_terms( $_POST['post_id'], 'auteur'));
+
+			$projet = $_POST['projet'];
+			$newAuthorsString = $_POST['newauthors'];
+
+			// liste des ID des utilisateurs à qui ajouter le projet
+			$newAuthorsArray = explode(',', $newAuthorsString);
+
+			// récupérer tous les auteurs
+			// si leur userid est dans la liste, leur ajouter le projet, sinon le virer
+			$users = get_users('role=author');
+
+		  foreach ($users as $user) {
+				$userID = $user->ID;
+				$hasProjects = get_user_meta( $userID, '_opendoc_user_projets', true );
+				$userProjects = explode(',', $hasProjects);
+
+				// si dans la liste des projets existants d'un user il y a projet, alors
+				if( in_array( $projet, $userProjects)) {
+					// si son ID figure dans la liste à éditer
+					if( in_array( $userID, $newAuthorsArray)) {
+						// ne rien faire
+					} else {
+						// mais si son ID n'y est pas, c'est qu'il ne doit plus avoir ce projet
+						$pos = array_search($projet, $userProjects);
+						unset($userProjects[$pos]);
+						$hasProjects = implode(",", $userProjects);
+						update_user_meta( $userID, '_opendoc_user_projets', $hasProjects);
+					}
+
+				} else {
+					// par contre, s'il n'est pas dans la liste des projets qu'un user peut déjà éditer
+					// et qu'il est mentionné dans les auteurs à ajouter
+					if( in_array( $userID, $newAuthorsArray)) {
+						array_push( $userProjects, $projet);
+						$hasProjects = implode(",", $userProjects);
+						update_user_meta( $userID, '_opendoc_user_projets', $hasProjects);
+					}
+				}
+			}
+
+
+			foreach( $newAuthorsArray as $authorID) {
+			}
+			echo "success";
     }
 
     die();
@@ -500,13 +556,12 @@ function user_can_edit() {
 	if( current_user_can('administrator')) {
 		return true;
 	}
-
 	// si logged in
 	if( is_user_logged_in() ) {
 		// si auteur
 		if( current_user_can('author')) {
 			// si editor
-			if( can_user_edit()) {
+			if( can_user_edit_project()) {
 				return true;
 			}
 		}
@@ -514,76 +569,31 @@ function user_can_edit() {
 	return false;
 }
 
-function can_user_edit() {
+function can_user_edit_project() {
+
+	// si super admin ou admin
+	if( current_user_can('administrator')) {
+		return true;
+	}
 
 	if( isset($GLOBALS["editor"]) && $GLOBALS["editor"] == true) {
 		return true;
 	}
 
-	$tax = get_query_var( 'taxonomy' );
 	$term = get_query_var( 'term' );
-	$args = array(
-    'tax_query'         => array(
-        'relation'      => 'AND',
-        array(
-            'taxonomy'  => $tax,
-            'field'     => 'slug',
-            'terms'     => $term,
-        ),
-        array(
-            'taxonomy'  => 'post_tag',
-            'field'     => 'slug',
-            'terms'     => 'featured'
-        ),
-    ),
-    'post_type'      => 'post', // set the post type to page
-    'posts_per_page' => 1,
-		'order' => 'DESC',
-	);
-	$descriptionQuery = new WP_Query($args);
 
-	if ( $descriptionQuery->have_posts() ) {
-		// The Loop
-		while( $descriptionQuery->have_posts() ) {
-			$descriptionQuery->the_post();
+  $users = get_users('role=author');
+	$currentuserlogin = wp_get_current_user()->user_login;
 
-			$auteurs = wp_get_post_terms( get_the_ID(), 'auteur');
-			$currentuserlogin = wp_get_current_user()->user_login;
+  foreach ($users as $user) {
 
-			if( !empty($auteurs) ) {
-				$auteursName = array_pop( $auteurs ) -> name;
-				$auteursArray = explode(',', $auteursName);
-			}
-			$users = get_users('role=author');
+		$userID = $user->ID;
+		$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+		$userProjects = explode(',', $hasProject);
 
-		  foreach ($users as $user) {
-				$userlogin =  $user->user_login;
-
-				$ifchecked = '';
-
-				if( !empty($auteursArray) ) {
-				  foreach ($auteursArray as $auteur) {
-
-		/*
-						echo "auteur : ";
-						echo $auteur . "</br>";
-						echo "userlogin : " ;
-						echo $userlogin . "</br>";
-						echo "</br></br>";
-		*/
-
-						if( $auteur == $userlogin) {
-							$ifchecked = 'checked="checked" ';
-
-							if( $userlogin == $currentuserlogin) {
-								$GLOBALS["editor"] = true;
-								return true;
-							}
-						}
-					}
-				}
-
-			}
+		if( in_array( $term, $userProjects)) {
+			$GLOBALS["editor"] = true;
+			return true;
 		}
 	}
 
@@ -605,10 +615,41 @@ add_filter('body_class', 'superadmin_ornot');
 
 // admin ou pas ajouter class au body
 function current_user_loggedin($classes) {
-	if( is_user_logged_in() && can_user_edit() ) {
+	if( is_user_logged_in() && user_can_edit() ) {
       $classes[] = 'is-edition';
 	}
 	return $classes;
 }
 add_filter('body_class', 'current_user_loggedin');
+
+
+
+
+
+
+add_action( 'cmb2_init', 'opendoc_contributeur_projets' );
+/**
+ * Hook in and add a metabox to add fields to the user profile pages
+ */
+function opendoc_contributeur_projets() {
+	// Start with an underscore to hide fields from custom fields list
+	$prefix = '_opendoc_user_';
+	/**
+	 * Metabox for the user profile screen
+	 */
+	$cmb_user = new_cmb2_box( array(
+		'id'               => $prefix . 'edit',
+		'title'            => __( 'User Profile Metabox', 'cmb2' ),
+		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
+		'show_names'       => true,
+		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
+	) );
+	$cmb_user->add_field( array(
+		'name'     => __( 'Liste des projets où l\'utilisateur est auteur', 'cmb2' ),
+		'desc'     => __( 'séparés par une virgule', 'cmb2' ),
+		'id'       => $prefix . 'projets',
+		'type'     => 'title',
+    'type' => 'textarea_small'
+	) );
+}
 
