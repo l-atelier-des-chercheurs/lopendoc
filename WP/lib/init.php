@@ -8,18 +8,6 @@ function roots_setup() {
   load_theme_textdomain('roots', get_template_directory() . '/lang');
   load_theme_textdomain('opendoc', get_template_directory() . '/languages');
 
-  // Register wp_nav_menu() menus
-  // http://codex.wordpress.org/Function_Reference/register_nav_menus
-  register_nav_menus(array(
-    'primary_navigation' => __('Primary Navigation', 'roots')
-  ));
-
-  // Add post thumbnails
-  // http://codex.wordpress.org/Post_Thumbnails
-  // http://codex.wordpress.org/Function_Reference/set_post_thumbnail_size
-  // http://codex.wordpress.org/Function_Reference/add_image_size
-  add_theme_support('post-thumbnails');
-
   // Add post formats
   // http://codex.wordpress.org/Post_Formats
   add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'video', 'audio'));

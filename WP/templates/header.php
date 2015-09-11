@@ -64,7 +64,7 @@
 				<div class="actionsContainer">
 					<ul class="action-button actions">
 						<?php
-						if (is_user_logged_in()) {
+						if (user_can_edit()) {
 							?>
 						<li class="button switch-edition">
 							<?php _e('Edit mode', 'opendoc'); ?>

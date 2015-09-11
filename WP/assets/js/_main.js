@@ -23,7 +23,6 @@ var mapRange = function(from, to, s) {
 var startDetectEnregistrementNewPost = function() {
     setTimeout(function () {
 			if( $("#fee-notice-area .updated").length > 0) {
-				window.top.location.reload();
 			} else {
 				startDetectEnregistrementNewPost();
 			}
@@ -51,7 +50,7 @@ jQuery.fn.the_filters = function(){
 
 			console.log("the_filters start");
 
-			var elements = ($(".filter-elements .category-list [data-categorie]").toArray());
+			var elements = ($(".filter-elements>:not(.descriptionContainer) .category-list [data-categorie]").toArray());
 
 			categories = [];
 			for(var i=0;typeof(elements[i])!=='undefined';) {
@@ -72,6 +71,10 @@ jQuery.fn.the_filters = function(){
 
 			// tap sur le tag d'un projet
 			$(".colonnes .category-term").bind("tap", function() {
+				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
+			});
+			// tap sur le tag d'un projet
+			$(".postContainer .category-term").bind("tap", function() {
 				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
 			});
 		}
@@ -145,6 +148,7 @@ jQuery.fn.the_filters = function(){
 
 						if( activetags.length === 0) {
 	 						$(".filter-elements .postContainer").removeClass("is-filtered");
+	 						$(".filter-elements .postContainer").slideDown();
 							$(".filter-elements .postContainer").find(".category-list span").removeClass("is-active");
 						} else {
 
@@ -157,6 +161,7 @@ jQuery.fn.the_filters = function(){
 
 									if( activetags.diff(motsClesFicheArray).length > 0) {
 										$(this).removeClass("is-filtered");
+										$(this).slideDown();
 
 										// mettre en surbrillance son tag
 										$(this).find(".category-list span").each(function() {
@@ -174,9 +179,11 @@ jQuery.fn.the_filters = function(){
 
 									} else {
 										$(this).addClass("is-filtered");
+										$(this).slideUp();
 									}
 								} else {
 									$(this).addClass("is-filtered");
+									$(this).slideUp();
 								}
 							});
 
@@ -381,9 +388,16 @@ function whichPostIndexIsVisible(modwscrollTop) {
 function replacePostWithIframe( $thisPost, pageLink ) {
 
 	$thisPost.addClass("is-edited");
-
 	var $blocOuMettreliframe = $thisPost.find(".entry-stuff");
-	$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-4by3"><iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe></div>');
+
+	// si on edit une description
+	if( $thisPost.parent().is(".descriptionContainer")) {
+		console.log("PLOP ");
+		$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-16by9"><iframe class="edit-frame" src="' + pageLink + '#edit=true&type=description" style="border:0px;width:100%;height:100%;"></iframe></div>');
+	} else {
+		$blocOuMettreliframe.empty().append('<div class="embed-responsive embed-responsive-4by3"><iframe class="edit-frame" src="' + pageLink + '#edit=true" style="border:0px;width:100%;height:100%;"></iframe></div>');
+	}
+
 
 	/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
 	// trigger un click sur "Mettre a jour" avant tout
@@ -396,6 +410,8 @@ function replacePostWithIframe( $thisPost, pageLink ) {
 		$thisPost.find(".edit-frame").contents().find(".fee-save").click();
 
 	});
+
+	//$(".edit-frame").contents().find("#categorychecklist [checked='checked']").parent().toArray()
 
 
 			/*
@@ -609,6 +625,7 @@ function newPost() {
 
 	  var data = {
         'action': 'add_taxonomy_to_post',
+				'security': ajaxnonce,
 				'post_id': thisID,
 				'term': projet
     };
@@ -616,6 +633,7 @@ function newPost() {
       //alert('Server response from the AJAX URL ' + response);
 		  var databis = {
 		      'action': 'change_post_visibility',
+					'security': ajaxnonce,
 					'post_id': thisID,
 					'post_status': 'private'
 		  };
@@ -624,9 +642,8 @@ function newPost() {
 		    console.log('Server response from the AJAX URL ' + response);
 				$(".popover").removeClass("is-loading");
 		  });
+
     });
-
-
 
 	});
 }
@@ -638,10 +655,39 @@ function loginField() {
 	var loginWindow = $(".login").clone(true);
 	console.log( "Start popover with content : " + loginWindow);
 
-	fillPopOver( loginWindow, $(".button.login-field"), 300, 380 );
-
+	fillPopOver( loginWindow, $(".button.login-field"), 300, 460 );
 
 }
+
+function updateProjectAuthors( newauthors) {
+
+
+	console.log('edit_projet_authors : ');
+	console.log('nomProjet : ' + nomProjet);
+	console.log('newauthors : ' + newauthors);
+  var data = {
+      'action': 'edit_projet_authors',
+			'projet': nomProjet,
+			'security': ajaxnonce,
+			'newauthors': newauthors
+  };
+  $.post(ajaxurl, data, function(response) {
+    console.log('Server response from the AJAX URL : ' + response);
+		$(".popover").removeClass("is-loading");
+		window.top.location.reload(true);
+  });
+
+}
+
+
+
+
+
+
+
+
+
+
 
 function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 
@@ -661,6 +707,10 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 
 	$popover.addClass("is-visible");
 	$popoverContainer.find(".login").css("visibility", "visible");
+
+	if( $popover.find("input").length > 0) {
+		$popover.find("input").focus();
+	}
 
 	var button = thisbutton;
 	var maxQuickWidth = 900;
@@ -707,9 +757,14 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 		}
 	});
 	$(document).keyup(function(event){
-  	if(event.which === '27'){
+		console.log( "event.which :  " + event.which);
+  	if(event.keyCode === 27){
 			closePopover();
 		}
+    if (event.keyCode === 13) {
+			debugger;
+			$popover.find("button").trigger("click");
+    }
 	});
 }
 
@@ -717,23 +772,6 @@ function closePopover() {
 	$("body").removeClass("is-overlaid");
 	$(".popover").removeClass("is-visible").empty();
 }
-
-fixedNav = {
-
-	init: function() {
-
-
-
-	},
-
-	update: function() {
-
-
-
-
-
-	}
-};
 
 
 postViewRoutine = {
@@ -789,9 +827,9 @@ postViewRoutine = {
 			initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
 
 
-			$(".entry-title-and-content").each(function() {
-				if( ($(this).find(".entry-title").text() === "Brouillon auto" || $(this).find(".entry-title").text() === "Auto draft") && $(this).find(".entry-content").text().trim() === "" ) {
-					$(this).parents(".postContainer").remove();
+			$(".post").each(function() {
+				if( ($(this).find(".entry-title").text() === "Brouillon auto" || $(this).find(".entry-title").text() === "Auto draft") && $(this).find(".entry-content").text().trim() === "" && $(this).find(".post-thumbnail").length === 0) {
+					//$(this).parents(".postContainer").remove();
 				}
 			});
 
@@ -847,9 +885,11 @@ postViewRoutine = {
 
 		    var data = {
 		        'action': 'change_post_visibility',
+						'security': ajaxnonce,
 						'post_id': thisID,
 						'post_status': newStatus
 		    };
+
 		    $.post(ajaxurl, data, function(response) {
 					var str = JSON.parse(response);
 
@@ -912,6 +952,7 @@ postViewRoutine = {
 
 		    var data = {
 		        'action': 'remove_post',
+						'security': ajaxnonce,
 						'post_id': thisID
 		    };
 		    $.post(ajaxurl, data, function(response) {
@@ -920,7 +961,6 @@ postViewRoutine = {
 						console.log(response);
 
 						$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
-
 		    });
 
 				return false;
@@ -1204,8 +1244,12 @@ var Roots = {
       // JavaScript to be fired on all pages
 
       // désactive les console.log si pas un superadmin
-			if( !$("body").hasClass("superadmin") ) {
+			if( !$("body").hasClass("is-superadmin") ) {
 		    logger.disableLogger();
+			} else {
+				$(".content-info").append("<button style='color: #ccc;'>showgrid</button>").on("click", function() {
+					$(".thisGrid").toggle();
+				});
 			}
 
 			postViewRoutine.init();
@@ -1214,7 +1258,7 @@ var Roots = {
 
 
 			if( $(".category-filters").length > 0) {
-				$(".category-filters").the_filters();
+				$(".category-filters .contenu").the_filters();
 			} else {
 				$(".category-filters").remove();
 			}
@@ -1222,12 +1266,9 @@ var Roots = {
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 
 			$(".add-post").click(function() {
-
 				sendActionToAnalytics( "Nouveau post" );
-
 				// générer la bonne url, remplir le pop-over avec ce contenu quand il sera dispo
 				var newPostURL = newPost();
-
 			});
 
 			///////////////////////////////////////////////// passer en mode édition /////////////////////////////////////////////////
@@ -1240,6 +1281,32 @@ var Roots = {
 				}
 
 				$("body").toggleClass("is-edition");
+			});
+
+			///////////////////////////////////////////// éditer les auteurs d'un projet ////////////////////////////////////////////
+			$(".edit-authors").click( function(e) {
+
+				// ouvrir un champ formulaire
+				$("body").addClass("is-overlaid");
+
+				var editAuthorsCheckboxField = $(".editProjetAuteurs").clone(true);
+				fillPopOver( editAuthorsCheckboxField, $(this), 300, 600 );
+
+				$(".popover .submit-updateAuthors").click( function(e) {
+
+					var $authorsList = $(this).closest(".editProjetAuteurs");
+					$(".popover").addClass("is-loading");
+
+					sendActionToAnalytics( "Édition des auteurs d'un projet" );
+
+					nomsAuteurs = [];
+					$authorsList.find("input:checked").each( function() {
+						nomsAuteurs.push( $(this).val());
+					});
+					listAllAuthors = nomsAuteurs.toString();
+					console.log("authors : " + listAllAuthors);
+					updateProjectAuthors( listAllAuthors);
+				});
 			});
 
 			///////////////////////////////////////////////// rafraichir postie /////////////////////////////////////////////////
@@ -1265,82 +1332,91 @@ var Roots = {
 				console.log("Submitted ajax post request");
 				console.log("TO : " + thisActionUrl);
 
+	      $.ajax({
+          type: "POST",
+          url: thisActionUrl,
+          data: {},
+          success: function(data)
+          {
+						console.log("SuccessAjax !");
+						console.log("Refreshed Postie !");
+						console.log( data );
 
+						var projectTerm = $("article.taxProj").attr("data-term");
 
-	       $.ajax({
-	          type: "POST",
-	          url: thisActionUrl,
-	          data: {},
-	          success: function(data)
-	          {
-							console.log("SuccessAjax !");
-							console.log("Refreshed Postie !");
-							console.log( data );
+						var countNewContent = 0;
+						var countNewContentForProject = 0;
 
-							var projectTerm = $("article.taxProj").attr("data-term");
+						while ( data.search("##") !== -1 ) {
+							project = data.substring( data.indexOf("##")+2 );
+							projectName = project.substring( 0, project.indexOf("##") );
 
-							var countNewContent = 0;
-							var countNewContentForProject = 0;
+							data = project.substring( project.indexOf("##")+2 );
 
-							while ( data.search("##") !== -1 ) {
-								project = data.substring( data.indexOf("##")+2 );
-								projectName = project.substring( 0, project.indexOf("##") );
-
-								data = project.substring( project.indexOf("##")+2 );
-
-								if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
-									countNewContentForProject++;
-									countNewContent++;
-								} else {
-									countNewContent++;
-								}
-
-								console.log ( "project gotten = " + projectName);
+							if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
+								countNewContentForProject++;
+								countNewContent++;
+							} else {
+								countNewContent++;
 							}
 
+							console.log ( "project gotten = " + projectName);
+						}
 
 
-							$this.removeClass("is-loading");
 
-							// récupérer le nombre de mails parsés
-							if ( countNewContent > 0 ) {
+						$this.removeClass("is-loading");
 
-								$this.empty();
+						// récupérer le nombre de mails parsés
+						if ( countNewContent > 0 ) {
 
-								if( countNewContentForProject > 0 ) {
-									if( langIsFrench() ) {
-										$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
-									} else {
-										$this.append("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. <a href=''>Refresh the page.</a></div>");
+							$this.empty();
 
-									}
+							if( countNewContentForProject > 0 ) {
+								if( langIsFrench() ) {
+									$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
 								} else {
-
-									if( langIsFrench() ) {
-										$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
-									} else {
-										$this.append("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
-									}
-
-									setTimeout( function() {
-										$this.empty().text("Rafraîchir");
-									}, 2000);
+									$this.append("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. <a href=''>Refresh the page.</a></div>");
 
 								}
+							} else {
+
+								if( langIsFrench() ) {
+									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+								} else {
+									$this.append("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
+								}
+
+								setTimeout( function() {
+									$this.empty().text("Rafraîchir");
+								}, 2000);
 
 							}
 
-	          }
+						}
+
+          }
 	      });
 
 			});
 
 			// click sur déconnexion
 			$(".deconnexion-field").click(function() {
-				sendActionToAnalytics("Déconnexion");
 
+				sendActionToAnalytics("Déconnexion");
+/*
 				var decoURL = $("#wp-logout").attr("href");
 				window.location.href = decoURL;
+*/
+		    var data = {
+		        'action': 'logout_user',
+						'security': ajaxnonce,
+						'userid'	: userID
+		    };
+		    $.post(ajaxurl, data, function(response) {
+					window.top.location.reload(true);
+				});
+
 			});
 
 			// click sur inscription
@@ -1350,7 +1426,6 @@ var Roots = {
 			});
 
 			$('[data-toggle="tooltip"]').tooltip();
-
 
     }
 
@@ -1381,7 +1456,7 @@ var Roots = {
 			  $("body").addClass("is-loaded");
 
 				var pckry = $('#colonnesContainer').isotope({
-				  layoutMode: 'fitRows',
+				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
 				  percentPosition: true,
 				  sortAscending: false,
@@ -1392,39 +1467,7 @@ var Roots = {
 				  sortBy : 'number'
 				});
 
-/*
-			  var pckry = new Packery( $('#colonnesContainer')[0], {
-				  itemSelector: '#colonnesContainer .colonneswrappers',
-			  });
-*/
-
-
-			  var itemElems = pckry.getItemElements();
-			  // for each item element
-			  for ( var i=0, len = itemElems.length; i < len; i++ ) {
-			    var elem = itemElems[i];
-			    // make element draggable with Draggabilly
-			    var draggie = new Draggabilly( elem );
-			    // bind Draggabilly events to Packery
-			    pckry.bindDraggabillyEvents( draggie );
-			  }
-
-
-			  // show item order after layout
-			  function orderItems() {
-			    var itemElems = pckry.getItemElements();
-			    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-			      var elem = itemElems[i];
-			      setText( elem, i + 1 );
-			    }
-			  }
-
-			  pckry.on( 'layoutComplete', orderItems );
-			  pckry.on( 'dragItemPositioned', orderItems );
-
-
-
-
+				// permettre de pinner les éléments
 
 
 			}, 500);
@@ -1460,7 +1503,7 @@ var Roots = {
 				$("body").addClass("is-overlaid");
 
 				var newProjectInputField = $(".nouveauProjet").clone(true);
-				fillPopOver( newProjectInputField, $(this), 300, 200 );
+				fillPopOver( newProjectInputField, $(this), 300, 240 );
 
 				$(".popover .nouveauProjet button").click( function(e) {
 
@@ -1474,7 +1517,10 @@ var Roots = {
 					// ajouter en ajax un nouveau terme
 			    var data = {
 			        'action': 'add_tax_term',
-							'tax_term': projName
+							'security': ajaxnonce,
+							'tax_term': projName,
+							'userid'	: userID,
+							'add-description' : true,
 			    };
 			    $.post(ajaxurl, data, function(response) {
 						// recharger la page
@@ -1485,17 +1531,6 @@ var Roots = {
 						window.top.location.reload(true);
 
 					});
-
-
-
-
-/*
-
-					if( projName.length > 0 ) {
-						sendActionToAnalytics( "Nouveau projet" );
-						var newPostURL = newProject(projName);
-					}
-*/
 				});
 			});
 
@@ -1516,7 +1551,10 @@ var Roots = {
 				console.log("clicked save post");
 				$("body").find(".fee-publish").click();
 				sendActionToAnalytics("Fin édition nouveau post");
-				startDetectEnregistrementNewPost();
+
+				$(document).on('fee-after-save', function() {
+					window.top.location.reload();
+				});
 
 
 			});
@@ -1533,6 +1571,7 @@ var Roots = {
 
 		    var data = {
 		        'action': 'remove_post',
+						'security': ajaxnonce,
 						'post_id': thisID
 		    };
 		    $.post(ajaxurl, data, function(response) {
@@ -1588,6 +1627,7 @@ var Roots = {
 
 		    var data = {
 		        'action': 'remove_post',
+						'security': ajaxnonce,
 						'post_id': thisID
 		    };
 		    $.post(ajaxurl, data, function(response) {
@@ -1633,6 +1673,19 @@ var Roots = {
 				$(".fee-button-categories").click();
 			});
 
+			// mettre à jour les categories quand on ferme le pop-up (maintenant pris en charge par FEE grace à la catégorie fee-categories
+/*
+			$( '.fee-category-modal' ).on( 'hide.bs.modal', function() {
+					var _categories = [];
+
+					$('#categorychecklist input[name="post_category[]"]:checked').each( function() {
+						_categories.push( '<span class="category-term">' + $(this).parent().text() + '</span>' );
+					});
+
+					console.log( "_categories : " + _categories);
+					$(".category-list").html( _categories);
+			});
+*/
 		}
 	},
 

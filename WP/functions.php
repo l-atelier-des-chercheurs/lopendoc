@@ -9,7 +9,7 @@
  *
  * @link https://github.com/roots/roots/pull/1042
  */
- 
+
 $roots_includes = array(
   'lib/utils.php',           // Utility functions
   'lib/init.php',            // Initial theme setup and constants
@@ -21,6 +21,8 @@ $roots_includes = array(
   'lib/nav.php',             // Custom nav modifications
   'lib/gallery.php',         // Custom [gallery] modifications
   'lib/scripts.php',         // Scripts and stylesheets
+
+  'lib/cmb2.php',          // Custom functions
   'lib/extras.php',          // Custom functions
 );
 
