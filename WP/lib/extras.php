@@ -1,13 +1,5 @@
 <?php
 /**
- * Clean up the_excerpt()
- */
-function roots_excerpt_more($more) {
-  return ' &hellip; <a href="' . get_permalink() . '">' . __('Continued', 'roots') . '</a>';
-}
-add_filter('excerpt_more', 'roots_excerpt_more');
-
-/**
  * Manage output of wp_title()
  */
 function roots_wp_title($title) {
@@ -26,13 +18,21 @@ add_filter('wp_title', 'roots_wp_title', 10);
  * Use this in conjunction with is_admin() to separate the front-end from the back-end of your theme
  * @return bool
  */
-/*
+
 if ( ! function_exists( 'is_login_page' ) ) {
   function is_login_page() {
-    return in_array( $GLOBALS['pagenow'], array( 'wp-login.php' ) );
+    return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-signup.php'));
   }
 }
-*/
+function prevent_login_page() {
+    if( is_login_page()){
+			wp_redirect( home_url() . '?login=true' );
+      exit();
+    }
+
+}
+add_action('init', 'prevent_login_page');
+
 
 function blockusers_init() {
 	if ( (is_admin()) && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
@@ -233,6 +233,10 @@ add_theme_support('post-thumbnails');
 set_post_thumbnail_size( 1200, 800, true );
 
 
+// suppression des emojis
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
 // project color
 $new_general_setting = new new_general_setting();
 
@@ -368,21 +372,25 @@ function add_frontend_ajax_javascript_file(){ ?>
     var ajaxurl = <?php echo json_encode( admin_url( "admin-ajax.php" ) ); ?>;
     var ajaxnonce = <?php echo json_encode( wp_create_nonce( get_option( "wp_custom_nonce" ) ) ); ?>;
     var username = "not-logged-in";
-    var userid = "";
     var nomProjet = "<?php echo get_query_var( 'term' ); ?>";
 
     <?php global $current_user; get_currentuserinfo(); ?>
 		<?php if ( is_user_logged_in() ) {
 			//echo 'Username: ' . $current_user->user_login . "\n"; echo 'User display name: ' . $current_user->display_name . "\n";
-			?>
+			if( user_can_edit()) { ?>
+		    var canuseredit = true;
+			<?php } else { ?>
+		    var canuseredit = false;
+			<?php } ?>
 				username = "<?php echo $current_user->user_login; ?>";
 				userID = "<?php echo $current_user->ID; ?>";
 			<?php
 			}
 			else {
 				//wp_loginout();
-				}
-			?>
+			}
+
+
 /*
     var myarray = <?php echo json_encode( array(
          'foo' => 'bar',
@@ -390,32 +398,22 @@ function add_frontend_ajax_javascript_file(){ ?>
          'ship' => array( 1, 2, 3, ),
        ) ); ?>
 */
+
+			?>
   </script><?php
 }
-
 
 
 add_action( 'wp_ajax_get_post_information', 'ajax_get_post_information' );
 function ajax_get_post_information()
 {
-    if(!empty($_POST['post_id']))
+    if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
         $post = get_post( $_POST['post_id'] );
         echo json_encode( $post );
     }
 
     die();
-
-/*
-    var data = {
-        'action': 'get_post_information',
-				'post_id': 120
-    };
-
-    $.post(ajaxurl, data, function(response) {
-        alert('Server response from the AJAX URL ' + response);
-    });
-*/
 }
 
 
@@ -464,6 +462,7 @@ function ajax_remove_post()
     die();
 }
 
+
 // ajouter une taxonomie
 add_action( 'wp_ajax_add_tax_term', 'ajax_add_tax_term' );
 function ajax_add_tax_term()
@@ -471,10 +470,48 @@ function ajax_add_tax_term()
 
     if(!empty($_POST['tax_term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
+	    $projet = $_POST['tax_term'];
 			wp_insert_term(
-        $_POST['tax_term'],
+        $projet,
         'projets'
 			);
+			$projetslug = get_term_by( 'name', $projet, 'projets')->slug;
+
+			// s'il y a un userid, ajouter ce projet à cet userid
+			if( !empty($_POST['userid'])) {
+				$userID = $_POST['userid'];
+
+				//récupération du slug
+
+
+
+				$hasProjects = get_user_meta( $userID, '_opendoc_user_projets', true );
+				$userProjects = explode(',', $hasProjects);
+
+				array_push( $userProjects, $projetslug);
+				$hasProjects = implode(",", $userProjects);
+				update_user_meta( $userID, '_opendoc_user_projets', $hasProjects);
+			}
+
+			// et créer un post description pour ce projet
+			if( !empty($_POST['add-description'])) {
+
+				if( $_POST['add-description'] == true) {
+
+					error_log('ajout projet description');
+
+					$newpost = array(
+						'post_title'					=> __('Description', 'opendoc'),
+						'post_content'				=> __('No content for this project yet.', 'opendoc'),
+						'post_status'					=> 'publish',
+						'post_author'					=> $userID,
+						'tags_input'					=> 'featured'
+					);
+					$newpostID = wp_insert_post( $newpost);
+					wp_set_object_terms( $newpostID, $projetslug, 'projets');
+				}
+			}
+
     }
 
     die();
@@ -489,9 +526,11 @@ function ajax_add_tax_term()
 add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
 function ajax_edit_projet_authors()
 {
+/*
     error_log("debug ajout meta autheur");
     error_log("projet ? " . $_POST['projet']);
     error_log("validité nonce ? " . check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ));
+*/
 
     if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
@@ -534,10 +573,6 @@ function ajax_edit_projet_authors()
 					}
 				}
 			}
-
-
-			foreach( $newAuthorsArray as $authorID) {
-			}
 			echo "success";
     }
 
@@ -545,7 +580,19 @@ function ajax_edit_projet_authors()
 }
 
 
+add_action( 'wp_ajax_logout_user', 'ajax_logout_user' );
+function ajax_logout_user()
+{
+    if(!empty($_POST['userid']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
+    {
+	    wp_clear_auth_cookie();
+	    wp_logout();
+	    ob_clean(); // probably overkill for this, but good habit
+	    wp_die();
+		}
+    die();
 
+}
 
 
 
@@ -556,12 +603,13 @@ function user_can_edit() {
 	if( current_user_can('administrator')) {
 		return true;
 	}
+
 	// si logged in
 	if( is_user_logged_in() ) {
 		// si auteur
 		if( current_user_can('author')) {
 			// si editor
-			if( can_user_edit_project()) {
+			if(can_user_edit_project()) {
 				return true;
 			}
 		}
@@ -571,33 +619,41 @@ function user_can_edit() {
 
 function can_user_edit_project() {
 
-	// si super admin ou admin
-	if( current_user_can('administrator')) {
-		return true;
-	}
-
 	if( isset($GLOBALS["editor"]) && $GLOBALS["editor"] == true) {
 		return true;
 	}
 
 	$term = get_query_var( 'term' );
 
-  $users = get_users('role=author');
-	$currentuserlogin = wp_get_current_user()->user_login;
-
-  foreach ($users as $user) {
-
-		$userID = $user->ID;
-		$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
-		$userProjects = explode(',', $hasProject);
+	if( $term != '') {
+		$currentuserid = wp_get_current_user()->ID;
+		$hasProjects = get_user_meta( $currentuserid, '_opendoc_user_projets', true );
+		$userProjects = explode(',', $hasProjects);
 
 		if( in_array( $term, $userProjects)) {
 			$GLOBALS["editor"] = true;
 			return true;
 		}
 	}
-
 	return false;
+}
+
+function can_user_edit_this_project( $projet) {
+
+	if( !isset($GLOBALS["listeProjet"])) {
+		$currentuserid = wp_get_current_user()->ID;
+		$hasProjects = get_user_meta( $currentuserid, '_opendoc_user_projets', true );
+		$userProjects = explode(',', $hasProjects);
+		$GLOBALS["listeProjet"] = $userProjects;
+	}
+
+	if( $projet != '') {
+		if( in_array( $projet, $GLOBALS["listeProjet"])) {
+			return true;
+		}
+	}
+	return false;
+
 }
 
 
@@ -639,14 +695,14 @@ function opendoc_contributeur_projets() {
 	 */
 	$cmb_user = new_cmb2_box( array(
 		'id'               => $prefix . 'edit',
-		'title'            => __( 'User Profile Metabox', 'cmb2' ),
+		'title'            => __( 'User Profile Metabox', 'opendoc' ),
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
 		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 	) );
 	$cmb_user->add_field( array(
-		'name'     => __( 'Liste des projets où l\'utilisateur est auteur', 'cmb2' ),
-		'desc'     => __( 'séparés par une virgule', 'cmb2' ),
+		'name'     => __( 'Project\'s list where a user is author. Write slugs here.', 'opendoc' ),
+		'desc'     => __( 'séparés par une virgule', 'opendoc' ),
 		'id'       => $prefix . 'projets',
 		'type'     => 'title',
     'type' => 'textarea_small'

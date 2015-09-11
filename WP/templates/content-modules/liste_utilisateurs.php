@@ -1,15 +1,15 @@
 <div class="editProjetAuteurs">
 	<ul action=''>
+		<h3>
+			<?php _e('Edit contributors', 'opendoc'); ?>
+		</h3>
+		<p>
+			<?php _e('Add or remove other users who can contribute to this project', 'opendoc'); ?>
+		</p>
+
 		<?php
 
 		$users = get_users('role=author');
-	  foreach ($users as $user) {
-			$userID = $user->ID;
-			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
-			echo "userID : " . $userID . " hasProjects " . $hasProject ;
-			echo "</br>";
-		}
-
 	  foreach ($users as $user) {
 			$userID = $user->ID;
 			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
@@ -29,7 +29,7 @@
 	?>
 	</ul>
 	<button type="button" class=" submit-updateAuthors">
-		Ajouter/suprimer des éditeurs au projet
+		<?php _e('Mettre à jour', 'opendoc'); ?>
 	</button>
 </div>
 

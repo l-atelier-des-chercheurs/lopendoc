@@ -655,12 +655,11 @@ function loginField() {
 	var loginWindow = $(".login").clone(true);
 	console.log( "Start popover with content : " + loginWindow);
 
-	fillPopOver( loginWindow, $(".button.login-field"), 300, 380 );
-
+	fillPopOver( loginWindow, $(".button.login-field"), 300, 460 );
 
 }
 
-function updateProjectAuthors( newauthors, thisID) {
+function updateProjectAuthors( newauthors) {
 
 
 	console.log('edit_projet_authors : ');
@@ -674,7 +673,8 @@ function updateProjectAuthors( newauthors, thisID) {
   };
   $.post(ajaxurl, data, function(response) {
     console.log('Server response from the AJAX URL : ' + response);
-		$(".editProjetAuteurs").css("opacity", 1);
+		$(".popover").removeClass("is-loading");
+		window.top.location.reload(true);
   });
 
 }
@@ -707,6 +707,10 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 
 	$popover.addClass("is-visible");
 	$popoverContainer.find(".login").css("visibility", "visible");
+
+	if( $popover.find("input").length > 0) {
+		$popover.find("input").focus();
+	}
 
 	var button = thisbutton;
 	var maxQuickWidth = 900;
@@ -753,9 +757,14 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 		}
 	});
 	$(document).keyup(function(event){
-  	if(event.which === '27'){
+		console.log( "event.which :  " + event.which);
+  	if(event.keyCode === 27){
 			closePopover();
 		}
+    if (event.keyCode === 13) {
+			debugger;
+			$popover.find("button").trigger("click");
+    }
 	});
 }
 
@@ -763,23 +772,6 @@ function closePopover() {
 	$("body").removeClass("is-overlaid");
 	$(".popover").removeClass("is-visible").empty();
 }
-
-fixedNav = {
-
-	init: function() {
-
-
-
-	},
-
-	update: function() {
-
-
-
-
-
-	}
-};
 
 
 postViewRoutine = {
@@ -1253,7 +1245,7 @@ var Roots = {
 
       // désactive les console.log si pas un superadmin
 			if( !$("body").hasClass("is-superadmin") ) {
-		    //logger.disableLogger();
+		    logger.disableLogger();
 			} else {
 				$(".content-info").append("<button style='color: #ccc;'>showgrid</button>").on("click", function() {
 					$(".thisGrid").toggle();
@@ -1274,12 +1266,9 @@ var Roots = {
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 
 			$(".add-post").click(function() {
-
 				sendActionToAnalytics( "Nouveau post" );
-
 				// générer la bonne url, remplir le pop-over avec ce contenu quand il sera dispo
 				var newPostURL = newPost();
-
 			});
 
 			///////////////////////////////////////////////// passer en mode édition /////////////////////////////////////////////////
@@ -1294,28 +1283,29 @@ var Roots = {
 				$("body").toggleClass("is-edition");
 			});
 
+			///////////////////////////////////////////// éditer les auteurs d'un projet ////////////////////////////////////////////
+			$(".edit-authors").click( function(e) {
 
-			///////////////////////////////////////////////// éditer les auteurs d'un projet /////////////////////////////////////////////////
+				// ouvrir un champ formulaire
+				$("body").addClass("is-overlaid");
 
-			$(".editProjetAuteurs").each( function(e) {
+				var editAuthorsCheckboxField = $(".editProjetAuteurs").clone(true);
+				fillPopOver( editAuthorsCheckboxField, $(this), 300, 600 );
 
-				$parent = $(this);
+				$(".popover .submit-updateAuthors").click( function(e) {
 
-				$(this).find(".submit-updateAuthors").click(function() {
-
-					$parent.fadeTo( "fast" , 0.5);
-
-					descriptionID = $(".descriptionContainer .post").attr("data-id");
+					var $authorsList = $(this).closest(".editProjetAuteurs");
+					$(".popover").addClass("is-loading");
 
 					sendActionToAnalytics( "Édition des auteurs d'un projet" );
 
 					nomsAuteurs = [];
-					$parent.find("input:checked").each( function() {
+					$authorsList.find("input:checked").each( function() {
 						nomsAuteurs.push( $(this).val());
 					});
 					listAllAuthors = nomsAuteurs.toString();
 					console.log("authors : " + listAllAuthors);
-					updateProjectAuthors( listAllAuthors, descriptionID);
+					updateProjectAuthors( listAllAuthors);
 				});
 			});
 
@@ -1342,82 +1332,91 @@ var Roots = {
 				console.log("Submitted ajax post request");
 				console.log("TO : " + thisActionUrl);
 
+	      $.ajax({
+          type: "POST",
+          url: thisActionUrl,
+          data: {},
+          success: function(data)
+          {
+						console.log("SuccessAjax !");
+						console.log("Refreshed Postie !");
+						console.log( data );
 
+						var projectTerm = $("article.taxProj").attr("data-term");
 
-	       $.ajax({
-	          type: "POST",
-	          url: thisActionUrl,
-	          data: {},
-	          success: function(data)
-	          {
-							console.log("SuccessAjax !");
-							console.log("Refreshed Postie !");
-							console.log( data );
+						var countNewContent = 0;
+						var countNewContentForProject = 0;
 
-							var projectTerm = $("article.taxProj").attr("data-term");
+						while ( data.search("##") !== -1 ) {
+							project = data.substring( data.indexOf("##")+2 );
+							projectName = project.substring( 0, project.indexOf("##") );
 
-							var countNewContent = 0;
-							var countNewContentForProject = 0;
+							data = project.substring( project.indexOf("##")+2 );
 
-							while ( data.search("##") !== -1 ) {
-								project = data.substring( data.indexOf("##")+2 );
-								projectName = project.substring( 0, project.indexOf("##") );
-
-								data = project.substring( project.indexOf("##")+2 );
-
-								if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
-									countNewContentForProject++;
-									countNewContent++;
-								} else {
-									countNewContent++;
-								}
-
-								console.log ( "project gotten = " + projectName);
+							if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
+								countNewContentForProject++;
+								countNewContent++;
+							} else {
+								countNewContent++;
 							}
 
+							console.log ( "project gotten = " + projectName);
+						}
 
 
-							$this.removeClass("is-loading");
 
-							// récupérer le nombre de mails parsés
-							if ( countNewContent > 0 ) {
+						$this.removeClass("is-loading");
 
-								$this.empty();
+						// récupérer le nombre de mails parsés
+						if ( countNewContent > 0 ) {
 
-								if( countNewContentForProject > 0 ) {
-									if( langIsFrench() ) {
-										$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
-									} else {
-										$this.append("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. <a href=''>Refresh the page.</a></div>");
+							$this.empty();
 
-									}
+							if( countNewContentForProject > 0 ) {
+								if( langIsFrench() ) {
+									$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
 								} else {
-
-									if( langIsFrench() ) {
-										$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
-									} else {
-										$this.append("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
-									}
-
-									setTimeout( function() {
-										$this.empty().text("Rafraîchir");
-									}, 2000);
+									$this.append("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. <a href=''>Refresh the page.</a></div>");
 
 								}
+							} else {
+
+								if( langIsFrench() ) {
+									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+								} else {
+									$this.append("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
+								}
+
+								setTimeout( function() {
+									$this.empty().text("Rafraîchir");
+								}, 2000);
 
 							}
 
-	          }
+						}
+
+          }
 	      });
 
 			});
 
 			// click sur déconnexion
 			$(".deconnexion-field").click(function() {
-				sendActionToAnalytics("Déconnexion");
 
+				sendActionToAnalytics("Déconnexion");
+/*
 				var decoURL = $("#wp-logout").attr("href");
 				window.location.href = decoURL;
+*/
+		    var data = {
+		        'action': 'logout_user',
+						'security': ajaxnonce,
+						'userid'	: userID
+		    };
+		    $.post(ajaxurl, data, function(response) {
+					window.top.location.reload(true);
+				});
+
 			});
 
 			// click sur inscription
@@ -1504,7 +1503,7 @@ var Roots = {
 				$("body").addClass("is-overlaid");
 
 				var newProjectInputField = $(".nouveauProjet").clone(true);
-				fillPopOver( newProjectInputField, $(this), 300, 200 );
+				fillPopOver( newProjectInputField, $(this), 300, 240 );
 
 				$(".popover .nouveauProjet button").click( function(e) {
 
@@ -1519,7 +1518,9 @@ var Roots = {
 			    var data = {
 			        'action': 'add_tax_term',
 							'security': ajaxnonce,
-							'tax_term': projName
+							'tax_term': projName,
+							'userid'	: userID,
+							'add-description' : true,
 			    };
 			    $.post(ajaxurl, data, function(response) {
 						// recharger la page
@@ -1530,17 +1531,6 @@ var Roots = {
 						window.top.location.reload(true);
 
 					});
-
-
-
-
-/*
-
-					if( projName.length > 0 ) {
-						sendActionToAnalytics( "Nouveau projet" );
-						var newPostURL = newProject(projName);
-					}
-*/
 				});
 			});
 

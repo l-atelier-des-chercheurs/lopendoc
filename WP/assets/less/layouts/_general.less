@@ -336,6 +336,8 @@ label#doorbell-feedback-label {
 			    margin-top:    		@grid-gutter-width/4;
 			    margin-bottom: 		@grid-gutter-width/4;
 
+			    color: @text-color;
+
 					#logo_opendoc {
 						.make-xs-column(3);
 						.vaMid2014;
@@ -571,6 +573,9 @@ body {
 	h3 {
 		margin-top: 0;
 	}
+	ul {
+		padding: 0;
+	}
 
 
 }
@@ -708,11 +713,11 @@ body {
 	.category-term, li {
 
 		display: inline-block;
-		background-color: @clightgrey;
+		background-color: @cgrey;
 		color: #000;
 
     padding: 6px 12px 4px 6px;
-		margin: 0px;
+		margin: 2px 0px;
 
 		cursor: pointer;
 
@@ -722,8 +727,21 @@ body {
 
 		font-weight: 	normal;
 
+		.styleCat( @numcat, @color ) {
+			&[data-categorieid = "@{numcat}"]{
+				background-color: @color;
+			}
+		}
+
+		.styleCat( 1, @cblue);
+		.styleCat( 2, @cpublish);
+		.styleCat( 3, @cdarkgrey);
+		.styleCat( 4, @cpink);
+		.styleCat( 5, @cyellow);
+		.styleCat( 0, @cprivate);
+
+
 		&.is-active {
-			background-color: @caction;
 			color: #fff;
 		}
 	}
@@ -763,7 +781,7 @@ body {
 	  padding: 0;
 		display: none;
 
-		textarea {
+		input {
 			.form-control;
 			border: 1px solid @cgrey;
 			width: 	100%;
@@ -786,7 +804,6 @@ body {
 			-webkit-font-smoothing: antialiased;
 
 			background-color: @cpublish;
-
 		}
 	}
 
@@ -822,6 +839,7 @@ body {
 	    border-radius: 2px;
 
 			.bxshd-buttons;
+
 		}
 
 		.js & {
@@ -848,7 +866,6 @@ body {
 
 	a:hover, .is-shown {
 		.headerProject {
-			background-color: fade( @cprivate, 13);
 			transition: background-color 0s;
 		}
 	}
@@ -877,10 +894,22 @@ body {
 
 	.headerProject, .entry-content, .entry-meta {
 		padding: @grid-gutter-width/2;
+
 	}
 
 
+	[data-isprojecteditor="true"] {
+		.edit-post {
+			position: absolute;
+    bottom: -19px;
+    right: 19px;
+    padding: 6px;
+    margin: 0;
+ 		}
+	}
+
 	.headerProject {
+		position: relative;
     border-bottom: 1px solid @clightgrey;
     transition: background-color .4s .0s ease-in;
 
@@ -901,6 +930,12 @@ body {
 	}
 	.entry-content {
 
+    border-bottom: 1px solid @clightgrey;
+
+		img {
+			max-width: 100%;
+			height: auto
+		}
 
 	}
 
@@ -966,6 +1001,29 @@ body {
 			  	display: block;
 			  }
 			}
+		}
+	}
+
+	.editProjetAuteurs {
+		display: none;
+
+		button {
+			width: 	100%;
+			border:none;
+			border-radius: 0.25em;
+			padding: 0 1em;
+			margin: 0;
+			height: 35px;
+			line-height: 36px;
+
+			cursor: pointer;
+
+			text-align: center;
+			color: #fff;
+
+			-webkit-font-smoothing: antialiased;
+
+			background-color: @cpublish;
 		}
 	}
 
@@ -1179,8 +1237,6 @@ body {
 		.post-thumbnail {
 
 			display: none;	// masque le thumbnail, sauf pour description
-
-			background-color: @clightgrey;
 			margin-bottom: 	@grid-gutter-width/2;
 
 			.fee-insert-thumbnail {

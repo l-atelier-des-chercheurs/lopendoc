@@ -22,17 +22,22 @@
 		);
 		$descriptionQuery = new WP_Query($args);
 
-		if ( $descriptionQuery->have_posts() ) {
-			// The Loop
-			while( $descriptionQuery->have_posts() ) {
-				$descriptionQuery->the_post();
-				if( user_can_edit()) {
-					get_template_part('templates/content-modules/liste_utilisateurs');
-				}
-			}
-			wp_reset_query();
+		if( user_can_edit()) {
+			get_template_part('templates/content-modules/liste_utilisateurs');
 		}
 	?>
+
+		<?php
+/*
+		$users = get_users('role=author');
+	  foreach ($users as $user) {
+			$userID = $user->ID;
+			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+			echo "userID : " . $userID . " hasProjects " . $hasProject ;
+			echo "</br>";
+		}
+*/
+		?>
 	<article class="projetContainer taxProj filter-elements" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
 
 		<div class='colTitle'>
@@ -92,6 +97,9 @@
 			<div class="topIcons">
 				<div class="button add-post">
 					<?php _e('Add a post', 'opendoc'); ?>
+				</div>
+				<div class="button edit-authors">
+					<?php _e('Edit project contributors', 'opendoc'); ?>
 				</div>
 			</div>
 			<?php
