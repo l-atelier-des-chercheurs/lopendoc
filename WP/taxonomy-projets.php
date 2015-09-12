@@ -84,7 +84,7 @@
 			}
 		}
 		?>
-		<div class='category-list category-filters'>
+		<div class='module-large category-list category-filters'>
 			<span class="legende">
 		  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
 			</span>

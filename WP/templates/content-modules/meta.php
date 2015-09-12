@@ -1,18 +1,23 @@
 
 <?php
 	$tags = get_the_category();
+
+
 	if ($tags) {
 		$htmlTags = '<div class="category-list fee-categories">';
+
 		$alltags = '';
 		foreach ( $tags as $tag ) {
-// 				$tag_link = get_category( $tag->term_id );
+			if( $tag->slug === 'non-classe') continue;
 
-			$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}'>";
+			$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}' data-categorieid='" . intval($tag->term_id)%6 . "'>";
 			$htmlTags .= "{$tag->name}</span>";
 			$alltags .= $tag->slug . " ";
 		}
 		$htmlTags .= '</div>';
 	}
+
+
 ?>
 
 <div class="categories edit-categories" data-allcategories="<?php echo $alltags; ?>">

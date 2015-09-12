@@ -685,9 +685,7 @@ body {
 																													modules
 ***********************************************************************/
 
-
-.category-filters {
-
+.module-large {
 	.make-md-column(7);
 	margin-bottom: 	@grid-gutter-width/2;
 	margin-left: 	0;
@@ -696,9 +694,13 @@ body {
 		.make-md-column-offset(2);
 	}
 
+	.legende {
+		display: block;
+	}
+
 }
 
-.category-list {
+.category-list, .sort-list {
 
 	ul {
 		padding: 	0;
@@ -709,12 +711,11 @@ body {
 		color: inherit;
 	}
 
-
-	.category-term, li {
+	.category-term, li, .sort-term {
 
 		display: inline-block;
-		background-color: @cgrey;
-		color: #000;
+		background-color: @cdarkgrey;
+		color: #fff;
 
     padding: 6px 12px 4px 6px;
 		margin: 2px 0px;
@@ -733,16 +734,17 @@ body {
 			}
 		}
 
-		.styleCat( 1, @cblue);
-		.styleCat( 2, @cpublish);
+		.styleCat( 5, @cblue);
+		.styleCat( 4, @cpublish);
 		.styleCat( 3, @cdarkgrey);
-		.styleCat( 4, @cpink);
-		.styleCat( 5, @cyellow);
-		.styleCat( 0, @cprivate);
+		.styleCat( 2, @cpink);
+		.styleCat( 1, @cyellow);
+		.styleCat( 6, @cprivate);
 
 
 		&.is-active {
 			color: #fff;
+			background-color: @caction;
 		}
 	}
 }
@@ -921,7 +923,6 @@ body {
 			cursor: pointer;
 
 			font-size: 24px;
-			text-transform: uppercase;
 			font-weight: bold;
 			margin: 0;
 
@@ -1867,11 +1868,11 @@ body {
 
 		body.publish& {
 			border-left: 4px solid @cpublish;
-			background-color: rgba(69,193,180, .4);
+			background-color: lighten(@cpublish, 40%);
 		}
 		body.private& {
 			border-left: 4px solid @cprivate;
-			background-color: rgba(242, 104, 44,.4);
+			background-color: lighten(@cprivate, 40%);
 		}
 	}
 
