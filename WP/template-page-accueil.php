@@ -21,7 +21,7 @@ Template Name: Accueil avec cartes
 				<?php echo( get_post()->post_content); ?>
 			</div>
 		<?php } ?>
-		<div class='category-list category-filters'>
+		<div class='module-large category-list category-filters'>
 			<span class="legende">
 		  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
 			</span>
@@ -29,10 +29,24 @@ Template Name: Accueil avec cartes
 			<span class="contenu">
 			</span>
 		</div>
-
+		<div class='module-large sort-list'>
+			<span class="legende">
+		  	<?php	_e("Order: ", 'opendoc'); ?>
+			</span>
+			<span class="contenu">
+				<span class="sort-term" data-type="ab">
+		  		<?php	_e("alphabetical", 'opendoc'); ?>
+				</span>
+				<span class="sort-term" data-type="chronos">
+			  	<?php	_e("chronological", 'opendoc'); ?>
+				</span>
+			</span>
+		</div>
 <?php
   if ( is_user_logged_in() ) {
 			?>
+
+
 		<div class="topIcons">
 			<div class="button add-project">
 				<?php _e('Add a project', 'opendoc'); ?>
@@ -112,10 +126,16 @@ Template Name: Accueil avec cartes
 			    $term_name = $term->name;
 			    $term_slug = $term->slug;
 
+			    // calculer lastpostdate en partant de now
+			    $nowts = get_the_date('U');
+			    $timeSinceLastPostDate = $nowts - $lastPostDate;
+
 		?>
 
 		<div class="colonneswrappers"
-			<?php if( $lastPostDate!= '') { ?> data-lastpostdate=" <?php echo $lastPostDate; } ?>"
+			<?php if( $lastPostDate != '') { ?> data-lastpostdate=" <?php echo $lastPostDate; } ?>"
+			<?php if( $timeSinceLastPostDate != '') { ?> data-timesincelastpostdate=" <?php echo $timeSinceLastPostDate; } ?>"
+			<?php if( $term_name != '') { ?> data-name=" <?php echo $term_name; } ?>"
 				>
 			<section  class="colonnes">
 
@@ -140,7 +160,8 @@ Template Name: Accueil avec cartes
 
 
 									foreach ( $tags as $tag ) {
-						// 			$tag_link = get_category( $tag->term_id );
+										if( $tag->slug === 'non-classe') continue;
+
 										$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}' data-categorieid='" . intval($tag->term_id)%6 . "'>";
 										$htmlTags .= "{$tag->name}</span>";
 										$alltags .= $tag->slug . " ";

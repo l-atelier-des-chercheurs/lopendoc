@@ -151,8 +151,6 @@ add_action( 'init', 'auteur_taxonomy', 0 );
 
 
 
-
-
 // cacher la barre admin
 function habfna_hide_admin_bar_settings()
 {

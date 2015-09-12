@@ -210,10 +210,45 @@ jQuery.fn.the_filters = function(){
 	  $container.packery();
 */
 
-
 	};
+
 	this.init();
 
+};
+
+
+jQuery.fn.sort_items = function(){
+	var self = this;
+
+	this.init = function(){
+		if($(this.selector).length){
+
+			$(this).find("[data-type=chronos]").addClass("is-active");
+
+			$(this).find(".sort-term").bind("tap", function() {
+				$(this).addClass("is-active");
+				$(".sort-term").not($(this)).removeClass("is-active");
+				var sortType = $(this).attr("data-type");
+				self.changeSort( sortType);
+			});
+		}
+	};
+
+	this.changeSort = function ( sortType) {
+
+		if( sortType === "chronos") {
+			$('#colonnesContainer').isotope({
+			  sortBy : ['number', 'titreprojet']
+			});
+		} else
+		if( sortType === "ab") {
+			$('#colonnesContainer').isotope({
+			  sortBy : ['titreproj', 'number']
+			});
+		}
+	};
+
+	this.init();
 };
 
 function createTimeline() {
@@ -762,7 +797,6 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 			closePopover();
 		}
     if (event.keyCode === 13) {
-			debugger;
 			$popover.find("button").trigger("click");
     }
 	});
@@ -1257,11 +1291,16 @@ var Roots = {
 			animateLogo();
 
 
-			if( $(".category-filters").length > 0) {
+			if( $(".category-filters .contenu").length > 0) {
 				$(".category-filters .contenu").the_filters();
 			} else {
 				$(".category-filters").remove();
 			}
+
+			if( $(".sort-list").length > 0) {
+				$(".sort-list .contenu").sort_items();
+			}
+
 
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 
@@ -1459,12 +1498,13 @@ var Roots = {
 				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
 				  percentPosition: true,
-				  sortAscending: false,
+				  sortAscending: true,
 
 				  getSortData: {
-				    number: '[data-lastpostdate] parseInt'
+				    number: '[data-timesincelastpostdate] parseInt',
+						titreproj: '[data-name]'
 				  },
-				  sortBy : 'number'
+				  sortBy : ['number', 'titreproj']
 				});
 
 				// permettre de pinner les éléments
