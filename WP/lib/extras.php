@@ -76,7 +76,7 @@ function doorbell_io() {
 	$out = ob_get_clean();
 	echo $out;
 }
-add_action( 'wp_enqueue_scripts', 'doorbell_io');
+add_action( 'wp_footer', 'doorbell_io');
 
 
 // Register projets tax
@@ -371,6 +371,7 @@ function add_frontend_ajax_javascript_file(){ ?>
     var ajaxnonce = <?php echo json_encode( wp_create_nonce( get_option( "wp_custom_nonce" ) ) ); ?>;
     var username = "not-logged-in";
     var nomProjet = "<?php echo get_query_var( 'term' ); ?>";
+    var singleID = "<?php echo get_the_ID(); ?>";
 
     <?php global $current_user; get_currentuserinfo(); ?>
 		<?php if ( is_user_logged_in() ) {
@@ -381,7 +382,7 @@ function add_frontend_ajax_javascript_file(){ ?>
 		    var canuseredit = false;
 			<?php } ?>
 				username = "<?php echo $current_user->user_login; ?>";
-				userID = "<?php echo $current_user->ID; ?>";
+				userid = "<?php echo $current_user->ID; ?>";
 			<?php
 			}
 			else {
@@ -416,13 +417,21 @@ function ajax_get_post_information()
 
 
 // ajouter taxonomy
-add_action( 'wp_ajax_add_taxonomy_to_post', 'ajax_add_taxonomy_to_post' );
-function ajax_add_taxonomy_to_post()
+add_action( 'wp_ajax_create_private_post_with_tax', 'ajax_create_private_post_with_tax' );
+function ajax_create_private_post_with_tax()
 {
-    if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
+    if(!empty($_POST['userid']) && !empty($_POST['term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
-				wp_set_object_terms( $_POST['post_id'], $_POST['term'], 'projets');
-				//echo "check postid = ".$_POST['post_id'] . " term = " . $_POST['term'];
+			$userid = $_POST['userid'];
+			$newpost = array(
+				'post_title'					=> '-',
+				'post_content'				=> '',
+				'post_status'					=> 'private',
+				'post_author'					=> $userid,
+			);
+			$newpostID = wp_insert_post( $newpost);
+			wp_set_object_terms( $newpostID, $_POST['term'], 'projets');
+      echo get_permalink( $newpostID);
     }
 
     die();
@@ -477,18 +486,18 @@ function ajax_add_tax_term()
 
 			// s'il y a un userid, ajouter ce projet à cet userid
 			if( !empty($_POST['userid'])) {
-				$userID = $_POST['userid'];
+				$userid = $_POST['userid'];
 
 				//récupération du slug
 
 
 
-				$hasProjects = get_user_meta( $userID, '_opendoc_user_projets', true );
+				$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
 				$userProjects = explode(',', $hasProjects);
 
 				array_push( $userProjects, $projetslug);
 				$hasProjects = implode(",", $userProjects);
-				update_user_meta( $userID, '_opendoc_user_projets', $hasProjects);
+				update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
 			}
 
 			// et créer un post description pour ce projet
@@ -502,7 +511,7 @@ function ajax_add_tax_term()
 						'post_title'					=> __('Description', 'opendoc'),
 						'post_content'				=> __('No content for this project yet.', 'opendoc'),
 						'post_status'					=> 'publish',
-						'post_author'					=> $userID,
+						'post_author'					=> $userid,
 						'tags_input'					=> 'featured'
 					);
 					$newpostID = wp_insert_post( $newpost);
@@ -520,7 +529,6 @@ function ajax_add_tax_term()
 // ajouter et supprimer des éditeurs à la description d'une taxonomy
 // _opendoc_projecteditors à post Description
 // _opendocprojecteditors_
-
 add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
 function ajax_edit_projet_authors()
 {
@@ -544,30 +552,30 @@ function ajax_edit_projet_authors()
 			$users = get_users('role=author');
 
 		  foreach ($users as $user) {
-				$userID = $user->ID;
-				$hasProjects = get_user_meta( $userID, '_opendoc_user_projets', true );
+				$userid = $user->ID;
+				$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
 				$userProjects = explode(',', $hasProjects);
 
 				// si dans la liste des projets existants d'un user il y a projet, alors
 				if( in_array( $projet, $userProjects)) {
 					// si son ID figure dans la liste à éditer
-					if( in_array( $userID, $newAuthorsArray)) {
+					if( in_array( $userid, $newAuthorsArray)) {
 						// ne rien faire
 					} else {
 						// mais si son ID n'y est pas, c'est qu'il ne doit plus avoir ce projet
 						$pos = array_search($projet, $userProjects);
 						unset($userProjects[$pos]);
 						$hasProjects = implode(",", $userProjects);
-						update_user_meta( $userID, '_opendoc_user_projets', $hasProjects);
+						update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
 					}
 
 				} else {
 					// par contre, s'il n'est pas dans la liste des projets qu'un user peut déjà éditer
 					// et qu'il est mentionné dans les auteurs à ajouter
-					if( in_array( $userID, $newAuthorsArray)) {
+					if( in_array( $userid, $newAuthorsArray)) {
 						array_push( $userProjects, $projet);
 						$hasProjects = implode(",", $userProjects);
-						update_user_meta( $userID, '_opendoc_user_projets', $hasProjects);
+						update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
 					}
 				}
 			}
@@ -577,7 +585,7 @@ function ajax_edit_projet_authors()
     die();
 }
 
-
+// log out en ajax en cliquant sur le bouton déconnecter
 add_action( 'wp_ajax_logout_user', 'ajax_logout_user' );
 function ajax_logout_user()
 {
@@ -591,8 +599,6 @@ function ajax_logout_user()
     die();
 
 }
-
-
 
 
 function user_can_edit() {
@@ -636,7 +642,7 @@ function can_user_edit_project() {
 	return false;
 }
 
-function can_user_edit_this_project( $projet) {
+function can_user_edit_this_project($projet) {
 
 	if( !isset($GLOBALS["listeProjet"])) {
 		$currentuserid = wp_get_current_user()->ID;
@@ -706,4 +712,15 @@ function opendoc_contributeur_projets() {
     'type' => 'textarea_small'
 	) );
 }
+
+
+// hide private posts
+add_filter('posts_where', 'no_privates');
+function no_privates($where) {
+    if( user_can_edit() ) return $where;
+
+    global $wpdb;
+    return " $where AND {$wpdb->posts}.post_status != 'private' ";
+}
+
 

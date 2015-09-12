@@ -60,48 +60,48 @@
 	    </div>
 
 	    <nav class="collapse navbar-collapse" role="navigation">
+					<div class="actionsContainer">
+						<div class="dropdown">
+						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									<?php _e('Compte', 'opendoc'); ?>
+						    <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu dropdown-menu-right action-button actions" aria-labelledby="dropdownMenu1">
 
-				<div class="actionsContainer">
-					<ul class="action-button actions">
-						<?php
-						if (user_can_edit()) {
-							?>
-						<li class="button switch-edition">
-							<?php _e('Edit mode', 'opendoc'); ?>
-						</li>
-						<li class="button refresh-postie">
-							<?php _e('Refresh', 'opendoc'); ?>
-						</li>
-					<?php
-						}
-					?>
-					<?php
-						if ( !is_user_logged_in() ) {
-							?>
-						<li class="button login-field">
-							<?php _e('Register/login', 'opendoc'); ?>
-						</li>
-					<?php
-						} else {
-					?>
-						<li class="button deconnexion-field">
-							<?php _e('Logout', 'opendoc'); ?>
-						</li>
-					<?php
-						}
-					?>
+								<li>
 
+						    <li role="separator" class="divider"></li>
 
-					</ul>
-
-	<!--
-	      <?php
-	        if (has_nav_menu('primary_navigation')) :
-	          wp_nav_menu(array('theme_location' => 'primary_navigation', 'menu_class' => 'nav navbar-nav'));
-	        endif;
-	      ?>
-	-->
-				</div>
+									<?php
+									if (user_can_edit()) {
+										?>
+									<li class="switch-edition">
+										<?php _e('Edit mode', 'opendoc'); ?>
+									</li>
+									<li class="refresh-postie">
+										<?php _e('Refresh', 'opendoc'); ?>
+									</li>
+								<?php
+									}
+								?>
+								<?php
+									if ( !is_user_logged_in() ) {
+										?>
+									<li class="login-field">
+										<?php _e('Register/login', 'opendoc'); ?>
+									</li>
+								<?php
+									} else {
+								?>
+									<li class="deconnexion-field">
+										<?php _e('Logout', 'opendoc'); ?>
+									</li>
+								<?php
+									}
+								?>
+						  </ul>
+						</div>
+					</div>
 	    </nav>
 	  </div>
   </div>

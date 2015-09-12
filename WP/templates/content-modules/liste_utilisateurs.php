@@ -29,7 +29,7 @@
 	?>
 	</ul>
 	<button type="button" class=" submit-updateAuthors">
-		<?php _e('Mettre à jour', 'opendoc'); ?>
+		<?php _e('Update', 'opendoc'); ?>
 	</button>
 </div>
 

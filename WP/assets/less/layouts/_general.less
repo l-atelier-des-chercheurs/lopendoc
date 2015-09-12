@@ -3,15 +3,27 @@
 @cprivate : #FB7833; // orange de private
 @cpublish : #45C1B4; // vert de publication
 @caction : #EF474B; // un rouge
-@cfond: #F9F9F9;
+
+@cfond: #f5f5f5;
+@cfondclair: #f9f9f9;
+
 @clightgrey: #eee;
-
-@cblue: #2299C2;
-@cgrey: #727272;
+@cgrey: #8D8D8D;
 @cdarkgrey: #3C3C3C;
-@cpink: #FF8FAE;
-@cyellow: #FCF463;
 
+/*
+@cblue: #2299C2;
+@cpink: #FF8FAE;
+@cyellow: #FFDE00;
+*/
+
+@cred: #E8293D;
+@corange: #EC4E2E;
+@cjaune: #F9A339;
+
+@cbleuefonce: #1D225E;
+@cbleue: #176BB4;
+@cvert: #2DB4A5;
 
 
 
@@ -180,8 +192,9 @@ button{
 
 .legende {
 	font-style: italic;
-	line-height: 1.6;
+	line-height: 1;
 	color: @cgrey;
+	margin-right: 4px;
 }
 .contenu {
 	font-weight: 	bold;
@@ -204,13 +217,6 @@ hr {
 small,.small {
   font-size: 80%;
 }
-
-.legende {
-
-
-
-}
-
 
 body {
 	background-color: @cfond;
@@ -365,6 +371,7 @@ label#doorbell-feedback-label {
 					.make-row;
 			    margin-top:    		@grid-gutter-width/4;
 			    margin-bottom: 		@grid-gutter-width/4;
+			    text-align: right;
 
 					.actions {
 						.make-sm-column(12);
@@ -388,8 +395,6 @@ label#doorbell-feedback-label {
   font-size: 16px;
   line-height: 18px;
 
-	font-size: 16px;
-	line-height: 18px;
 	height: auto;
 	min-height: 50px;
 
@@ -401,10 +406,7 @@ label#doorbell-feedback-label {
 			width: 140px;
 		}
 	}
-	.lopendocInstance {
-		border-left: 1px solid @clightgrey;
-	}
-	.lopendocProjet {
+	.lopendocInstance, .lopendocProjet {
 		border-left: 1px solid @clightgrey;
 	}
 
@@ -412,7 +414,6 @@ label#doorbell-feedback-label {
 	.lopendocInstance {
 		display: inline-block;
 		vertical-align: middle;
-		max-width: 360px;
 		padding-top: 5px;
 		padding-bottom: 5px;
 	}
@@ -471,7 +472,7 @@ label#doorbell-feedback-label {
 .topIcons	> * {
 	cursor: pointer;
 	display: inline-block;
-	background-color: #fff;
+	background-color: @cfondclair;
 	transition: all .4s;
 
 	margin: 0;
@@ -690,12 +691,18 @@ body {
 	margin-bottom: 	@grid-gutter-width/2;
 	margin-left: 	0;
 
+	background-color: @cfondclair;
+
 	.tax-projets & {
 		.make-md-column-offset(2);
 	}
 
 	.legende {
-		display: block;
+		margin-bottom: 	4px;
+	}
+
+	.legende, .contenu {
+		display: inline;
 	}
 
 }
@@ -711,12 +718,12 @@ body {
 		color: inherit;
 	}
 
+	.contenu {
+	}
+
 	.category-term, li, .sort-term {
-
 		display: inline-block;
-		background-color: @cdarkgrey;
-		color: #fff;
-
+		color: @text-color;
     padding: 6px 12px 4px 6px;
 		margin: 2px 0px;
 
@@ -728,42 +735,83 @@ body {
 
 		font-weight: 	normal;
 
-		.styleCat( @numcat, @color ) {
-			&[data-categorieid = "@{numcat}"]{
-				background-color: @color;
-			}
-		}
+    background-image: linear-gradient(to right,@cdarkgrey,@cdarkgrey 50%,transparent 50%,transparent);
+		background-position: 0% 0%;
+    background-repeat: no-repeat;
+    background-size: 4px 200%;
 
-		.styleCat( 5, @cblue);
-		.styleCat( 4, @cpublish);
-		.styleCat( 3, @cdarkgrey);
-		.styleCat( 2, @cpink);
-		.styleCat( 1, @cyellow);
-		.styleCat( 6, @cprivate);
+		transition:	background .15s ease-in-out, color .2s ease-out;
 
 
 		&.is-active {
 			color: #fff;
-			background-color: @caction;
+			background-size: 200% 100%;
 		}
+	}
+
+	// exceptions sort-term
+	.sort-term {
+
+	}
+
+	.category-term, li {
+
+    background-size: 0px 200%;
+
+		&::before {
+			content: "#";
+			color: @cgrey;
+			display: inline;
+			position: relative;
+			margin-right: 	@grid-gutter-width/6;
+		}
+
+		.styleCat( @numcat, @color ) {
+			&[data-categorieid = "@{numcat}"]{
+
+				background-image: linear-gradient(to right,
+				                                  @color,
+				                                  @color 50%,
+				                                  transparent 50%,
+				                                  transparent);
+
+
+				&::before {
+					color: @color;
+				}
+			}
+		}
+
+		.styleCat( 0, @cred);
+		.styleCat( 1, @corange);
+		.styleCat( 2, @cjaune);
+		.styleCat( 3, @cbleuefonce);
+		.styleCat( 4, @cbleue);
+		.styleCat( 5, @cvert);
+
+
+		&.is-active::before {
+			color: #fff;
+		}
+
+
 	}
 }
 
 /*******************************************************************
-	HOME / wideCol
+	HOME
 *********************************************************************/
 
 .page-template-template-page-accueil {
 
 	.colTitle {
 		.make-md-column(8);
-		margin-bottom: @grid-gutter-width/2;
+		margin-bottom: @grid-gutter-width;
 	}
 
 	.pageText {
 		.make-md-column(7);
-		margin-bottom: 1rem;
-		margin-bottom: 	@grid-gutter-width/2;
+		margin-bottom: 	@grid-gutter-width*2;
 	}
 
 	.topIcons {
@@ -815,7 +863,7 @@ body {
 		.make-xs-column(12);
 		.make-sm-column(6);
 		.make-md-column(4);
-		.make-lg-column(3);
+		.make-lg-column(4);
 
 		float: left;
 		vertical-align: top;
@@ -828,6 +876,8 @@ body {
 
 		padding-left: 	0;
 
+		transition: opacity .5s, margin .5s ease;
+
 		@media @phone-only {
 			width: 100%;
 			margin: 0;
@@ -836,11 +886,9 @@ body {
 
 
 		.colonnes {
-			margin-bottom:	@grid-gutter-width/2;
-			background-color: #fff;
-	    border-radius: 2px;
-
-			.bxshd-buttons;
+			margin-bottom:	@grid-gutter-width;
+			background-color: @cfond;
+			border-bottom: 2px solid @cgrey;
 
 		}
 
@@ -849,9 +897,12 @@ body {
 		}
 		.js .is-loaded& {
 			opacity: 1;
-			transition: opacity .5s;
 		}
 
+	}
+
+	.postThumbLink {
+		display: block;
 	}
 
 	.post {
@@ -894,6 +945,39 @@ body {
 		margin-bottom: 	0;
 	}
 
+
+	// remonter le titre si il y a un post thumb, mettre un dégradé blanc comme j'aime au dessous
+	.cssgradients & a.postThumbLink + .post {
+	    margin-top: -64px;
+	    padding-top: 0;
+
+	    @wgradient : top, fade( @cfond, 50%) 0px, fade( @cfond, 90%) 50px;
+
+	    background: -webkit-linear-gradient( @wgradient);
+	    background: -moz-linear-gradient( @wgradient);
+	    background: -o-linear-gradient( @wgradient);
+	    background: linear-gradient( @wgradient);
+
+	    &[data-isprojecteditor="true"] {
+		    @wgradient : top, fade( #fff, 50%) 0px, fade( #fff, 90%) 50px;
+		    background: -webkit-linear-gradient( @wgradient);
+		    background: -moz-linear-gradient( @wgradient);
+		    background: -o-linear-gradient( @wgradient);
+		    background: linear-gradient( @wgradient);
+		  }
+	}
+	.cssgradients.no-touch & .colonneswrappers[data-hasthumb]:hover  {
+
+		margin-top: -32px;
+		z-index: 	19;
+
+		a.postThumbLink + .post {
+	    margin-top: 0px;
+	  }
+	}
+
+
+
 	.headerProject, .entry-content, .entry-meta {
 		padding: @grid-gutter-width/2;
 
@@ -901,18 +985,20 @@ body {
 
 
 	[data-isprojecteditor="true"] {
+
+		background-color: #fff;
+
 		.edit-post {
 			position: absolute;
-    bottom: -19px;
-    right: 19px;
-    padding: 6px;
-    margin: 0;
+	    bottom: -19px;
+	    right: 19px;
+	    padding: 6px;
+	    margin: 0;
  		}
 	}
 
 	.headerProject {
 		position: relative;
-    border-bottom: 1px solid @clightgrey;
     transition: background-color .4s .0s ease-in;
 
 		&:hover {
@@ -922,7 +1008,8 @@ body {
 		.titreProjet {
 			cursor: pointer;
 
-			font-size: 24px;
+			font-size: 28px;
+			line-height: 	1.14;
 			font-weight: bold;
 			margin: 0;
 
@@ -931,7 +1018,7 @@ body {
 	}
 	.entry-content {
 
-    border-bottom: 1px solid @clightgrey;
+		margin-bottom: 	@grid-gutter-width;
 
 		img {
 			max-width: 100%;
@@ -941,13 +1028,29 @@ body {
 	}
 
 	.entry-meta {
+		.clearfix;
+		background-color: @clightgrey;
+		padding-top: 	0;
+		padding-bottom: 	@grid-gutter-width/4;
 
+		.legende, .contenu {
+			display: inline;
+		}
 	}
 
 
 
+	.metablock {
+		padding-top: 	@grid-gutter-width/4;
+		float: left;
+		width: 	100%;
 
-	.modDate {
+		&.half {
+			width: 	50%;
+
+		}
+
+
 	}
 
 
@@ -966,44 +1069,6 @@ body {
 
 	}
 
-	.descriptionContainer {
-
-		.make-md-column(12);
-	  background-color: #fff;
-	  padding-left: @grid-gutter-width/2;
-	  padding-right: @grid-gutter-width/2;
-	  margin-bottom: 	@grid-gutter-width;
-
-		.post {
-			.make-row;
-
-			.post-thumbnail {
-
-				display: block;	// activer la thumbnail sur les descriptions
-
-				.make-md-column(5);
-				padding-left: 0;
-    		margin-bottom: 0;
-			}
-
-			.entry-meta {
-				.make-md-column(2);
-			}
-
-			.entry-title-and-content {
-				.make-md-column(5);
-			}
-
-			.button-right {
-				right: 0;
-		    left: auto;
-
-		    .icons {
-			  	display: block;
-			  }
-			}
-		}
-	}
 
 	.editProjetAuteurs {
 		display: none;
@@ -1028,6 +1093,10 @@ body {
 		}
 	}
 
+	.projetContainer {
+		.clearfix;
+	}
+
 	.colTitle {
 		.make-md-column(8);
 		.make-md-column-offset(2);
@@ -1046,40 +1115,120 @@ body {
 		padding-left: 	0;
 	}
 
-	#colonnesContainer {
-		.make-md-column(12);
-		padding: 0;
+	.postContainer, .descriptionContainer {
+
+		position: relative;
+		float: left;
+		width: 	100%;
+		top:0;
+
+		.clearfix;
+	  margin-bottom: @grid-gutter-width;
+
+	}
+	.postContainer[data-status=private] {
+			max-height: 0;
+			min-height: 0;
+			margin: 0;
+			opacity: 0;
+			transition: margin-bottom .8s ease-out, opacity .4s, max-height 0s .4s;
+
+			overflow: scroll;
 	}
 
+	.descriptionContainer {
 
-	.projetContainer {
+		background-color: @cfondclair;
+/*
+	  padding-left: @grid-gutter-width/2;
+	  padding-right: @grid-gutter-width/2;
+*/
 
-		.postContainer .post {
-			.make-sm-column(9);
-			z-index: 10;
-		}
+		.post {
+			.make-md-column(12);
 
-		.colTitle {
+			.post-thumbnail {
 
-			h3 {
-				margin: 7px;
-				font-size: 1.3em;
+				display: block;	// activer la thumbnail sur les descriptions
 
+				.make-md-column(5);
+				padding-left: 0;
+    		margin-bottom: 0;
 			}
 
+			.entry-stuff {
+				background-color: transparent !important;
+				box-shadow: none !important;
+			}
 
+			.entry-meta {
+				.make-md-column(2);
+			}
+
+			.entry-title-and-content {
+				.make-md-column(5);
+			}
+
+			.button-right {
+
+		    .icons {
+			  	display: block;
+			  }
+			  .remove-post {
+					display: none;
+				}
+			}
+		}
+	}
+
+	.postContainer {
+
+		.publish-private-post {
+			.make-md-column(11);
+			position: absolute;
 		}
 
-		.topIcons {
-			margin-bottom: 2rem;
+		.post {
+			.make-sm-column(9);
+			.make-md-column-offset(2);
+			.make-md-column(9);
+		}
+		.post[data-status=publish] {
+			.make-sm-column-offset(2);
+		}
+		.post[data-status=private] {
+			.make-sm-column-offset(0);
+		}
 
-			@media @phone-only {
+		// si filtre (page projet)
+		&.is-filtered {
 
-				padding: 4px 2rem;
-	  	}
 		}
 
 	}
+
+
+	.colTitle {
+
+		h3 {
+			margin: 7px;
+			font-size: 1.3em;
+
+		}
+
+
+	}
+
+	.topIcons {
+		margin-bottom: 2rem;
+
+		@media @phone-only {
+
+			padding: 4px 2rem;
+  	}
+	}
+
+
 
 	.viewport {
 		height: 800px;
@@ -1088,11 +1237,13 @@ body {
 	}
 }
 
-// si pas logged-in /////////////////////////////////////////////////////
 .button-right {
 	display: none;
-
 	transition: opacity .4s;
+
+	.icons {
+		overflow: hidden;
+	}
 
 }
 
@@ -1116,8 +1267,6 @@ body {
 
 		margin-bottom: @grid-gutter-width/4;
 		margin-left: @grid-gutter-width/4;
-
-		overflow: visible;
 
 		transition: all 1s;
 
@@ -1143,76 +1292,15 @@ body {
 }
 
 
-
 ////////////////////////////// toutes les vues ///////////////////////////////////////////////////////////
-
-.descriptionContainer {
-
-	.clearfix;
-	position: relative;
-	top:0;
-
-	margin-bottom: 0;
-
-	transition: margin-bottom .8s ease-out;
-
-	.absence_de_description {
-		color: @brand-warning;
-		padding: @grid-gutter-width/2 0;
-		margin: 0;
-	}
-
-}
-
-////////////////////////////// toutes les vues, pas la description ///////////////////////////////////////////////////////////
-
-.postContainer {
-
-	position: relative;
-	float: left;
-	width: 	100%;
-	top:0;
-
-	margin-bottom: 0;
-
-	transition: margin-bottom .8s ease-out, opacity .4s, max-height 0s .4s;
-
-	.clearfix;
-
-	.publish-private-post {
-		.make-md-column(11);
-		position: absolute;
-	}
-
-	.post {
-		.make-md-column-offset(2);
-		.make-md-column(9);
-	}
-	.post[data-status=publish] {
-		.make-sm-column-offset(2);
-	}
-
-
-	.js & .post[data-status=private] {
-		max-height: 0;
-		min-height: 0;
-		margin: 0;
-		opacity: 0;
-	}
-
-	// si filtre (page projet)
-	&.is-filtered {
-
-	}
-
-
-}
-
-////////////////////////////// toutes les vues ///////////////////////////////////////////////////////////
-
 .post {
+	.allPostsContent;
+}
 
-	transition: opacity .5s ease-out, margin-left .5s ease, max-height 1s ease-out, padding .5s;
+
+.allPostsContent {
+
+	transition: opacity .5s ease-out, margin .5s ease, max-height 1s ease-out, padding .5s;
 
 	img {
 		max-width: 100%;
@@ -1229,20 +1317,12 @@ body {
 		.make-row;
 		background-color: transparent;
 		transition: box-shadow 1s ease-out, background-color 1s ease-out;
-
-		.is-edition & {
-			background-color: #fff;
-
-		}
+		background-color: #fff;
 
 		.post-thumbnail {
 
 			display: none;	// masque le thumbnail, sauf pour description
 			margin-bottom: 	@grid-gutter-width/2;
-
-			.fee-insert-thumbnail {
-				display: none;
-			}
 
 			img {
 				margin-top: 0;
@@ -1267,7 +1347,11 @@ body {
 			text-align: left;
 			text-transform: none;
 
+			margin-top: @grid-gutter-width/2;
+			margin-bottom: @grid-gutter-width/2;
+
 			padding: @grid-gutter-width/2 @grid-gutter-width/2;
+			border-right: 1px solid @clightgrey;
 
 
 			> * {
@@ -1321,9 +1405,6 @@ body {
 					color: #2B7EC2;
 				}
 			}
-			.updated, .added {
-				color: #293275;
-			}
 		}
 
 		.entry-title-and-content {
@@ -1333,7 +1414,6 @@ body {
 			padding-bottom: @grid-gutter-width/2;
 
 			margin: 0;
-			border-left: 1px solid #eee;
 
 			min-height: 200px;
 			max-height: 8920px;
@@ -1373,7 +1453,12 @@ body {
 
 
 		.edit-post {
-			transform: rotate(180deg);
+//			transform: rotate(180deg);
+			opacity:0;
+			height:0;
+			margin: 0;
+			padding: 0;
+
 		}
 
 		.remove-post {
@@ -1444,7 +1529,6 @@ body {
 		margin-bottom: 0px;
 		margin-bottom: 5px;
 		display: block;
-
 
 		svg {
 			overflow: visible;
@@ -1530,14 +1614,6 @@ body {
 }
 
 
-// si pas édition
-.taxProj {
-
-
-}
-
-
-
 // si vu édition ///////////////////////////////////////////////////////////
 .is-edition {
 
@@ -1549,26 +1625,14 @@ body {
 		display: inline-block;
 	}
 
-	.taxProj {
+	.projetContainer {
 
-		.postContainer {
-
-			margin-bottom: 55px;
-
+		.postContainer[data-status=private] {
+			margin-bottom: 	@grid-gutter-width;
 		}
 
-
 		.entry-stuff {
-	/*
-			-moz-box-shadow: 3px 1px 15px 1px #cfcfcf;
-			-webkit-box-shadow: 3px 1px 15px 1px #cfcfcf;
-			-o-box-shadow: 3px 1px 15px 1px #cfcfcf;
-			box-shadow: 3px 1px 15px 1px #cfcfcf;
-	*/
-
-
-			box-shadow: 3px 3px 15px 1px #d4d4d4;
-
+			.bxshd-buttons;
 		}
 		.post[data-status=publish] .entry-stuff {
 		    box-shadow: 3px 3px 15px -6px @cpublish;
@@ -1585,7 +1649,7 @@ body {
 			opacity: 1;
 		}
 
-		.post {
+		.postContainer {
 
 			// si privé
 			&[data-status=private] {
@@ -1593,6 +1657,7 @@ body {
 				opacity: 1;
 				max-height: 10024px;
 				height: auto;
+
 
 			}
 
@@ -1624,7 +1689,7 @@ body {
 
 .fee-on {
 	.fee-insert-thumbnail {
-		display: block !important;
+// 		display: block !important;
 	}
 
 }

@@ -11,12 +11,6 @@ if ( user_can_edit() ) {
 ?>
 	<div class="entry-stuff">
 
-		<?php if( has_post_thumbnail() ) { ?>
-			<div class="post-thumbnail">
-				<?php the_post_thumbnail(); ?>
-			</div>
-		<?php } ?>
-
 		<div class="entry-meta">
 			<?php get_template_part('templates/content-modules/meta'); ?>
 		</div><!-- .entry-meta -->
@@ -30,6 +24,12 @@ if ( user_can_edit() ) {
 				<?php the_content(); ?>
 			</div>
 		</div>
+
+		<?php if( has_post_thumbnail() ) { ?>
+			<div class="post-thumbnail">
+				<?php the_post_thumbnail('medium'); ?>
+			</div>
+		<?php } ?>
 
 	</div>
 

@@ -59,7 +59,10 @@ jQuery.fn.the_filters = function(){
 				}
 				i++;
 			}
-			$(this).append( categories.join(" ") );
+			$(this).find(".contenu").append( categories.join(" ") );
+			if( categories.length === 0) {
+				$(this).remove();
+			}
 
 
 			$(this).find(".category-term").bind("tap", function() {
@@ -204,12 +207,6 @@ jQuery.fn.the_filters = function(){
 				filter: ''
 			});
 		}
-/*
-	  $container.packery( 'remove', $(".colonneswrappers.is-shown") );
-		$container.packery( 'appended', $(".colonneswrappers.is-shown") );
-	  $container.packery();
-*/
-
 	};
 
 	this.init();
@@ -223,7 +220,8 @@ jQuery.fn.sort_items = function(){
 	this.init = function(){
 		if($(this.selector).length){
 
-			$(this).find("[data-type=chronos]").addClass("is-active");
+			$(this).find("[data-type=edited]").addClass("is-active");
+			self.changeSort( "edited");
 
 			$(this).find(".sort-term").bind("tap", function() {
 				$(this).addClass("is-active");
@@ -236,14 +234,20 @@ jQuery.fn.sort_items = function(){
 
 	this.changeSort = function ( sortType) {
 
-		if( sortType === "chronos") {
+	console.log( "sorttype L " + sortType);
+		if( sortType === "edited") {
 			$('#colonnesContainer').isotope({
-			  sortBy : ['number', 'titreprojet']
+			  sortBy : ['edited', 'titreproj', 'created']
 			});
 		} else
 		if( sortType === "ab") {
 			$('#colonnesContainer').isotope({
-			  sortBy : ['titreproj', 'number']
+			  sortBy : ['titreproj', 'edited', 'created']
+			});
+		} else
+		if( sortType === "created") {
+			$('#colonnesContainer').isotope({
+			  sortBy : ['created', 'edited', 'titreproj']
 			});
 		}
 	};
@@ -446,24 +450,22 @@ function replacePostWithIframe( $thisPost, pageLink ) {
 
 	});
 
-	//$(".edit-frame").contents().find("#categorychecklist [checked='checked']").parent().toArray()
+	window.addEventListener('message', function(event) {
+	      if(event.origin === 'http://www.lopendoc.org')
+	      {
+					$thisPost.find(".button-right .edit-post").trigger("click");
+	      }
+	      else
+	      {
 
+	      }
 
-			/*
-	url = pageLink;
-	width = $thisPost.width();
-	height = 400;
-
-  var leftPosition, topPosition;
-  //Allow for borders.
-  leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
-  //Allow for title and status bars.
-  topPosition = (window.screen.height / 2) - ((height / 2) + 50);
-  //Open the window.
-  window.open(url, "Window2", "status=no,height=" + height + ",width=" + width + ",resizable=yes,left=" + leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY=" + topPosition + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
+	    }, false);
+/*
+	$thisPost.find(".edit-frame").contents().find("body").on('fee-after-save', function() {
+		console.log("plop");
+	});
 */
-
-
 
 }
 
@@ -478,20 +480,22 @@ function replaceiFrameWithPost( $thisPost, pageLink ) {
 		var $thisContent = $data.find('.post .entry-stuff').html();
 
 		console.log( "$thisContent");
-		console.log(  $thisContent );
-
-
-		var $blocOuMettrelepost = $thisPost.find(".entry-stuff");
-
-		$blocOuMettrelepost.fadeOut(400).empty().append($thisContent).fadeIn(400);
+//		console.log(  $thisContent );
 
 		console.log( "found " + $thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").length + " canvas");
-
 		$thisPost.find(".entry-content:not(.is-sketch):contains(void setup)").each( function() {
 			$this = $(this);
 			$this.addClass("is-sketch");
 			// récupérer le sketch, le transformer en canvas
 			textToCanvas( $this );
+		});
+
+		var $blocOuMettrelepost = $thisPost.find(".entry-stuff");
+
+		$blocOuMettrelepost.fadeOut(400).empty().append($thisContent).fadeIn(400, function() {
+
+			$(this).find('[data-toggle="tooltip"]').tooltip();
+
 		});
 
 	});
@@ -586,7 +590,7 @@ function textToCanvas( $this ) {
 function animateLogo() {
 
 	$(".navbar-brand svg").find("rect,circle,polyline,line,path").velocity({
-			scale: 0.5
+			scale: 0.8
 		}, {
     	duration: 0,
 		});
@@ -638,7 +642,41 @@ function newPost() {
 
 	$("body").addClass("is-overlaid");
 
+	// créer un post
+	var data = {
+      'action': 'create_private_post_with_tax',
+			'security': ajaxnonce,
+			'term': nomProjet,
+			'userid'	: userid,
+  };
+  $.post(ajaxurl, data, function(the_permalink) {
+		console.log('Server response from the AJAX URL ' + the_permalink);
+
+		$.get( the_permalink, function( data ) {
+			$data = $(data);
+
+			var $thisPost = $data.find('.postContainer');
+			console.log( "$thisContent");
+	//		console.log(  $thisContent );
+
+			$(".projetContainer .topIcons").after( $thisPost);
+			$("body").removeClass("is-overlaid");
+			postViewRoutine.init();
+			$thisPost.find(".button-right .edit-post").trigger("click");
+
+	    $('html, body').animate({
+	        scrollTop: $thisPost.offset().top - $(".banner").height() * 1.5
+	    }, 600);
+
+		});
+
+  });
+
+
+	// puis quand on récupère on url, l'ouvrir
+
 	// de fee-adminbar.js
+/*
 	wp.ajax.post( 'fee_new', {
 		post_type: 'post',
 		nonce: fee.nonce
@@ -648,39 +686,8 @@ function newPost() {
 		fillPopOver( iframeAvecLien, $(".button.add-post"), 900, 600);
 		$(".popover").addClass("is-loading");
 
-		// lui attribuer le bon projet
-		var thisActionUrl = window.location.href;
-		var thisID = urlParam('p', url);
-		console.log( "thisID : " + thisID);
-
-		var projName = $(".taxProj").data("term");
-
-
-
-
-	  var data = {
-        'action': 'add_taxonomy_to_post',
-				'security': ajaxnonce,
-				'post_id': thisID,
-				'term': projet
-    };
-    $.post(ajaxurl, data, function(response) {
-      //alert('Server response from the AJAX URL ' + response);
-		  var databis = {
-		      'action': 'change_post_visibility',
-					'security': ajaxnonce,
-					'post_id': thisID,
-					'post_status': 'private'
-		  };
-		  console.log("new call thisID " + thisID + " databis : " + databis);
-		  $.post(ajaxurl, databis, function(response) {
-		    console.log('Server response from the AJAX URL ' + response);
-				$(".popover").removeClass("is-loading");
-		  });
-
-    });
-
 	});
+*/
 }
 
 function loginField() {
@@ -926,7 +933,6 @@ postViewRoutine = {
 
 		    $.post(ajaxurl, data, function(response) {
 					var str = JSON.parse(response);
-
 					$thisPost.parents(".postContainer").removeClass("is-loading");
 					$thisPost.attr("data-status", str);
 					$thisPost.siblings(".publish-private-post").attr("data-status", str);
@@ -945,7 +951,6 @@ postViewRoutine = {
 				e.preventDefault();
 
 				// ouvrir dans un nouvel onglet
-
 				console.log("edit-post click");
 
 				var $thisPost = $(this).closest(".post");
@@ -956,10 +961,8 @@ postViewRoutine = {
 					sendActionToAnalytics("Fin d'édition d'un post");
 					replaceiFrameWithPost( $thisPost, pageLink );
 				} else {
-
 					sendActionToAnalytics("Édition d'un post");
 					replacePostWithIframe( $thisPost, pageLink );
-
 				}
 
 				return false;
@@ -1292,13 +1295,9 @@ var Roots = {
 
 
 			if( $(".category-filters .contenu").length > 0) {
-				$(".category-filters .contenu").the_filters();
+				$(".category-filters").the_filters();
 			} else {
 				$(".category-filters").remove();
-			}
-
-			if( $(".sort-list").length > 0) {
-				$(".sort-list .contenu").sort_items();
 			}
 
 
@@ -1450,7 +1449,7 @@ var Roots = {
 		    var data = {
 		        'action': 'logout_user',
 						'security': ajaxnonce,
-						'userid'	: userID
+						'userid'	: userid
 		    };
 		    $.post(ajaxurl, data, function(response) {
 					window.top.location.reload(true);
@@ -1494,6 +1493,7 @@ var Roots = {
 
 			  $("body").addClass("is-loaded");
 
+
 				var pckry = $('#colonnesContainer').isotope({
 				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
@@ -1501,39 +1501,22 @@ var Roots = {
 				  sortAscending: true,
 
 				  getSortData: {
-				    number: '[data-timesincelastpostdate] parseInt',
+				    edited: '[data-timesincelastpostdate] parseInt',
+				    created: '[data-timecreated] parseInt',
 						titreproj: '[data-name]'
 				  },
-				  sortBy : ['number', 'titreproj']
+				  sortBy : ['edited', 'titreproj', 'created']
 				});
+
+				if( $(".sort-list").length > 0) {
+					$(".sort-list .contenu").sort_items();
+				}
 
 				// permettre de pinner les éléments
 
 
 			}, 500);
 
-
-/*
-		  var sortOrder = []; // global variable for saving order, used later
-		  var storedSortOrder = localStorage.getItem('sortOrder');
-		  if ( storedSortOrder ) {
-		    storedSortOrder = JSON.parse( storedSortOrder );
-		    // create a hash of items by their tabindex
-		    var itemsByTabIndex = {};
-		    var tabIndex;
-		    for ( var i=0, len = pckry.items.length; i < len; i++ ) {
-		      var item = pckry.items[i];
-		      tabIndex = $( item.element ).attr('tabindex');
-		      itemsByTabIndex[ tabIndex ] = item;
-		    }
-		    // overwrite packery item order
-		    i = 0; len = storedSortOrder.length;
-		    for (; i < len; i++ ) {
-		      tabIndex = storedSortOrder[i];
-		      pckry.items[i] = itemsByTabIndex[ tabIndex ];
-		    }
-	    }
-*/
 
 			///////////////////////////////////////////////// ajouter un projet /////////////////////////////////////////////////
 
@@ -1559,7 +1542,7 @@ var Roots = {
 			        'action': 'add_tax_term',
 							'security': ajaxnonce,
 							'tax_term': projName,
-							'userid'	: userID,
+							'userid'	: userid,
 							'add-description' : true,
 			    };
 			    $.post(ajaxurl, data, function(response) {
@@ -1580,6 +1563,7 @@ var Roots = {
 
   new_post: {
 	  init: function() {
+
 			/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
 			// trigger un click sur "Mettre a jour" avant tout
 			var $save_button = $(".save-modifications");
@@ -1595,7 +1579,6 @@ var Roots = {
 				$(document).on('fee-after-save', function() {
 					window.top.location.reload();
 				});
-
 
 			});
 
@@ -1712,6 +1695,12 @@ var Roots = {
 				$(".category-list a").remove();
 				$(".fee-button-categories").click();
 			});
+
+			// si click sur le bouton save et qu'on est dans un iframe, propagé un événement
+				$(document).on('fee-after-save', function() {
+					window.parent.postMessage({message: 'finished saving'}, 'http://www.lopendoc.org/');
+				});
+
 
 			// mettre à jour les categories quand on ferme le pop-up (maintenant pris en charge par FEE grace à la catégorie fee-categories
 /*

@@ -2,25 +2,38 @@
 		/*********************************************************** DESCRIPTION FIELD *********************/
 		$tax = get_query_var( 'taxonomy' );
 		$term = get_query_var( 'term' );
+
+		/*********************************************************** CONTENUS *********************/
 		$args = array(
-	    'tax_query'         => array(
-	        'relation'      => 'AND',
-	        array(
-	            'taxonomy'  => $tax,
-	            'field'     => 'slug',
-	            'terms'     => $term,
-	        ),
-	        array(
-	            'taxonomy'  => 'post_tag',
-	            'field'     => 'slug',
-	            'terms'     => 'featured'
-	        ),
-	    ),
-	    'post_type'      => 'post', // set the post type to page
-	    'posts_per_page' => 1,
-			'order' => 'DESC',
-		);
-		$descriptionQuery = new WP_Query($args);
+		    'tax_query'         => array(
+		        array(
+		            'taxonomy'  => $tax,
+		            'field'     => 'slug',
+		            'terms'     => $term,
+		        ),
+		    ),
+		    'post_type'      => 'post', // set the post type to page
+		    'posts_per_page' => -1,
+				'order' => 'DESC',
+			);
+
+
+		$allposts = new WP_Query($args);
+		$descriptionPostID = -1;
+
+
+		if ( $allposts->have_posts() ) {
+			// The Loop
+			while ($allposts->have_posts()) {
+				$allposts->the_post();
+				$featured =  has_tag('featured');
+				if( $featured == true ) {
+					$descriptionPostID = get_the_ID();
+					break;
+				}
+
+			}
+		}
 
 		if( user_can_edit()) {
 			get_template_part('templates/content-modules/liste_utilisateurs');
@@ -47,14 +60,14 @@
 		</div>
 		<?php
 
-		if ( $descriptionQuery->have_posts() ) {
-				// The Loop
-				while( $descriptionQuery->have_posts() ) { $descriptionQuery->the_post(); ?>
-					<div class="descriptionContainer">
-						<?php get_template_part('templates/content-carte'); ?>
-					</div>
-				<?php }
-				wp_reset_query();
+		if( $descriptionPostID != -1) {
+				$post = get_post($descriptionPostID);
+				?>
+			<div class="descriptionContainer">
+					<?php get_template_part('templates/content-carte'); ?>
+				</div>
+
+		<?php
 		} else {
 			?>
 			<div class="descriptionContainer">
@@ -85,11 +98,11 @@
 		}
 		?>
 		<div class='module-large category-list category-filters'>
-			<span class="legende">
+			<div class="legende">
 		  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
-			</span>
-			<span class="contenu">
-			</span>
+			</div>
+			<div class="contenu">
+			</div>
 		</div>
 		<?php
 		if ( user_can_edit() ) {
@@ -106,40 +119,33 @@
 		}
 
 
-		/*********************************************************** CONTENUS *********************/
-		$args = array(
-		    'tax_query'         => array(
-		        array(
-		            'taxonomy'  => $tax,
-		            'field'     => 'slug',
-		            'terms'     => $term,
-		        ),
-		    ),
-		    'post_type'      => 'post', // set the post type to page
-		    'posts_per_page' => -1,
 
-				'order' => 'DESC',
-			);
-
-
-		$allposts = new WP_Query($args);
+		$modDateRecent = 0;
+		$modDateDescription = 0;
+		$allposts->rewind_posts();
 
 		if ( $allposts->have_posts() ) {
-
 			// The Loop
 			while ($allposts->have_posts()) {
+
 				$allposts->the_post();
 
-			 	$featured =  has_tag('featured');
-		 		if( $featured == true ) {
+				$modDatePost = get_the_modified_date('U');
+				if( $modDateRecent < $modDatePost)
+					$modDateRecent = $modDatePost;
+
+				$featured =  has_tag('featured');
+				if( $featured == true ) {
+					$modDateDescription = get_the_modified_date('U');
 					continue;
 				}
 
 			  $ID = get_the_ID();
-			  $status = get_post_status($ID);
+			  $status = get_post_status();
+
 				?>
 
-				<div class="postContainer">
+				<div class="postContainer" data-status="<?php echo $status; ?>">
 					<?php
 					if ( user_can_edit() ) {
 						get_template_part('templates/content-modules/private-publish');
@@ -163,6 +169,16 @@
 
 		}
 
+		// si il y a un post plus récent que description
+		if( $modDateRecent > $modDateDescription) {
+			echo "maj modified date description";
+			// et si on a un ID pour le post description
+			if( $descriptionPostID != -1) {
+		    $updateDescription['ID'] = $descriptionPostID;
+	      $updateDescription['post_modified'] = $modDateRecent;
+				wp_update_post( $updateDescription);
+			}
+		}
 
 	?>
 

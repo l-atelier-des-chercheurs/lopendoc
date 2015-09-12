@@ -4,7 +4,11 @@
 
 
 	if ($tags) {
-		$htmlTags = '<div class="category-list fee-categories">';
+		$htmlTags = '<div class="category-list">';
+		$htmlTags .= '<div class="legende edit-me">';
+		$htmlTags .= __('Categories: ', 'opendoc');
+		$htmlTags .= '</div>';
+		$htmlTags .= '<div class="contenu fee-categories">';
 
 		$alltags = '';
 		foreach ( $tags as $tag ) {
@@ -15,12 +19,14 @@
 			$alltags .= $tag->slug . " ";
 		}
 		$htmlTags .= '</div>';
+		$htmlTags .= '</div>';
 	}
 
 
 ?>
 
 <div class="categories edit-categories" data-allcategories="<?php echo $alltags; ?>">
+<!--
 	<svg class="icons category-icon edit-me" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		 viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve"
 
@@ -34,6 +40,7 @@
 			<text transform="matrix(-1 0 0 1 49.0928 49.9068)" fill="#FCB421" font-family="'Rockwell-ExtraBold'" font-size="38.1519">#</text>
 		</g>
 	</svg>
+-->
 
 	<?php
 		echo $htmlTags;
@@ -67,12 +74,30 @@
 // 	edit_post_link( __( 'Edit', 'twentyfourteen' ), '<span class="edit-link">', '</span>' );
 ?>
 
-<time class="added" datetime="<?php echo get_the_time('c'); ?>"
-	data-toggle="tooltip" data-placement="top" title="<?php _e('Edited on ', 'opendoc'); echo get_the_modified_date('d/m/Y'); ?> " data-toggle-tooltip-color="#293275"
-><?php
-	echo _e("Added on ", 'opendoc');
-	echo get_the_date('d/m/Y'); ?>
+<time class="metablock half createdDate added" datetime="<?php echo get_the_time('c'); ?>"
+data-toggle="tooltip" data-placement="top" title="<?php echo get_the_time(''); ?> " data-toggle-tooltip-color="#293275"
+>
+	<div class="legende">
+		<?php _e('Added on: ', 'opendoc'); ?>
+	</div>
+	<div class="contenu">
+		<?php	echo get_the_date('d/m/Y'); ?>
+	</div>
 </time>
+
+<time class="metablock half modDate edited" datetime="<?php echo get_the_modified_time('c'); ?>"
+data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_time(''); ?> " data-toggle-tooltip-color="#293275"
+>
+	<div class="legende">
+		<?php _e('Last edit: ', 'opendoc'); ?>
+	</div>
+	<div class="contenu">
+		<?php	echo get_the_modified_date('d/m/Y'); ?>
+	</div>
+</time>
+
+<!-- 	data-toggle="tooltip" data-placement="top" title="<?php _e('Edited on ', 'opendoc'); echo get_the_modified_date('d/m/Y'); ?> " data-toggle-tooltip-color="#293275" -->
+
 <!-- <p class="byline author vcard"><?php echo __('By', 'roots'); ?> <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" rel="author" class="fn"><?php echo get_the_author(); ?></a></p> -->
 
 <?php
