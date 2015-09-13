@@ -967,6 +967,7 @@ body {
 		    background: linear-gradient( @wgradient);
 		  }
 	}
+
 	.cssgradients.no-touch & .colonneswrappers[data-hasthumb]:hover  {
 
 		margin-top: -32px;
@@ -977,6 +978,13 @@ body {
 	  }
 	}
 
+	.cssgradients.no-touch & #colonnesContainer:hover .colonneswrappers {
+		opacity: .9;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
 
 
 	.headerProject, .entry-content, .entry-meta {
