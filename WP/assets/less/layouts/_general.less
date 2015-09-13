@@ -823,6 +823,7 @@ body {
 	#colonnesContainer {
 		.make-md-column(12);
 		padding: 0;
+    transition: height .5s;
 	}
 
 	.nouveauProjet {
@@ -887,8 +888,8 @@ body {
 
 		.colonnes {
 			margin-bottom:	@grid-gutter-width;
-			background-color: @cfond;
-			border-bottom: 2px solid @cgrey;
+			background-color: @cfondclair;
+			border-bottom: 2px solid @clightgrey;
 
 		}
 
@@ -951,7 +952,7 @@ body {
 	    margin-top: -64px;
 	    padding-top: 0;
 
-	    @wgradient : top, fade( @cfond, 50%) 0px, fade( @cfond, 90%) 50px;
+	    @wgradient : top, fade( @cfondclair, 50%) 0px, fade( @cfondclair, 90%) 50px;
 
 	    background: -webkit-linear-gradient( @wgradient);
 	    background: -moz-linear-gradient( @wgradient);
@@ -1029,7 +1030,7 @@ body {
 
 	.entry-meta {
 		.clearfix;
-		background-color: @clightgrey;
+		background-color: @cfond;
 		padding-top: 	0;
 		padding-bottom: 	@grid-gutter-width/4;
 

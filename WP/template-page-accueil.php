@@ -137,10 +137,10 @@ Template Name: Accueil avec cartes
 		?>
 
 		<div class="colonneswrappers"
-			<?php if( $lastPostDate != '') { ?> data-lastpostdate="${lastPostDate}" <?php } ?>
-			<?php if( $timeSinceLastPostDate != '') { ?> data-timesincelastpostdate="${timeSinceLastPostDate}" <?php } ?>
-			<?php if( $timeCreated != '') { ?> data-timecreated="${timeCreated}" <?php } ?>
-			<?php if( $term_name != '') { ?> data-name="${term_name}" <?php } ?>
+			<?php if( $lastPostDate != '') { echo "data-lastpostdate='$lastPostDate'"; } ?>
+			<?php if( $timeSinceLastPostDate != '') { echo "data-timesincelastpostdate='$timeSinceLastPostDate'"; } ?>
+			<?php if( $timeCreated != '') { echo "data-timecreated='$timeCreated'"; } ?>
+			<?php if( $term_name != '') { echo "data-name='$term_name'"; } ?>
 			<?php if( has_post_thumbnail()) { ?> data-hasthumb <?php } ?>
 				>
 			<section  class="colonnes" >
