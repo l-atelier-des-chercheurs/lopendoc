@@ -35,7 +35,7 @@
 	</svg>
 
 	<?php
-	if (current_user_can( 'delete_posts' )) {
+	if ( user_can_edit()) {
 		?>
 
 		<svg class="icons remove-post" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-06-30 10:04-0500\n"
+"POT-Creation-Date: 2015-09-20 00:13+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -20,26 +20,26 @@ msgstr ""
 "esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;"
 "_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 1.8.2\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: 404.php:5
+#: 404.php:4
 msgid "Sorry, but the page you were trying to view does not exist."
 msgstr "La page que vous essayez d'atteindre n'existe pas."
 
-#: 404.php:8
+#: 404.php:7
 msgid "It looks like this was the result of either:"
 msgstr ""
 
-#: 404.php:10
+#: 404.php:9
 msgid "a mistyped address"
 msgstr ""
 
-#: 404.php:11
+#: 404.php:10
 msgid "an out-of-date link"
 msgstr ""
 
-#: functions.php:29
+#: functions.php:31
 #, php-format
 msgid "Error locating %s for inclusion"
 msgstr ""
@@ -48,11 +48,11 @@ msgstr ""
 msgid "Sorry, no results were found."
 msgstr ""
 
-#: index.php:16 taxonomy-projets.php:211
+#: index.php:16 taxonomy-projets.php:172
 msgid "&larr; Older posts"
 msgstr ""
 
-#: index.php:17 taxonomy-projets.php:212
+#: index.php:17 taxonomy-projets.php:173
 msgid "Newer posts &rarr;"
 msgstr ""
 
@@ -122,147 +122,175 @@ msgid "Home"
 msgstr ""
 
 #: lib/activation.php:173 lib/activation.php:176 lib/activation.php:190
-#: lib/init.php:14
 msgid "Primary Navigation"
 msgstr ""
 
-#: lib/extras.php:6
-msgid "Continued"
+#: lib/cmb2.php:18
+msgid "Ajouter des utilisateurs au projet"
 msgstr ""
 
-#: lib/extras.php:68
+#: lib/cmb2.php:19
+msgid "field description (optional)"
+msgstr ""
+
+#: lib/extras.php:79
 msgctxt "Taxonomy General Name"
 msgid "Projets"
 msgstr ""
 
-#: lib/extras.php:69
+#: lib/extras.php:80
 msgctxt "Taxonomy Singular Name"
 msgid "Projet"
 msgstr ""
 
-#: lib/extras.php:70
+#: lib/extras.php:81
 msgid "Projets"
 msgstr ""
 
-#: lib/extras.php:71
+#: lib/extras.php:82
 msgid "Tous les projets"
 msgstr ""
 
-#: lib/extras.php:72
+#: lib/extras.php:83
 msgid "Projet parent"
 msgstr ""
 
-#: lib/extras.php:73
+#: lib/extras.php:84
 msgid "Projet parent:"
 msgstr ""
 
-#: lib/extras.php:74
+#: lib/extras.php:85
 msgid "Nouveau projet"
 msgstr ""
 
-#: lib/extras.php:75
+#: lib/extras.php:86
 msgid "Ajouter un projet"
 msgstr ""
 
-#: lib/extras.php:76
+#: lib/extras.php:87
 msgid "Éditer un projet"
 msgstr ""
 
-#: lib/extras.php:77
+#: lib/extras.php:88
 msgid "Mettre à jour un projet"
 msgstr ""
 
-#: lib/extras.php:78
+#: lib/extras.php:89
 msgid "Séparer les projets avec une virgule"
 msgstr ""
 
-#: lib/extras.php:79
+#: lib/extras.php:90
 msgid "Chercher les projets"
 msgstr ""
 
-#: lib/extras.php:80
+#: lib/extras.php:91
 msgid "Ajouter ou enlever un objet"
 msgstr ""
 
-#: lib/extras.php:81 lib/extras.php:117
+#: lib/extras.php:92 lib/extras.php:128
 msgid "Choisir parmi les plus utilisés"
 msgstr ""
 
-#: lib/extras.php:82 lib/extras.php:118
+#: lib/extras.php:93 lib/extras.php:129
 msgid "Pas trouvé"
 msgstr ""
 
-#: lib/extras.php:104
+#: lib/extras.php:115
 msgctxt "Taxonomy General Name"
 msgid "Auteurs"
 msgstr ""
 
-#: lib/extras.php:105
+#: lib/extras.php:116
 msgctxt "Taxonomy Singular Name"
 msgid "Auteur"
 msgstr ""
 
-#: lib/extras.php:106
+#: lib/extras.php:117
 msgid "Auteurs"
 msgstr ""
 
-#: lib/extras.php:107
+#: lib/extras.php:118
 msgid "Tous les auteurs"
 msgstr ""
 
-#: lib/extras.php:108
+#: lib/extras.php:119
 msgid "Auteur parent"
 msgstr ""
 
-#: lib/extras.php:109
+#: lib/extras.php:120
 msgid "Auteur parent:"
 msgstr ""
 
-#: lib/extras.php:110
+#: lib/extras.php:121
 msgid "Nouvel auteur"
 msgstr ""
 
-#: lib/extras.php:111
+#: lib/extras.php:122
 msgid "Ajouter un auteur"
 msgstr ""
 
-#: lib/extras.php:112
+#: lib/extras.php:123
 msgid "Éditer un auteur"
 msgstr ""
 
-#: lib/extras.php:113
+#: lib/extras.php:124
 msgid "Mettre à jour un auteur"
 msgstr ""
 
-#: lib/extras.php:114
+#: lib/extras.php:125
 msgid "Séparer les auteurs avec une virgule"
 msgstr ""
 
-#: lib/extras.php:115
+#: lib/extras.php:126
 msgid "Chercher les auteurs"
 msgstr ""
 
-#: lib/extras.php:116
+#: lib/extras.php:127
 msgid "Ajouter ou enlever un auteur"
 msgstr ""
 
-#: lib/extras.php:214
+#: lib/extras.php:242
 msgid "Couleur primaire"
 msgstr ""
 
-#: lib/extras.php:217
+#: lib/extras.php:245
 msgid "Couleur secondaire"
 msgstr ""
 
-#: lib/extras.php:220
+#: lib/extras.php:248
+msgid "Chaîne de sécurité pour vérifier l'origine des requêtes ajax"
+msgstr ""
+
+#: lib/extras.php:251
 msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
 msgstr ""
 
-#: lib/init.php:41
+#: lib/extras.php:558
+msgid "Description"
+msgstr ""
+
+#: lib/extras.php:559
+#, fuzzy
+msgid "No content for this project yet."
+msgstr "Ce projet n'a pas encore de description."
+
+#: lib/extras.php:762
+msgid "User Profile Metabox"
+msgstr ""
+
+#: lib/extras.php:768
+msgid "Project's list where a user is author. Write slugs here."
+msgstr ""
+
+#: lib/extras.php:769
+msgid "séparés par une virgule"
+msgstr ""
+
+#: lib/init.php:38
 msgid "Primary"
 msgstr ""
 
-#: lib/init.php:50
+#: lib/init.php:47
 msgid "Footer"
 msgstr ""
 
@@ -299,7 +327,7 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: taxonomy-projets.php:127
+#: taxonomy-projets.php:75
 msgid ""
 "No description for this project yet. To add one send an email to this "
 "project's mail with the subject line <strong>Description</strong>."
@@ -307,35 +335,89 @@ msgstr ""
 "Ce projet n'a pas encore de description. Pour en ajouter une, envoyez un "
 "email à l'adresse mail avec pour sujet <strong>Description</strong>."
 
-#: taxonomy-projets.php:148
+#: taxonomy-projets.php:89
 msgid "To contribute, send an email to "
 msgstr "Pour contribuer, envoyez un email à "
 
-#: taxonomy-projets.php:150
+#: taxonomy-projets.php:91
 msgid ", or click on <strong>Add a post</strong>."
 msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
 
-#: taxonomy-projets.php:166
+#: taxonomy-projets.php:102 template-page-accueil.php:24
+msgid "Filter by categories: "
+msgstr ""
+
+#: taxonomy-projets.php:112
 msgid "Add a post"
 msgstr "Ajouter un post"
 
-#: template-page-accueil.php:28 template-page-accueil.php:33
+#: taxonomy-projets.php:115
+msgid "Edit project contributors"
+msgstr ""
+
+#: taxonomy-projets.php:149 templates/content-carte.php:24
+msgid "Post currently edited by "
+msgstr ""
+
+#: template-page-accueil.php:32
+msgid "Order: "
+msgstr ""
+
+#: template-page-accueil.php:36
+msgid "edited"
+msgstr ""
+
+#: template-page-accueil.php:39
+msgid "created"
+msgstr ""
+
+#: template-page-accueil.php:42
+msgid "alphabetical"
+msgstr ""
+
+#: template-page-accueil.php:54 template-page-accueil.php:59
 msgid "Add a project"
 msgstr "Ajouter un projet"
 
-#: template-page-accueil.php:36
+#: template-page-accueil.php:62
 msgid "Write your project's name"
 msgstr "Nom de votre projet"
 
-#: template-page-accueil.php:41
+#: template-page-accueil.php:67
 msgid "Add the project"
 msgstr "Ajouter le projet"
 
-#: template-page-accueil.php:127
-msgid "No description for this project yet."
+#: template-page-accueil.php:164 templates/content-modules/meta.php:9
+msgid "Categories: "
+msgstr ""
+
+#: template-page-accueil.php:210
+#, fuzzy
+msgid "Editor of this project"
 msgstr "Ce projet n'a pas encore de description."
 
-#: templates/comments.php:9
+#: template-page-accueil.php:239 templates/content-modules/meta.php:74
+msgid "Edited: "
+msgstr ""
+
+#: template-page-accueil.php:251 templates/content-modules/meta.php:63
+msgid "Created: "
+msgstr ""
+
+#: templates/comments-modules/comment.php:4
+#, php-format
+msgid "%1$s"
+msgstr ""
+
+#: templates/comments-modules/comment.php:5
+msgid "(Edit)"
+msgstr ""
+
+#: templates/comments-modules/comment.php:9
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: templates/comments-modules/comments.php:9
 #, php-format
 msgctxt "comments title"
 msgid "One response to &ldquo;%2$s&rdquo;"
@@ -343,84 +425,118 @@ msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/comments.php:19
+#: templates/comments-modules/comments.php:19
 msgid "&larr; Older comments"
 msgstr ""
 
-#: templates/comments.php:22
+#: templates/comments-modules/comments.php:22
 msgid "Newer comments &rarr;"
 msgstr ""
 
-#: templates/comments.php:31
+#: templates/comments-modules/comments.php:31
 msgid "Comments are closed."
 msgstr ""
 
-#: templates/content-carte.php:28
-msgid "Make this private"
-msgstr "Passer en privé"
-
-#: templates/content-carte.php:48
-msgid "Make this public"
-msgstr "Passer en public"
-
-#: templates/entry-button-right.php:9
-msgid "Remove this post"
-msgstr ""
-
-#: templates/entry-button-right.php:24
-msgid "Accept modifications"
-msgstr "Valider les modifications"
-
-#: templates/entry-button-right.php:40
+#: templates/content-modules/button-right.php:7
 msgid "Toggle edit mode"
 msgstr "Basculer le mode édition"
 
-#: templates/entry-meta.php:2
-msgid "By"
+#: templates/content-modules/button-right.php:21
+msgid "Accept modifications"
+msgstr "Valider les modifications"
+
+#: templates/content-modules/button-right.php:44
+msgid "Remove this post"
 msgstr ""
 
-#: templates/entry-meta.php:57
+#: templates/content-modules/liste_utilisateurs.php:4
+msgid "Edit contributors"
+msgstr ""
+
+#: templates/content-modules/liste_utilisateurs.php:7
+msgid "Add or remove other users who can contribute to this project"
+msgstr ""
+
+#: templates/content-modules/liste_utilisateurs.php:31
+msgid "Updating..."
+msgstr ""
+
+#: templates/content-modules/liste_utilisateurs.php:32
+msgid "Update"
+msgstr ""
+
+#: templates/content-modules/meta.php:25
+msgid "Edit categories"
+msgstr ""
+
+#: templates/content-modules/meta.php:27
+#, fuzzy
+msgid "Edit"
+msgstr "Mode édition"
+
+#: templates/content-modules/meta.php:44
+msgid "Comments: "
+msgstr ""
+
+#: templates/content-modules/meta.php:48
 msgid "Add a comment"
 msgstr ""
 
-#: templates/entry-meta.php:57
+#: templates/content-modules/meta.php:48
 msgid "1 comment"
 msgstr ""
 
-#: templates/entry-meta.php:57
+#: templates/content-modules/meta.php:48
 #, php-format
 msgid "% comments"
 msgstr ""
 
-#: templates/entry-meta.php:60
+#: templates/content-modules/meta.php:51
 msgid "Leave a comment"
 msgstr ""
 
-#: templates/entry-meta.php:60
+#: templates/content-modules/meta.php:51
 msgid "1 Comment"
 msgstr ""
 
-#: templates/entry-meta.php:60
+#: templates/content-modules/meta.php:51
 msgid "% Comments"
 msgstr ""
 
-#: templates/header.php:6
+#: templates/content-modules/meta.php:81
+#, fuzzy
+msgid "Edited on "
+msgstr "Mode édition"
+
+#: templates/content-modules/meta.php:83
+msgid "By"
+msgstr ""
+
+#: templates/content-modules/private-publish.php:14
+msgid "Make this private"
+msgstr "Passer en privé"
+
+#: templates/content-modules/private-publish.php:37
+msgid "Make this public"
+msgstr "Passer en public"
+
+#: templates/header.php:15
 msgid "Toggle navigation"
 msgstr "Navigation"
 
-#: templates/header.php:65
-msgid "Edit mode"
-msgstr "Mode édition"
-
-#: templates/header.php:68
-msgid "Refresh"
-msgstr "Rafraîchir"
-
-#: templates/header.php:75
+#: templates/header.php:72
 msgid "Register/login"
 msgstr "Inscription/connexion"
 
-#: templates/header.php:81
+#: templates/header.php:90
+msgid "Edit mode"
+msgstr "Mode édition"
+
+#: templates/header.php:93
+msgid "Get mails"
+msgstr ""
+
+#: templates/header.php:99
 msgid "Logout"
 msgstr "Déconnexion"
 
@@ -1233,3 +1349,6 @@ msgstr ""
 #: node_modules/grunt/node_modules/underscore.string/test/strings.js:425
 msgid "I know latin characters: á í ó ú ç ã õ ñ ü"
 msgstr ""
+
+#~ msgid "Refresh"
+#~ msgstr "Rafraîchir"

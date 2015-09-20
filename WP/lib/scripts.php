@@ -50,7 +50,7 @@ function roots_scripts() {
     add_filter('script_loader_src', 'roots_jquery_local_fallback', 10, 2);
   }
 
-  if (is_single() && comments_open() && get_option('thread_comments')) {
+  if ((is_tax() || is_single()) && comments_open() && get_option('thread_comments')) {
     wp_enqueue_script('comment-reply');
   }
 

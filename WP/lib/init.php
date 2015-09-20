@@ -10,7 +10,7 @@ function roots_setup() {
 
   // Add post formats
   // http://codex.wordpress.org/Post_Formats
-  add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'video', 'audio'));
+	// add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'video', 'audio'));
 
   // Add HTML5 markup for captions
   // http://codex.wordpress.org/Function_Reference/add_theme_support#HTML5
@@ -18,6 +18,15 @@ function roots_setup() {
 
   // Tell the TinyMCE editor to use a custom stylesheet
   add_editor_style('/assets/css/editor-style.css');
+
+	// image size
+	update_option('large_size_w', 1600);
+	update_option('large_size_h', '');
+	update_option('medium_size_w', 800);
+	update_option('medium_size_h', '');
+	update_option('thumbnail_size_w', 400);
+	update_option('thumbnail_size_h', '');
+
 }
 add_action('after_setup_theme', 'roots_setup');
 

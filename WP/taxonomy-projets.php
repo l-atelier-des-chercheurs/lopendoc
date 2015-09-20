@@ -143,9 +143,18 @@
 			  $ID = get_the_ID();
 			  $status = get_post_status();
 
+			  $whoIsLockingID = is_post_lock_admin($ID);
+			  if( !empty( $whoIsLockingID)) {
+					$whoIsLocking = get_user_meta( $whoIsLockingID, 'nickname', true);
+					$lockingSentence = __('Post currently edited by ', 'opendoc');
+				}
+
 				?>
 
-				<div class="postContainer" data-status="<?php echo $status; ?>">
+				<div class="postContainer"
+					data-status="<?php echo $status; ?>"
+					<?php if( !empty($whoIsLockingID) ) { echo " data-isLocked='$whoIsLocking'"; } ?>
+						>
 					<?php
 					if ( user_can_edit() ) {
 						get_template_part('templates/content-modules/private-publish');
@@ -171,14 +180,16 @@
 
 		// si il y a un post plus récent que description
 		if( $modDateRecent > $modDateDescription) {
-			echo "maj modified date description";
 			// et si on a un ID pour le post description
 			if( $descriptionPostID != -1) {
+				echo "MODIF DESCRIPTION EDIT DATE";
 		    $updateDescription['ID'] = $descriptionPostID;
 	      $updateDescription['post_modified'] = $modDateRecent;
 				wp_update_post( $updateDescription);
 			}
 		}
+
+		unset( $whoIsLockingID);
 
 	?>
 

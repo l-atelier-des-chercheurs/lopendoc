@@ -26,7 +26,7 @@ if ( ! function_exists( 'is_login_page' ) ) {
 }
 function prevent_login_page() {
     if( is_login_page()){
-			wp_redirect( home_url() . '?login=true' );
+			wp_redirect( home_url() );
       exit();
     }
 
@@ -42,21 +42,14 @@ function blockusers_init() {
 }
 add_action( 'admin_init', 'blockusers_init' );
 
-// image size
-update_option('large_size_w', 1600);
-update_option('large_size_h', '');
-update_option('medium_size_w', 800);
-update_option('medium_size_h', '');
-update_option('thumbnail_size_w', 400);
-update_option('thumbnail_size_h', '');
-
 
 
 // custom typeface
 function google_font(){
-	echo "<link href='http://fonts.googleapis.com/css?family=Work+Sans:400,600' rel='stylesheet' type='text/css'>","\n";
+	//echo "<link href='http://fonts.googleapis.com/css?family=Fira+Sans:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>","\n";
+	echo "<link href='http://fonts.googleapis.com/css?family=Fira+Sans:300,400' rel='stylesheet' type='text/css'>","\n";
 }
-//add_action( 'wp_enqueue_scripts', 'google_font');
+add_action( 'wp_enqueue_scripts', 'google_font');
 
 
 
@@ -234,6 +227,8 @@ set_post_thumbnail_size( 1200, 800, true );
 // suppression des emojis
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
+update_option('use_smilies', false);
+
 
 // project color
 $new_general_setting = new new_general_setting();
@@ -370,7 +365,27 @@ function add_frontend_ajax_javascript_file(){ ?>
     var ajaxurl = <?php echo json_encode( admin_url( "admin-ajax.php" ) ); ?>;
     var ajaxnonce = <?php echo json_encode( wp_create_nonce( get_option( "wp_custom_nonce" ) ) ); ?>;
     var username = "not-logged-in";
-    var nomProjet = "<?php echo get_query_var( 'term' ); ?>";
+
+	  <?php
+		  $primaireColor =  get_option( "primary_color" );
+			if( empty($primaireColor) ) $primaireColor = "#EF444E";
+			echo "var couleurPrimaire = '$primaireColor';";
+
+		  $secondaireColor =  get_option( "secondary_color" );
+			if( empty($secondaireColor) ) $secondaireColor = "#FCB248";
+			echo "var couleurSecondaire = '$secondaireColor';";
+		?>
+
+
+    var nomProjet = "<?php
+	    if( get_query_var( 'term' ) !== '')
+	    	echo get_query_var('term');
+	    else if( count( wp_get_object_terms( get_the_ID(), 'projets' )) > 0 ) {
+	    	$terms = get_the_terms( get_the_ID(), 'projets');
+				$term = array_pop($terms);
+				echo $term->slug;
+	    }
+	    ?>";
     var singleID = "<?php echo get_the_ID(); ?>";
 
     <?php global $current_user; get_currentuserinfo(); ?>
@@ -381,7 +396,7 @@ function add_frontend_ajax_javascript_file(){ ?>
 			<?php } else { ?>
 		    var canuseredit = false;
 			<?php } ?>
-				username = "<?php echo $current_user->user_login; ?>";
+				var username = "<?php echo $current_user->user_login; ?>";
 				userid = "<?php echo $current_user->ID; ?>";
 			<?php
 			}
@@ -408,8 +423,8 @@ function ajax_get_post_information()
 {
     if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
-        $post = get_post( $_POST['post_id'] );
-        echo json_encode( $post );
+      $post = get_post( $_POST['post_id'] );
+      echo json_encode( $post );
     }
 
     die();
@@ -422,16 +437,25 @@ function ajax_create_private_post_with_tax()
 {
     if(!empty($_POST['userid']) && !empty($_POST['term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
-			$userid = $_POST['userid'];
-			$newpost = array(
-				'post_title'					=> '-',
-				'post_content'				=> '',
-				'post_status'					=> 'private',
-				'post_author'					=> $userid,
-			);
-			$newpostID = wp_insert_post( $newpost);
-			wp_set_object_terms( $newpostID, $_POST['term'], 'projets');
-      echo get_permalink( $newpostID);
+
+			$projet = $_POST['term'];
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				||
+				current_user_can('administrator')
+			) {
+
+				$userid = $_POST['userid'];
+				$newpost = array(
+					'post_title'					=> '-',
+					'post_content'				=> '',
+					'post_status'					=> 'private',
+					'post_author'					=> $userid,
+				);
+				$newpostID = wp_insert_post( $newpost);
+				wp_set_object_terms( $newpostID, $_POST['term'], 'projets');
+	      echo get_permalink( $newpostID);
+	    }
     }
 
     die();
@@ -444,12 +468,22 @@ function ajax_change_post_visibility()
 
     if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
+
+			$projet = wp_get_object_terms( $_POST['post_id'], 'projets');
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				||
+				current_user_can('administrator')
+			) {
+
 		    $post = array();
 		    $post['ID'] = $_POST['post_id'];
-        $post['post_status'] = $_POST['post_status'];
+	      $post['post_status'] = $_POST['post_status'];
 				wp_update_post($post);
-        $post = get_post( $_POST['post_id'] );
-        echo json_encode( get_post_status($_POST['post_id']) );
+	      $post = get_post( $_POST['post_id'] );
+	      echo json_encode( get_post_status($_POST['post_id']) );
+
+      }
     }
 
     die();
@@ -462,8 +496,18 @@ function ajax_remove_post()
 
     if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
+
+			$projet = wp_get_object_terms( $_POST['post_id'], 'projets');
+
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				||
+				current_user_can('administrator')
+			) {
+
 				wp_trash_post( $_POST['post_id'] );
         echo json_encode( get_post_status($_POST['post_id']) );
+      }
     }
 
     die();
@@ -477,6 +521,9 @@ function ajax_add_tax_term()
 
     if(!empty($_POST['tax_term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
+
+			if ( !current_user_can( 'edit_posts' )){ die(); }
+
 	    $projet = $_POST['tax_term'];
 			wp_insert_term(
         $projet,
@@ -526,61 +573,65 @@ function ajax_add_tax_term()
 
 
 
-// ajouter et supprimer des éditeurs à la description d'une taxonomy
-// _opendoc_projecteditors à post Description
-// _opendocprojecteditors_
+// ajouter et supprimer des éditeurs à un projet (en mettant à jour un champ meta user '_opendoc_user_projets'
 add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
 function ajax_edit_projet_authors()
 {
-/*
     error_log("debug ajout meta autheur");
     error_log("projet ? " . $_POST['projet']);
     error_log("validité nonce ? " . check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ));
-*/
 
     if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
 
 			$projet = $_POST['projet'];
-			$newAuthorsString = $_POST['newauthors'];
+	    // check si l'auteur du changement un est admin, un superadmin, ou un auteur qui a l'accès à ce projet
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				||
+				current_user_can('administrator')
+			) {
 
-			// liste des ID des utilisateurs à qui ajouter le projet
-			$newAuthorsArray = explode(',', $newAuthorsString);
+				$newAuthorsString = $_POST['newauthors'];
 
-			// récupérer tous les auteurs
-			// si leur userid est dans la liste, leur ajouter le projet, sinon le virer
-			$users = get_users('role=author');
+				// liste des ID des utilisateurs à qui ajouter le projet
+				$newAuthorsArray = explode(',', $newAuthorsString);
 
-		  foreach ($users as $user) {
-				$userid = $user->ID;
-				$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
-				$userProjects = explode(',', $hasProjects);
+				// récupérer tous les auteurs
+				// si leur userid est dans la liste, leur ajouter le projet, sinon le virer
+				$users = get_users('role=author');
 
-				// si dans la liste des projets existants d'un user il y a projet, alors
-				if( in_array( $projet, $userProjects)) {
-					// si son ID figure dans la liste à éditer
-					if( in_array( $userid, $newAuthorsArray)) {
-						// ne rien faire
+			  foreach ($users as $user) {
+					$userid = $user->ID;
+					$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
+					$userProjects = explode(',', $hasProjects);
+
+					// si dans la liste des projets existants d'un user il y a projet, alors
+					if( in_array( $projet, $userProjects)) {
+						// si son ID figure dans la liste à éditer
+						if( in_array( $userid, $newAuthorsArray)) {
+							// ne rien faire
+						} else {
+							// mais si son ID n'y est pas, c'est qu'il ne doit plus avoir ce projet
+							$pos = array_search($projet, $userProjects);
+							unset($userProjects[$pos]);
+							$hasProjects = implode(",", $userProjects);
+							update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
+						}
+
 					} else {
-						// mais si son ID n'y est pas, c'est qu'il ne doit plus avoir ce projet
-						$pos = array_search($projet, $userProjects);
-						unset($userProjects[$pos]);
-						$hasProjects = implode(",", $userProjects);
-						update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
-					}
-
-				} else {
-					// par contre, s'il n'est pas dans la liste des projets qu'un user peut déjà éditer
-					// et qu'il est mentionné dans les auteurs à ajouter
-					if( in_array( $userid, $newAuthorsArray)) {
-						array_push( $userProjects, $projet);
-						$hasProjects = implode(",", $userProjects);
-						update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
+						// par contre, s'il n'est pas dans la liste des projets qu'un user peut déjà éditer
+						// et qu'il est mentionné dans les auteurs à ajouter
+						if( in_array( $userid, $newAuthorsArray)) {
+							array_push( $userProjects, $projet);
+							$hasProjects = implode(",", $userProjects);
+							update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
+						}
 					}
 				}
-			}
-			echo "success";
-    }
+				echo "success";
+	    }
+	  }
 
     die();
 }
@@ -599,6 +650,39 @@ function ajax_logout_user()
     die();
 
 }
+
+
+// spam comment
+add_action( 'wp_ajax_spam_comment', 'ajax_spam_comment' );
+function ajax_spam_comment()
+{
+
+    if(!empty($_POST['comment_id'])
+    	 &&
+    	 !empty($_POST['post_id'])
+    	 &&
+    	 check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
+    {
+
+			$projet = wp_get_object_terms( $_POST['post_id'], 'projets');
+
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				||
+				current_user_can('administrator')
+			) {
+
+				wp_set_comment_status( $_POST['comment_id'], 'spam');
+
+			}
+
+		}
+    die();
+
+}
+
+
+
 
 
 function user_can_edit() {
@@ -627,7 +711,14 @@ function can_user_edit_project() {
 		return true;
 	}
 
-	$term = get_query_var( 'term' );
+  if( get_query_var( 'term' ) !== '') {
+		$term = get_query_var( 'term' );
+	}
+  else if( count( wp_get_object_terms( get_the_ID(), 'projets' )) > 0 ) {
+  	$terms = get_the_terms( get_the_ID(), 'projets');
+		$term1 = array_pop($terms);
+		$term = $term1->slug;
+  }
 
 	if( $term != '') {
 		$currentuserid = wp_get_current_user()->ID;
@@ -644,12 +735,17 @@ function can_user_edit_project() {
 
 function can_user_edit_this_project($projet) {
 
+	error_log( "-- is authorized ?");
+
 	if( !isset($GLOBALS["listeProjet"])) {
 		$currentuserid = wp_get_current_user()->ID;
 		$hasProjects = get_user_meta( $currentuserid, '_opendoc_user_projets', true );
 		$userProjects = explode(',', $hasProjects);
 		$GLOBALS["listeProjet"] = $userProjects;
 	}
+
+	error_log( "-- listeprojets " . $GLOBALS["listeProjet"]);
+	error_log( "-- projet in array listeprojets ? " . in_array( $projet, $GLOBALS["listeProjet"]));
 
 	if( $projet != '') {
 		if( in_array( $projet, $GLOBALS["listeProjet"])) {
@@ -717,10 +813,157 @@ function opendoc_contributeur_projets() {
 // hide private posts
 add_filter('posts_where', 'no_privates');
 function no_privates($where) {
-    if( user_can_edit() ) return $where;
-
+    if( current_user_can( 'edit_posts') ) return $where;
     global $wpdb;
     return " $where AND {$wpdb->posts}.post_status != 'private' ";
 }
 
+// rediriger vers la page taxonomy si pas un éditeur du projet, ou pas administrateur !
+// ATTENTION : pour les éditeurs et admin, ne surtout pas le faire car sinon ça casse le embed iframe (et ça c'est nul)
+function redirect_single_to_tax() {
 
+	global $post;
+
+    // Only modify custom taxonomy template redirect
+	if ( is_single() ) {
+
+		$terms = get_the_terms( get_the_ID(), 'projets');
+		$term = array_pop($terms);
+		$projet = $term->slug;
+
+		if (
+			(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+			||
+			current_user_can('administrator')
+			||
+			(isset( $_GET['comments']) && $_GET['comments'] === 'show')
+		) {
+			return;
+    }
+
+		wp_safe_redirect( get_term_link( $term));
+		exit;
+
+  }
+}
+add_action( 'template_redirect', 'redirect_single_to_tax' );
+
+
+// copie de wp_check_post_lock
+if ( ! function_exists( 'is_post_lock_admin' ) ) {
+	function is_post_lock_admin( $post_id ) {
+		if ( !$post = get_post( $post_id ) )
+			return false;
+		if ( !$lock = get_post_meta( $post->ID, '_edit_lock', true ) )
+			return false;
+		$lock = explode( ':', $lock );
+		$time = $lock[0];
+		$user = isset( $lock[1] ) ? $lock[1] : get_post_meta( $post->ID, '_edit_last', true );
+		/** This filter is documented in wp-admin/includes/ajax-actions.php */
+		$time_window = apply_filters( 'wp_check_post_lock_window', 150 );
+		if ( $time && $time > time() - $time_window && $user != get_current_user_id() )
+			return $user;
+		return false;
+	}
+}
+
+
+// from https://gist.github.com/georgiecel/9445357
+class opendoc_walker extends Walker_Comment {
+	var $tree_type = 'comment';
+	var $db_fields = array( 'parent' => 'comment_parent', 'id' => 'comment_ID' );
+
+	// constructor – wrapper for the comments list
+	function __construct() { ?>
+
+		<section class="comments-list">
+
+	<?php }
+
+	// start_lvl – wrapper for child comments list
+	function start_lvl( &$output, $depth = 0, $args = array() ) {
+		$GLOBALS['comment_depth'] = $depth + 2; ?>
+
+		<section class="child-comments comments-list">
+
+	<?php }
+
+	// end_lvl – closing wrapper for child comments list
+	function end_lvl( &$output, $depth = 0, $args = array() ) {
+		$GLOBALS['comment_depth'] = $depth + 2; ?>
+
+		</section>
+
+	<?php }
+
+	// start_el – HTML for comment template
+	function start_el( &$output, $comment, $depth = 0, $args = array(), $id = 0 ) {
+		$depth++;
+		$GLOBALS['comment_depth'] = $depth;
+		$GLOBALS['comment'] = $comment;
+		$parent_class = ( empty( $args['has_children'] ) ? '' : 'parent' );
+
+		if ( 'article' == $args['style'] ) {
+			$tag = 'article';
+			$add_below = 'comment';
+		} else {
+			$tag = 'article';
+			$add_below = 'comment';
+		} ?>
+
+		<article <?php comment_class(empty( $args['has_children'] ) ? '' :'parent') ?> id="comment-<?php comment_ID() ?>" itemprop="comment" itemscope itemtype="http://schema.org/Comment">
+
+		<div class="comment-body">
+
+			<div class="comment-meta post-meta" role="complementary">
+				<div class="comment-author">
+<!-- 				<figure class="gravatar"><?php //echo get_avatar( $comment, 65, '[default gravatar URL]', 'Author’s gravatar' ); ?></figure> -->
+<!-- 					<a class="comment-author-link" href="<?php comment_author_url(); ?>" itemprop="author"><?php comment_author(); ?></a> -->
+					<?php comment_author(); ?>
+				</div>
+				<div class="comment-metadata">
+					<time class="comment-meta-item" datetime="<?php comment_date('Y-m-d') ?>T<?php comment_time('H:iP') ?>" itemprop="datePublished"><?php comment_date('jS F Y') ?>, <?php comment_time() ?>
+					</time>
+
+
+
+					<?php
+						if( $args['can_spam'] === "true") {
+					?>
+					<button class='send-to-spam' data-commentID='<?php comment_ID(); ?>'>
+						<?php _e( 'Spam', 'opendoc'); ?>
+					</button>
+					<?php } ?>
+
+					<?php edit_comment_link('<p class="comment-meta-item edit-link">Edit this comment</p>','',''); ?>
+
+					<?php if ($comment->comment_approved == '0') : ?>
+					<p class="comment-meta-item">Your comment is awaiting moderation.</p>
+					<?php endif; ?>
+				</div>
+			</div>
+			<div class="comment-content post-content" itemprop="text">
+				<?php comment_text() ?>
+				<div class="reply">
+					<?php comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
+				</div>
+			</div>
+		</div>
+
+	<?php }
+
+	// end_el – closing HTML for comment template
+	function end_el(&$output, $comment, $depth = 0, $args = array() ) { ?>
+
+		</article>
+
+	<?php }
+
+	// destructor – closing wrapper for the comments list
+	function __destruct() { ?>
+
+		</section>
+
+	<?php }
+
+}

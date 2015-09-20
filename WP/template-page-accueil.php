@@ -9,8 +9,6 @@ Template Name: Accueil avec cartes
 ?>
 
 
-
-
 	<div class='colTitle'>
 		<h1>
 			<?php echo roots_title( ); ?>
@@ -101,8 +99,12 @@ Template Name: Accueil avec cartes
 					  'orderby'=> 'modified',
 					  'order' => 'DESC',
 					  'tag'		=> 'featured',
+
+			      'nopaging' => true,
+
 					);
 					$get_description = new WP_Query($args);
+
 					$lastPostDate = '1000000000';
 					$lastPostDateHuman = '';
 					$createdDateHuman = '';
@@ -136,7 +138,7 @@ Template Name: Accueil avec cartes
 
 		?>
 
-		<div class="colonneswrappers"
+		<div class="colonneswrappers make-it-col"
 			<?php if( $lastPostDate != '') { echo "data-lastpostdate='$lastPostDate'"; } ?>
 			<?php if( $timeSinceLastPostDate != '') { echo "data-timesincelastpostdate='$timeSinceLastPostDate'"; } ?>
 			<?php if( $timeCreated != '') { echo "data-timecreated='$timeCreated'"; } ?>
@@ -221,7 +223,8 @@ Template Name: Accueil avec cartes
 									<div class="entry-content">
 										<?php
 											if( isset( $description_content) && !empty($description_content)) {
-												echo $description_content;
+												$content = apply_filters( 'the_content', $description_content );
+												echo str_replace( ']]>', ']]&gt;', $content );
 											}
 										?>
 									</div><!-- .entry-content -->
@@ -233,7 +236,7 @@ Template Name: Accueil avec cartes
 												data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_time(''); ?>" data-toggle-tooltip-color="#3C3C3C"
 												>
 													<div class="legende">
-														<?php _e('Last edit: ', 'opendoc'); ?>
+														<?php _e('Edited: ', 'opendoc'); ?>
 													</div>
 													<div class="contenu">
 														<?php echo $lastPostDateHuman;?>
@@ -245,7 +248,7 @@ Template Name: Accueil avec cartes
 												data-toggle="tooltip" data-placement="top" title="<?php echo get_the_time(''); ?> " data-toggle-tooltip-color="#3C3C3C"
 												>
 													<div class="legende">
-														<?php _e('Created on: ', 'opendoc'); ?>
+														<?php _e('Created: ', 'opendoc'); ?>
 													</div>
 													<div class="contenu">
 														<?php echo $createdDateHuman;?>
@@ -264,9 +267,10 @@ Template Name: Accueil avec cartes
 										unset( $hascategory);
 
 									}
-									?>
 
+								wp_reset_postdata();
 
+								?>
 				 </div>
 			</section>
 		</div>

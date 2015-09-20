@@ -9,6 +9,7 @@
   <div class="navbar-container">
 	  <div class="navbar-row">
 	    <div class="navbar-header">
+<!--
 	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 	        <span class="sr-only">
 						<?php _e('Toggle navigation', 'opendoc'); ?>
@@ -17,6 +18,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
+-->
 
 
 	      <a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>">
@@ -59,45 +61,46 @@
 	      </a>
 	    </div>
 
-	    <nav class="collapse navbar-collapse" role="navigation">
+	    <nav class="navbar-collapse" role="navigation">
 					<div class="actionsContainer">
 						<div class="dropdown">
-						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									<?php _e('Compte', 'opendoc'); ?>
-						    <span class="caret"></span>
-						  </button>
-						  <ul class="dropdown-menu dropdown-menu-right action-button actions" aria-labelledby="dropdownMenu1">
-
-								<li>
-
-						    <li role="separator" class="divider"></li>
-
+							<?php
+								if( !is_user_logged_in()) {
+									?>
+								  <button class="action-button actions login-field" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<?php
+												_e('Register/login', 'opendoc');
+											?>
+								  </button>
 									<?php
-									if (user_can_edit()) {
+								} else {
+									?>
+								  <button class="action-button actions dropdown-toggle is--loggedin" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<?php
+												global $current_user;
+												echo "$current_user->user_login";
+											?>
+								    <span class="caret"></span>
+								  </button>
+								  <ul class="dropdown-menu dropdown-menu-right login-list" aria-labelledby="dropdownMenu1">
+											<?php
+											if (user_can_edit()) {
+												?>
+											<li class="action-button switch-edition">
+												<?php _e('Edit mode', 'opendoc'); ?>
+											</li>
+											<li class="action-button refresh-postie">
+												<?php _e('Get mails', 'opendoc'); ?>
+											</li>
+										<?php
+											}
 										?>
-									<li class="switch-edition">
-										<?php _e('Edit mode', 'opendoc'); ?>
-									</li>
-									<li class="refresh-postie">
-										<?php _e('Refresh', 'opendoc'); ?>
-									</li>
-								<?php
-									}
-								?>
-								<?php
-									if ( !is_user_logged_in() ) {
-										?>
-									<li class="login-field">
-										<?php _e('Register/login', 'opendoc'); ?>
-									</li>
-								<?php
-									} else {
-								?>
-									<li class="deconnexion-field">
-										<?php _e('Logout', 'opendoc'); ?>
-									</li>
-								<?php
-									}
+										<li class="action-button deconnexion-field">
+											<?php _e('Logout', 'opendoc'); ?>
+										</li>
+								  </ul>
+								  <?php
+								}
 								?>
 						  </ul>
 						</div>

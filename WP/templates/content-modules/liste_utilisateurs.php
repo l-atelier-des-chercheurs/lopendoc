@@ -28,7 +28,7 @@
 
 	?>
 	</ul>
-	<button type="button" class=" submit-updateAuthors">
+	<button type="button" class="submit-updateAuthors" data-submitted="<?php _e('Updating...', 'opendoc'); ?>">
 		<?php _e('Update', 'opendoc'); ?>
 	</button>
 </div>

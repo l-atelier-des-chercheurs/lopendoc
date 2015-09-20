@@ -4,6 +4,11 @@
   </div>
 </footer>
 <?php
-if( current_user_can('manage_options')) {
-	echo get_num_queries(); ?> queries in <?php timer_stop(1); ?> seconds.
-<?php }
+if ( is_user_logged_in() ) {
+	global $current_user; get_currentuserinfo();
+	if( $current_user->user_login === "louis") {
+		echo "-" . get_num_queries() . "queries in - ";
+		echo timer_stop() . " seconds";
+	}
+}
+?>
