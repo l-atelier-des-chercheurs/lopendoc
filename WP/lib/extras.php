@@ -224,6 +224,15 @@ add_theme_support('post-thumbnails');
 set_post_thumbnail_size( 1200, 800, true );
 
 
+
+add_action( 'wp_enqueue_scripts', 'mytheme_scripts' );
+/**
+ * Enqueue Dashicons style for frontend use
+ */
+function mytheme_scripts() {
+	wp_enqueue_style( 'dashicons' );
+}
+
 // suppression des emojis
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
@@ -917,9 +926,7 @@ class opendoc_walker extends Walker_Comment {
 
 			<div class="comment-meta post-meta" role="complementary">
 				<div class="comment-author">
-<!-- 				<figure class="gravatar"><?php //echo get_avatar( $comment, 65, '[default gravatar URL]', 'Author’s gravatar' ); ?></figure> -->
-<!-- 					<a class="comment-author-link" href="<?php comment_author_url(); ?>" itemprop="author"><?php comment_author(); ?></a> -->
-					<?php comment_author(); ?>
+					<?php echo get_comment_author(); ?>
 				</div>
 				<div class="comment-metadata">
 					<time class="comment-meta-item" datetime="<?php comment_date('Y-m-d') ?>T<?php comment_time('H:iP') ?>" itemprop="datePublished"><?php comment_date('jS F Y') ?>, <?php comment_time() ?>
@@ -944,9 +951,10 @@ class opendoc_walker extends Walker_Comment {
 			</div>
 			<div class="comment-content post-content" itemprop="text">
 				<?php comment_text() ?>
-				<div class="reply">
-					<?php comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
-				</div>
+			</div>
+
+			<div class="reply">
+				<?php comment_reply_link(array_merge( $args, array('add_below' => $add_below, 'depth' => $depth, 'max_depth' => $args['max_depth']))) ?>
 			</div>
 		</div>
 

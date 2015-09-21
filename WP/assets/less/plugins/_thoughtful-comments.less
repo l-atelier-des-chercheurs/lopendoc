@@ -1,0 +1,33 @@
+/* FV - Thoughtful Comments */
+.tc_highlight {
+	background: red;
+	color: white;
+	padding: 3px;
+}
+.tc-frontend {
+	font-size: 80%;
+}
+.tc-frontend a {
+	margin-right: 6px;
+}
+.tc-frontend a:before {
+	-webkit-font-smoothing: antialiased;
+	display: inline-block;
+	font: normal 20px/1 'dashicons';
+	vertical-align: middle;
+}
+.tc-frontend span[id$="-approve"] a:before {
+	content: "\f147";
+}
+.tc-frontend a.fv-tc-del:before {
+	content: "\f182";
+}
+.tc-frontend a.fv-tc-ban:before {
+	content: "\f227";
+}
+.tc-frontend a.fv-tc-delthread:before {
+	content: "\f117";
+}
+.tc-frontend a.fv-tc-banthread:before {
+	content: "\f335";
+}

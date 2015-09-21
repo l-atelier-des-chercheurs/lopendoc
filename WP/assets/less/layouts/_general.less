@@ -2112,7 +2112,16 @@ body {
 
 		}
 
+
+		.tc-frontend {
+			position: relative;
+	    margin-top: @grid-gutter-width/2;
+	    padding-top: @grid-gutter-width/2;
+			border-top: 1px solid @cgrey;
+		}
+
 		.reply {
+			position: relative;
 			text-align: right;
 			.comment-reply-link {
 				.button-style;
@@ -2126,20 +2135,24 @@ body {
 		}
 	}
 
-	.comments li.depth-1 {
-	    position: relative;
-	    counter-increment: step-counter;
-	    margin-bottom: @grid-gutter-width + @grid-gutter-width/2;
+	.comment.depth-1 {
+    position: relative;
+    counter-increment: step-counter;
+    margin-bottom: @grid-gutter-width + @grid-gutter-width/2;
+
+		+ .comment-respond {
+	    margin-left: 32px;
+		}
 	}
 
-	.comments li.depth-1::before {
-	    content: "# " counter(step-counter);
-	    margin-right: 0;
-	    color: @cbleue;
-	    padding: 3px 8px;
-	    position: absolute;
-	    left: 0;
-	    bottom: 100%;
+	.comment.depth-1::before {
+    content: "# " counter(step-counter);
+    margin-right: 0;
+    color: @cbleue;
+    padding: 3px 8px;
+    position: absolute;
+    left: 0;
+    bottom: 100%;
 	}
 
 }
