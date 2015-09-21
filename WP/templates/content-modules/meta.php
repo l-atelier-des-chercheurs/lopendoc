@@ -19,12 +19,14 @@
 			$alltags .= $tag->slug . " ";
 		}
 
+		if( user_can_edit()) {
 		// bouton édit
-		$htmlTags .= '<span class="button-edit-categories"
+			$htmlTags .= '<span class="button-edit-categories"
 
-			data-toggle="tooltip" data-placement="right" title="' . __( 'Edit categories', 'opendoc')  . '" data-toggle-tooltip-color="#ef474b"
+				data-toggle="tooltip" data-placement="right" title="' . __( 'Edit categories', 'opendoc')  . '" data-toggle-tooltip-color="#ef474b"
 
-		>' . __( 'Edit', 'opendoc' ) . "</span>";
+			>' . __( 'Edit', 'opendoc' ) . "</span>";
+		}
 
 		$htmlTags .= '</div>';
 		$htmlTags .= '</div>';

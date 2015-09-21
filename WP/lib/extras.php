@@ -225,6 +225,7 @@ set_post_thumbnail_size( 1200, 800, true );
 
 
 
+
 add_action( 'wp_enqueue_scripts', 'mytheme_scripts' );
 /**
  * Enqueue Dashicons style for frontend use
