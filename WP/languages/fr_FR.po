@@ -78,12 +78,12 @@ msgstr ""
 #: lib/activation.php:64 lib/activation.php:76 lib/activation.php:88
 #: lib/activation.php:100
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: lib/activation.php:65 lib/activation.php:77 lib/activation.php:89
 #: lib/activation.php:101
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: lib/activation.php:67
 msgid "Create a page called Home and set it to be the static front page"
@@ -280,7 +280,7 @@ msgstr ""
 
 #: lib/extras.php:768
 msgid "Project's list where a user is author. Write slugs here."
-msgstr ""
+msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
 #: lib/extras.php:769
 msgid "séparés par une virgule"
@@ -345,7 +345,7 @@ msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
 
 #: taxonomy-projets.php:102 template-page-accueil.php:24
 msgid "Filter by categories: "
-msgstr ""
+msgstr "Filtrer par catégories : "
 
 #: taxonomy-projets.php:112
 msgid "Add a post"
@@ -353,27 +353,27 @@ msgstr "Ajouter un post"
 
 #: taxonomy-projets.php:115
 msgid "Edit project contributors"
-msgstr ""
+msgstr "Éditer les contributeurs du projet"
 
 #: taxonomy-projets.php:149 templates/content-carte.php:24
 msgid "Post currently edited by "
-msgstr ""
+msgstr "Contenu édité par"
 
 #: template-page-accueil.php:32
 msgid "Order: "
-msgstr ""
+msgstr "Ordre : "
 
 #: template-page-accueil.php:36
 msgid "edited"
-msgstr ""
+msgstr "édité"
 
 #: template-page-accueil.php:39
 msgid "created"
-msgstr ""
+msgstr "créé"
 
 #: template-page-accueil.php:42
 msgid "alphabetical"
-msgstr ""
+msgstr "alphabétique"
 
 #: template-page-accueil.php:54 template-page-accueil.php:59
 msgid "Add a project"
@@ -389,20 +389,19 @@ msgstr "Ajouter le projet"
 
 #: template-page-accueil.php:164 templates/content-modules/meta.php:9
 msgid "Categories: "
-msgstr ""
+msgstr "Catégories :"
 
 #: template-page-accueil.php:210
-#, fuzzy
 msgid "Editor of this project"
-msgstr "Ce projet n'a pas encore de description."
+msgstr "Éditeur de ce projet"
 
 #: template-page-accueil.php:239 templates/content-modules/meta.php:74
 msgid "Edited: "
-msgstr ""
+msgstr "Édité le :"
 
 #: template-page-accueil.php:251 templates/content-modules/meta.php:63
 msgid "Created: "
-msgstr ""
+msgstr "Créé le :"
 
 #: templates/comments-modules/comment.php:4
 #, php-format
@@ -415,7 +414,7 @@ msgstr ""
 
 #: templates/comments-modules/comment.php:9
 msgid "Your comment is awaiting moderation."
-msgstr ""
+msgstr "Votre commentaire est en attente de modération."
 
 #: templates/comments-modules/comments.php:9
 #, php-format
@@ -447,27 +446,27 @@ msgstr "Valider les modifications"
 
 #: templates/content-modules/button-right.php:44
 msgid "Remove this post"
-msgstr ""
+msgstr "Supprimer ce contenu."
 
 #: templates/content-modules/liste_utilisateurs.php:4
 msgid "Edit contributors"
-msgstr ""
+msgstr "Éditer les contributeurs"
 
 #: templates/content-modules/liste_utilisateurs.php:7
 msgid "Add or remove other users who can contribute to this project"
-msgstr ""
+msgstr "Ajouter ou supprimer des contributeurs au projet."
 
 #: templates/content-modules/liste_utilisateurs.php:31
 msgid "Updating..."
-msgstr ""
+msgstr "Mise à jour en cours..."
 
 #: templates/content-modules/liste_utilisateurs.php:32
 msgid "Update"
-msgstr ""
+msgstr "Mise à jour"
 
 #: templates/content-modules/meta.php:25
 msgid "Edit categories"
-msgstr ""
+msgstr "Éditer les catégories"
 
 #: templates/content-modules/meta.php:27
 #, fuzzy
@@ -476,49 +475,48 @@ msgstr "Mode édition"
 
 #: templates/content-modules/meta.php:44
 msgid "Comments: "
-msgstr ""
+msgstr "Commentaires :"
 
 #: templates/content-modules/meta.php:48
 msgid "Add a comment"
-msgstr ""
+msgstr "Ajouter un commentaire"
 
 #: templates/content-modules/meta.php:48
 msgid "1 comment"
-msgstr ""
+msgstr "1 commentaire"
 
 #: templates/content-modules/meta.php:48
 #, php-format
 msgid "% comments"
-msgstr ""
+msgstr "% commentaires"
 
 #: templates/content-modules/meta.php:51
 msgid "Leave a comment"
-msgstr ""
+msgstr "Laisser un commentaire"
 
 #: templates/content-modules/meta.php:51
 msgid "1 Comment"
-msgstr ""
+msgstr "1 Commentaire"
 
 #: templates/content-modules/meta.php:51
 msgid "% Comments"
-msgstr ""
+msgstr "% Commentaires"
 
 #: templates/content-modules/meta.php:81
-#, fuzzy
 msgid "Edited on "
-msgstr "Mode édition"
+msgstr "Édité le "
 
 #: templates/content-modules/meta.php:83
 msgid "By"
-msgstr ""
+msgstr "Par"
 
 #: templates/content-modules/private-publish.php:14
 msgid "Make this private"
-msgstr "Passer en privé"
+msgstr "Passer ce contenu en privé"
 
 #: templates/content-modules/private-publish.php:37
 msgid "Make this public"
-msgstr "Passer en public"
+msgstr "Passer ce contenu en public"
 
 #: templates/header.php:15
 msgid "Toggle navigation"
@@ -534,7 +532,7 @@ msgstr "Mode édition"
 
 #: templates/header.php:93
 msgid "Get mails"
-msgstr ""
+msgstr "Récupérer les mails"
 
 #: templates/header.php:99
 msgid "Logout"
