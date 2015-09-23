@@ -52,6 +52,24 @@ function google_font(){
 add_action( 'wp_enqueue_scripts', 'google_font');
 
 
+// bloquer l'accès aux médias des autres
+add_filter( 'posts_where', 'hide_attachments_wpquery_where' );
+function hide_attachments_wpquery_where( $where ){
+	global $current_user;
+	if( !current_user_can( 'manage_options' ) ) {
+		if( is_user_logged_in() ){
+			if( isset( $_POST['action'] ) ){
+				// library query
+				if( $_POST['action'] == 'query-attachments' ){
+					$where .= ' AND post_author='.$current_user->data->ID;
+				}
+			}
+		}
+	}
+
+	return $where;
+}
+
 
 function doorbell_io() {
 	ob_start();
