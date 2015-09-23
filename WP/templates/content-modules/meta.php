@@ -1,5 +1,26 @@
 
 <?php
+	$auteurs = get_the_author();
+	if( !empty($auteurs) ) {
+		$htmlTags = '<div class="auteurs auteurs-list">';
+		$htmlTags .= '<div class="legende">';
+		$htmlTags .= __('Author: ', 'opendoc');
+		$htmlTags .= '</div>';
+		$htmlTags .= '<div class="contenu">';
+
+// 		foreach( $auteurs as $auteur) {
+			$authorName = $auteurs;
+			$htmlTags .= '<span class="auteur">';
+			$htmlTags .= $authorName;
+			$htmlTags .= '</span>';
+// 		}
+		$htmlTags .= '</div>';
+		$htmlTags .= '</div>';
+		echo $htmlTags;
+	}
+?>
+
+<?php
 
 	$tags = get_the_category();
 
@@ -83,14 +104,3 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 <!-- 	data-toggle="tooltip" data-placement="top" title="<?php _e('Edited on ', 'opendoc'); echo get_the_modified_date('d/m/Y'); ?> " data-toggle-tooltip-color="#293275" -->
 
 <!-- <p class="byline author vcard"><?php echo __('By', 'roots'); ?> <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" rel="author" class="fn"><?php echo get_the_author(); ?></a></p> -->
-
-<?php
-/*
-	$term_list = wp_get_post_terms( get_the_ID(), 'auteur');
-	if( !empty($term_list) ) {
-		echo '<div class="auteur">';
-		echo (array_pop( $term_list ) -> name);
-		echo '</div>';
-	}
-*/
-?>

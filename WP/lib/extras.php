@@ -459,7 +459,7 @@ function ajax_get_post_information()
 }
 
 
-// ajouter taxonomy
+// ajouter post pour un projet
 add_action( 'wp_ajax_create_private_post_with_tax', 'ajax_create_private_post_with_tax' );
 function ajax_create_private_post_with_tax()
 {
@@ -482,6 +482,7 @@ function ajax_create_private_post_with_tax()
 				);
 				$newpostID = wp_insert_post( $newpost);
 				wp_set_object_terms( $newpostID, $_POST['term'], 'projets');
+				wp_set_object_terms( $newpostID, $userid, 'auteur');
 	      echo get_permalink( $newpostID);
 	    }
     }
@@ -555,50 +556,56 @@ function ajax_add_tax_term()
 
 			if ( !current_user_can( 'edit_posts' )){ die(); }
 
-	    $projet = $_POST['tax_term'];
-			wp_insert_term(
-        $projet,
-        'projets'
-			);
-			$projetslug = get_term_by( 'name', $projet, 'projets')->slug;
+	    $leprojet = $_POST['tax_term'];
+			$leuserid = $_POST['userid'];
+			$leaddDescription = $_POST['add-description'];
 
-			// s'il y a un userid, ajouter ce projet à cet userid
-			if( !empty($_POST['userid'])) {
-				$userid = $_POST['userid'];
-
-				//récupération du slug
-				$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
-				$userProjects = explode(',', $hasProjects);
-
-				array_push( $userProjects, $projetslug);
-				$hasProjects = implode(",", $userProjects);
-				update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
-			}
-
-			// et créer un post description pour ce projet
-			if( !empty($_POST['add-description'])) {
-
-				if( $_POST['add-description'] == true) {
-
-					error_log('ajout projet description');
-
-					$newpost = array(
-						'post_title'					=> __('Description', 'opendoc'),
-						'post_content'				=> __('No content for this project yet.', 'opendoc'),
-						'post_status'					=> 'publish',
-						'post_author'					=> $userid,
-						'tags_input'					=> 'featured'
-					);
-					$newpostID = wp_insert_post( $newpost);
-					wp_set_object_terms( $newpostID, $projetslug, 'projets');
-				}
-			}
+			addTermAndCreateDescription( $leprojet, $leuserid, $leaddDescription);
 
     }
 
     die();
 }
 
+function addTermAndCreateDescription( $projet, $userid, $addDescription) {
+
+	wp_insert_term(
+    $projet,
+    'projets'
+	);
+	$projetslug = get_term_by( 'name', $projet, 'projets')->slug;
+
+	// s'il y a un userid, ajouter ce projet à cet userid
+	if( !empty($userid)) {
+		//récupération du slug
+		$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
+		$userProjects = explode(',', $hasProjects);
+		array_push( $userProjects, $projetslug);
+		$hasProjects = implode(",", $userProjects);
+		update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
+	}
+
+	// et créer un post description pour ce projet
+	if( !empty($addDescription)) {
+
+		if( $addDescription == true) {
+
+			error_log('ajout projet description');
+
+			$newpost = array(
+				'post_title'					=> __('Description', 'opendoc'),
+				'post_content'				=> __('No content for this project yet.', 'opendoc'),
+				'post_status'					=> 'publish',
+				'post_author'					=> $userid,
+				'tags_input'					=> 'featured'
+			);
+			$newpostID = wp_insert_post( $newpost);
+			wp_set_object_terms( $newpostID, $projetslug, 'projets');
+			wp_set_object_terms( $newpostID, $userid, 'auteur');
+		}
+	}
+
+}
 
 
 // ajouter et supprimer des éditeurs à un projet (en mettant à jour un champ meta user '_opendoc_user_projets'

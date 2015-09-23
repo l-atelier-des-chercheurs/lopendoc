@@ -1,5 +1,5 @@
 <?php
-	$terms = get_the_terms( get_the_ID(), 'projets');
+	$terms = wp_get_post_terms( get_the_ID(), 'projets');
 	$term = array_pop( $terms);
 ?>
 
