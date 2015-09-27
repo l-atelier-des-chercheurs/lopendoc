@@ -64,9 +64,8 @@
 				$post = get_post($descriptionPostID);
 				?>
 			<div class="descriptionContainer">
-					<?php get_template_part('templates/content-carte'); ?>
-				</div>
-
+				<?php get_template_part('templates/content-carte'); ?>
+			</div>
 		<?php
 		} else {
 			?>

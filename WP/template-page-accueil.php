@@ -49,12 +49,22 @@ Template Name: Accueil avec cartes
 			?>
 
 
-		<div class="topIcons">
-			<div class="button add-project">
-				<?php _e('Add a project', 'opendoc'); ?>
+		<div class="module-large topIcons">
+			<div class="legende">
+		  	<?php	_e("Actions: ", 'opendoc'); ?>
 			</div>
+			<div class="contenu">
+				<button class="button add-project" data-open-popover="nouveauProjet">
+					<?php _e('Add a project', 'opendoc'); ?>
+				</button>
+				<button class="button open-search" data-open-popover="nouveauProjet">
+					<?php _e('Search', 'opendoc'); ?>
+				</button>
+			</div>
+
 		</div>
-		<div class="nouveauProjet">
+
+		<div class="popoverContent nouveauProjet">
 			<h3>
 				<?php _e('Add a project', 'opendoc'); ?>
 			</h3>
@@ -67,6 +77,14 @@ Template Name: Accueil avec cartes
 				<?php _e('Add the project', 'opendoc'); ?>
       </button>
 		</div>
+
+		<div class="popoverContent champRecherche">
+			<h3>
+				<?php _e('Search on l\'opendoc', 'opendoc'); ?>
+			</h3>
+			<?php get_template_part('templates/searchform'); ?>
+		</div>
+
 		<?php
 	}
 
@@ -78,7 +96,6 @@ Template Name: Accueil avec cartes
  );
  $terms = get_terms( $tax, $tax_args);
  $count = count($terms);
-
 ?>
 	<div id="colonnesContainer" class="filter-elements">
 <?php
@@ -129,6 +146,7 @@ Template Name: Accueil avec cartes
 			    $term_link = get_term_link($term->slug, $tax);
 			    $term_name = $term->name;
 			    $term_slug = $term->slug;
+			    $term_count = $term->count;
 
 			    // calculer lastpostdate en partant de now
 			    $nowts = current_time('U');
@@ -139,11 +157,12 @@ Template Name: Accueil avec cartes
 		?>
 
 		<div class="colonneswrappers make-it-col"
-			<?php if( $lastPostDate != '') { echo "data-lastpostdate='$lastPostDate'"; } ?>
-			<?php if( $timeSinceLastPostDate != '') { echo "data-timesincelastpostdate='$timeSinceLastPostDate'"; } ?>
-			<?php if( $timeCreated != '') { echo "data-timecreated='$timeCreated'"; } ?>
-			<?php if( $term_name != '') { echo "data-name='$term_name'"; } ?>
-			<?php if( has_post_thumbnail()) { ?> data-hasthumb <?php } ?>
+			<?php if( $lastPostDate != '') {						echo " data-lastpostdate='$lastPostDate'"; } ?>
+			<?php if( $timeSinceLastPostDate != '') { 	echo " data-timesincelastpostdate='$timeSinceLastPostDate'"; } ?>
+			<?php if( $timeCreated != '') { 					 	echo " data-timecreated='$timeCreated'"; } ?>
+			<?php if( $term_name != '') { 							echo " data-name='" . strtoupper( $term_name) . "'"; } ?>
+			<?php if( has_post_thumbnail()) { 	 				echo " data-hasthumb "; } ?>
+			<?php if( $term_count != '') { 							echo " data-count='" . $term_count . "'"; } ?>
 				>
 			<section  class="colonnes" >
 

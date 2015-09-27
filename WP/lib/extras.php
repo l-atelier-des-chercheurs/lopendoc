@@ -47,7 +47,7 @@ add_action( 'admin_init', 'blockusers_init' );
 // custom typeface
 function google_font(){
 	//echo "<link href='http://fonts.googleapis.com/css?family=Fira+Sans:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>","\n";
-	echo "<link href='http://fonts.googleapis.com/css?family=Fira+Sans:300,400' rel='stylesheet' type='text/css'>","\n";
+	echo "<link href='http://fonts.googleapis.com/css?family=Fira+Sans:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>","\n";
 }
 add_action( 'wp_enqueue_scripts', 'google_font');
 
@@ -593,7 +593,7 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 			error_log('ajout projet description');
 
 			$newpost = array(
-				'post_title'					=> __('Description', 'opendoc'),
+				'post_title'					=> $projet,
 				'post_content'				=> __('No content for this project yet.', 'opendoc'),
 				'post_status'					=> 'publish',
 				'post_author'					=> $userid,

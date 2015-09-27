@@ -1619,6 +1619,23 @@ var Roots = {
 				});
 			});
 
+			///////////////////////////////////////////////// ouvrir le champ de recherche /////////////////////////////////////////////////
+
+			$(".open-search").click(function() {
+
+				// ouvrir un champ formulaire
+				$("body").addClass("is-overlaid");
+
+				var newProjectInputField = $(".champRecherche").clone(true);
+				fillPopOver( newProjectInputField, $(this), 300, 240 );
+
+				$(".popover .champRecherche button").click( function(e) {
+
+					$popover = $(this).closest(".popover");
+					sendActionToAnalytics("Champ de recherche");
+
+				});
+			});
 
 		}
 	},
