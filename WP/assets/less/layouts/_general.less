@@ -581,12 +581,24 @@ label#doorbell-feedback-label {
 	margin-bottom: 	@grid-gutter-width*2;
 }
 
+.topIcons {
+	.make-md-column-offset(3);
+	.make-md-column(6);
+	margin-bottom: 	@grid-gutter-width/2;
+	padding: 0;
+	text-align: left;
 
+}
 
 .topIcons	.contenu button {
 	display: inline-block;
 	.button-style;
 	.bxshd-buttons;
+
+	&:first-child {
+		margin-left: 	0;
+	}
+
 }
 
 .refresh-postie {
@@ -760,7 +772,6 @@ body {
 
 .module-large {
 
-	.make-md-column-offset(2);
 	.make-md-column(8);
 
 	text-align: left;
@@ -887,13 +898,6 @@ body {
 
 	margin-top: @grid-gutter-width;
 
-	.topIcons {
-		.make-md-column-offset(3);
-		.make-md-column(6);
-		margin-bottom: 	@grid-gutter-width/2;
-		padding: 0;
-		text-align: center;
-	}
 
 	#colonnesContainer {
 		.make-md-column(12);
@@ -1943,6 +1947,12 @@ body {
 		color: @cbleue;
 	}
 
+	.close-comments {
+		position: absolute;
+		right: @grid-gutter-width/2;
+		top: @grid-gutter-width/2;
+	}
+
 
 	.comment-respond {
 
@@ -1953,15 +1963,15 @@ body {
 	    padding: @grid-gutter-width/2;
 			margin-top: 	@grid-gutter-width/2;
 
-	    border-bottom: 2px solid #176bb4;
+	    border-bottom: 2px solid @cbleue;
 
-		  -moz-animation: flash 1s ease-out;
+		  -moz-animation: flash .6s ease-out;
 		  -moz-animation-iteration-count: 1;
 
-		  -webkit-animation: flash 1s ease-out;
+		  -webkit-animation: flash .6s ease-out;
 		  -webkit-animation-iteration-count: 1;
 
-		  -ms-animation: flash 1s ease-out;
+		  -ms-animation: flash .6s ease-out;
 		  -ms-animation-iteration-count: 1;
 
 
@@ -1972,7 +1982,7 @@ body {
 }
 
 @-moz-keyframes flash {
-    00% { background-color: fade(@cbleue, 20%);}
+    0% { background-color: fade(@cbleue, 20%);}
     100% {background-color:none;}
 }
 
@@ -2008,6 +2018,11 @@ body {
 
 				}
 			}
+
+			.form-allowed-tags {
+				display: none;
+			}
+
 			.form-submit {
 				text-align: right;
 				.submit {
@@ -2097,6 +2112,7 @@ body {
 			.comment-author {
 				.legende;
 				margin: 0;
+				line-height: 16px;
 
 				img {
 					display: none;
@@ -2105,6 +2121,7 @@ body {
 
 			.comment-metadata {
 				text-align: right;
+				line-height: 16px;
 
 				> * {
 					.contenu-with-border-left;

@@ -106,12 +106,17 @@
 		<?php
 		if ( user_can_edit() ) {
 			?>
-			<div class="topIcons">
-				<div class="button add-post">
-					<?php _e('Add a post', 'opendoc'); ?>
+			<div class="module-large topIcons">
+				<div class="legende">
+			  	<?php	_e("Actions: ", 'opendoc'); ?>
 				</div>
-				<div class="button edit-authors">
-					<?php _e('Edit project contributors', 'opendoc'); ?>
+				<div class="contenu">
+					<button class="button add-post">
+						<?php _e('Add a post', 'opendoc'); ?>
+					</button>
+					<button class="button edit-authors">
+						<?php _e('Edit project contributors', 'opendoc'); ?>
+					</button>
 				</div>
 			</div>
 			<?php

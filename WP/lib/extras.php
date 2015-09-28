@@ -967,12 +967,16 @@ class opendoc_walker extends Walker_Comment {
 
 
 					<?php
+/*
 						if( $args['can_spam'] === "true") {
 					?>
 					<button class='send-to-spam' data-commentID='<?php comment_ID(); ?>'>
 						<?php _e( 'Spam', 'opendoc'); ?>
 					</button>
-					<?php } ?>
+					<?php }
+
+*/
+					?>
 
 					<?php edit_comment_link('<p class="comment-meta-item edit-link">Edit this comment</p>','',''); ?>
 

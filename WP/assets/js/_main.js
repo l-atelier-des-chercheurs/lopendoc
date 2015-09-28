@@ -1021,12 +1021,24 @@ jQuery.fn.post_view_routine = function(){
 		$thisPost.find(".entry-footer").addClass("is-loading");
 		var pageLink = $thisPost.attr("data-singleurl") + "?comments=show";
 
+    $('html, body').animate({
+        scrollTop: $thisPost.find(".entry-footer").offset().top - $(".banner").height() * 1.5
+    }, 600);
+
 		$.get( pageLink, function( data ) {
 			$data = $(data);
 			var $thisContent = $data.find('.entry-footer').html();
 			$thisFooter = $thisPost.find(".entry-footer");
 
 			$thisFooter.removeClass("is-loading").empty().html($thisContent);
+
+			// fermer les commentaires
+			$(".close-comments").bind("tap", function() {
+				$(this).closest(".comments").fadeOut(400, function() {
+					$(this).closest(".entry-footer").empty();
+				});
+
+			});
 
 			// ajouter lien vers spam
 			$(".send-to-spam").bind("tap", function() {

@@ -8,7 +8,7 @@ Template Name: Accueil avec cartes
 
 ?>
 
-
+<section class="presentationActions">
 	<div class='colTitle'>
 		<h1>
 			<?php echo roots_title( ); ?>
@@ -87,6 +87,9 @@ Template Name: Accueil avec cartes
 
 		<?php
 	}
+	?>
+</section>
+	<?php
 
  $tax = 'projets';
 	 $tax_args = array(
@@ -97,7 +100,7 @@ Template Name: Accueil avec cartes
  $terms = get_terms( $tax, $tax_args);
  $count = count($terms);
 ?>
-	<div id="colonnesContainer" class="filter-elements">
+	<section id="colonnesContainer" class="filter-elements grilleProjets">
 <?php
 
  if ( $count > 0 ){
@@ -297,4 +300,4 @@ Template Name: Accueil avec cartes
 	}
 }
 ?>
-</div>
+</section>
