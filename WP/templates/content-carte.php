@@ -43,11 +43,19 @@
 			</div>
 		</div>
 
-		<?php if( has_post_thumbnail() ) { ?>
-			<div class="post-thumbnail">
-				<?php the_post_thumbnail('medium'); ?>
-			</div>
-		<?php } ?>
+		<?php if( has_post_thumbnail() ) {
+			$large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'original' );
+			echo '<div class="post-thumbnail">';
+
+				if( is_tax()) {
+					echo '<a href="' . $large_image_url[0] . '" title="' . the_title_attribute( 'echo=0' ) . '" target="_blank">';
+				}
+					the_post_thumbnail( 'medium' );
+				if( is_tax()) {
+					echo '</a>';
+				}
+			echo '</div>';
+		} ?>
 
 		<footer class="entry-footer">
 			<?php

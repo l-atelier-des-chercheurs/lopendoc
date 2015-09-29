@@ -233,6 +233,13 @@ function tax_tag($post) {
 	  EchoInfo( "Ajout au post " . $post['ID'] );
 	  EchoInfo( "Du projet " . $project );
 	  EchoInfo( "##" . $project . "##" );
+
+		error_log( "le terme existe t'il ? " . term_exists($project, 'projets'));
+		$term = term_exists($project, 'projets');
+		if( $term === 0 || $term === null) {
+			addTermAndCreateDescription( $project, $auteur, true);
+		}
+
 		wp_set_object_terms( $post['ID'], array($project), 'projets');
 	  DebugEcho( "Vérification du post ---" );
 	  DebugEcho( $post );

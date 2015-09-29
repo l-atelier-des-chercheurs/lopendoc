@@ -75,6 +75,15 @@ jQuery.fn.the_filters = function(){
 				self.updateIsotope();
 			});
 
+			// ouverture du menu filtre au click
+			$(".open-filters").bind("tap", function() {
+				if( $(".main").attr("data-filters") !== "show") {
+					$(".main").attr("data-filters", "show");
+				} else {
+					$(".main").attr("data-filters", "");
+				}
+			});
+
 			// tap sur le tag d'un projet
 			$(".colonnes .category-term").bind("tap", function() {
 				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
@@ -201,11 +210,11 @@ jQuery.fn.the_filters = function(){
 	this.updateIsotope = function() {
 
 		if( $(".colonneswrappers.is-shown").length > 0) {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 				filter: '.is-shown'
 			});
 		} else {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 				filter: ''
 			});
 		}
@@ -238,17 +247,17 @@ jQuery.fn.sort_items = function(){
 
 	console.log( "sorttype L " + sortType);
 		if( sortType === "edited") {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 			  sortBy : ['edited', 'titreproj', 'created']
 			});
 		} else
 		if( sortType === "ab") {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 			  sortBy : ['titreproj', 'edited', 'created']
 			});
 		} else
 		if( sortType === "created") {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 			  sortBy : ['created', 'edited', 'titreproj']
 			});
 		}
@@ -257,6 +266,46 @@ jQuery.fn.sort_items = function(){
 	this.init();
 };
 
+
+jQuery.fn.fixedUI = function(){
+	var self = this;
+
+	this.init = function(){
+		if($(this.selector).length){
+
+			console.log("fixedUI start");
+			//fix lateral filter and gallery on scrolling
+			$(window).on('scroll', function(){
+				jshint = (!window.requestAnimationFrame) ? self.fixGallery() : window.requestAnimationFrame(self.fixGallery);
+			});
+
+		}
+
+	};
+
+	this.fixGallery = function() {
+		var offsetTop = $('.main').offset().top;
+		var	scrollTop = $(window).scrollTop();
+		console.log("fixGallery");
+		jshint = ( scrollTop >= offsetTop ) ? $('.main').addClass('is-fixed') : $('.main').removeClass('is-fixed');
+	};
+
+	this.init();
+};
+
+
+function createTimeline() {
+
+
+	var navbarContainer = d3.select( $(".banner")[0]);
+
+	var makeTimeline = navbarContainer.append("svg")
+																	.attr("width", "95%")
+																	.attr("margin-left", "2.5%")
+																	.attr("height","20px")
+																	.attr("display", "block")
+																	.attr("class", "timelineContainer")
+																	.attr("style", "overflow:visible; bottom:-14px; position: absolute")
 
 function jumpTo(index){
 	$(window).scrollTop($('.postContainer:eq('+index+')').offset().top - 100, 300);
@@ -1100,12 +1149,24 @@ jQuery.fn.post_view_routine = function(){
 		$thisPost.find(".entry-footer").addClass("is-loading");
 		var pageLink = $thisPost.attr("data-singleurl") + "?comments=show";
 
+    $('html, body').animate({
+        scrollTop: $thisPost.find(".entry-footer").offset().top - $(".banner").height() * 1.5
+    }, 600);
+
 		$.get( pageLink, function( data ) {
 			$data = $(data);
 			var $thisContent = $data.find('.entry-footer').html();
 			$thisFooter = $thisPost.find(".entry-footer");
 
 			$thisFooter.removeClass("is-loading").empty().html($thisContent);
+
+			// fermer les commentaires
+			$(".close-comments").bind("tap", function() {
+				$(this).closest(".comments").fadeOut(400, function() {
+					$(this).closest(".entry-footer").empty();
+				});
+
+			});
 
 			// ajouter lien vers spam
 			$(".send-to-spam").bind("tap", function() {
@@ -1419,7 +1480,7 @@ var Roots = {
 			}
 
 			$(".post").post_view_routine();
-			initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
+			//initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
 
 			createCustomFavicon();
 
@@ -1635,7 +1696,7 @@ var Roots = {
 			  $("body").addClass("is-loaded");
 
 
-				var pckry = $('#colonnesContainer').isotope({
+				var pckry = $('#colonnesContainer .colonnesContainerInside').isotope({
 				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
 				  percentPosition: true,
@@ -1653,7 +1714,7 @@ var Roots = {
 					$(".sort-list .contenu").sort_items();
 				}
 
-				// permettre de pinner les éléments
+				$(".main").fixedUI();
 
 
 			}, 500);
@@ -1698,6 +1759,23 @@ var Roots = {
 				});
 			});
 
+			///////////////////////////////////////////////// ouvrir le champ de recherche /////////////////////////////////////////////////
+
+			$(".open-search").click(function() {
+
+				// ouvrir un champ formulaire
+				$("body").addClass("is-overlaid");
+
+				var newProjectInputField = $(".champRecherche").clone(true);
+				fillPopOver( newProjectInputField, $(this), 300, 240 );
+
+				$(".popover .champRecherche button").click( function(e) {
+
+					$popover = $(this).closest(".popover");
+					sendActionToAnalytics("Champ de recherche");
+
+				});
+			});
 
 		}
 	},

@@ -53,20 +53,20 @@
 		?>
 	<article class="projetContainer taxProj filter-elements" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
 
+<!--
 		<div class='colTitle'>
 			<h1 class="entry-title">
 				<?php echo roots_title( ); ?>
 			</h1>
 		</div>
+-->
 		<?php
-
-		if( $descriptionPostID != -1) {
+			if( $descriptionPostID != -1) {
 				$post = get_post($descriptionPostID);
 				?>
 			<div class="descriptionContainer">
-					<?php get_template_part('templates/content-carte'); ?>
-				</div>
-
+				<?php get_template_part('templates/content-carte'); ?>
+			</div>
 		<?php
 		} else {
 			?>
@@ -107,12 +107,17 @@
 		<?php
 		if ( user_can_edit() ) {
 			?>
-			<div class="topIcons">
-				<div class="button add-post">
-					<?php _e('Add a post', 'opendoc'); ?>
+			<div class="module-large topIcons">
+				<div class="legende">
+			  	<?php	_e("Actions: ", 'opendoc'); ?>
 				</div>
-				<div class="button edit-authors">
-					<?php _e('Edit project contributors', 'opendoc'); ?>
+				<div class="contenu">
+					<button class="button add-post">
+						<?php _e('Add a post', 'opendoc'); ?>
+					</button>
+					<button class="button edit-authors">
+						<?php _e('Edit project contributors', 'opendoc'); ?>
+					</button>
 				</div>
 			</div>
 			<?php
