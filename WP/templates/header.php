@@ -5,7 +5,7 @@
   if( empty($secondaireColor) ) $secondaireColor =  "#FCB248";
 ?>
 
-<header class="banner navbar navbar-default navbar-fixed-top" role="banner" style="">
+<header class="banner navbar navbar-default" role="banner" style="">
   <div class="navbar-container">
 	  <div class="navbar-row">
 	    <div class="navbar-header">
@@ -102,7 +102,6 @@
 								  <?php
 								}
 								?>
-						  </ul>
 						</div>
 					</div>
 	    </nav>

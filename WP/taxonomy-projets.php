@@ -53,14 +53,15 @@
 		?>
 	<article class="projetContainer taxProj filter-elements" data-taxonomy="<?php echo $tax; ?>" data-term="<?php echo $term; ?>">
 
+<!--
 		<div class='colTitle'>
 			<h1 class="entry-title">
 				<?php echo roots_title( ); ?>
 			</h1>
 		</div>
+-->
 		<?php
-
-		if( $descriptionPostID != -1) {
+			if( $descriptionPostID != -1) {
 				$post = get_post($descriptionPostID);
 				?>
 			<div class="descriptionContainer">

@@ -954,7 +954,7 @@ class opendoc_walker extends Walker_Comment {
 
 		<article <?php comment_class(empty( $args['has_children'] ) ? '' :'parent') ?> id="comment-<?php comment_ID() ?>" itemprop="comment" itemscope itemtype="http://schema.org/Comment">
 
-		<div class="comment-body">
+		<div class="comment-body" >
 
 			<div class="comment-meta post-meta" role="complementary">
 				<div class="comment-author">

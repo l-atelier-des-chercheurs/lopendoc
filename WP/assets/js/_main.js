@@ -75,6 +75,15 @@ jQuery.fn.the_filters = function(){
 				self.updateIsotope();
 			});
 
+			// ouverture du menu filtre au click
+			$(".open-filters").bind("tap", function() {
+				if( $(".main").attr("data-filters") !== "show") {
+					$(".main").attr("data-filters", "show");
+				} else {
+					$(".main").attr("data-filters", "");
+				}
+			});
+
 			// tap sur le tag d'un projet
 			$(".colonnes .category-term").bind("tap", function() {
 				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
@@ -201,11 +210,11 @@ jQuery.fn.the_filters = function(){
 	this.updateIsotope = function() {
 
 		if( $(".colonneswrappers.is-shown").length > 0) {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 				filter: '.is-shown'
 			});
 		} else {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 				filter: ''
 			});
 		}
@@ -238,17 +247,17 @@ jQuery.fn.sort_items = function(){
 
 	console.log( "sorttype L " + sortType);
 		if( sortType === "edited") {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 			  sortBy : ['edited', 'titreproj', 'created']
 			});
 		} else
 		if( sortType === "ab") {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 			  sortBy : ['titreproj', 'edited', 'created']
 			});
 		} else
 		if( sortType === "created") {
-			$('#colonnesContainer').isotope({
+			$('#colonnesContainer .colonnesContainerInside').isotope({
 			  sortBy : ['created', 'edited', 'titreproj']
 			});
 		}
@@ -256,6 +265,33 @@ jQuery.fn.sort_items = function(){
 
 	this.init();
 };
+
+jQuery.fn.fixedUI = function(){
+	var self = this;
+
+	this.init = function(){
+		if($(this.selector).length){
+
+			console.log("fixedUI start");
+			//fix lateral filter and gallery on scrolling
+			$(window).on('scroll', function(){
+				jshint = (!window.requestAnimationFrame) ? self.fixGallery() : window.requestAnimationFrame(self.fixGallery);
+			});
+
+		}
+
+	};
+
+	this.fixGallery = function() {
+		var offsetTop = $('.main').offset().top;
+		var	scrollTop = $(window).scrollTop();
+		console.log("fixGallery");
+		jshint = ( scrollTop >= offsetTop ) ? $('.main').addClass('is-fixed') : $('.main').removeClass('is-fixed');
+	};
+
+	this.init();
+};
+
 
 function createTimeline() {
 
@@ -1352,7 +1388,7 @@ var Roots = {
 			}
 
 			$(".post").post_view_routine();
-			initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
+			//initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
 
 			createCustomFavicon();
 
@@ -1568,7 +1604,7 @@ var Roots = {
 			  $("body").addClass("is-loaded");
 
 
-				var pckry = $('#colonnesContainer').isotope({
+				var pckry = $('#colonnesContainer .colonnesContainerInside').isotope({
 				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
 				  percentPosition: true,
@@ -1586,7 +1622,7 @@ var Roots = {
 					$(".sort-list .contenu").sort_items();
 				}
 
-				// permettre de pinner les éléments
+				$(".main").fixedUI();
 
 
 			}, 500);

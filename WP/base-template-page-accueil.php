@@ -49,11 +49,7 @@
     get_template_part('templates/header');
   ?>
 
-  <div class="wrap" role="document">
-
-    <main class="main" role="main">
-      <?php include roots_template_path(); ?>
-    </main><!-- /.main -->
+	  <?php include roots_template_path(); ?>
 
     <?php
       if (roots_display_sidebar()) : ?>
