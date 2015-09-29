@@ -272,6 +272,7 @@ jQuery.fn.fixedUI = function(){
 
 	this.init = function(){
 		if($(this.selector).length){
+			self.fixGallery();
 
 			console.log("fixedUI start");
 			//fix lateral filter and gallery on scrolling
@@ -314,8 +315,8 @@ function createTimeline() {
 
 	var options = {
 		radius : {
-			min: 10,
-			max: 20
+			min: 6,
+			max: 10
 		},
 	};
 
@@ -344,16 +345,23 @@ function createTimeline() {
 
 
 	// min/max time
-	var time = {};
-	$("#projetContainer").find(".postContainer").last().each(function(){
-		timeinISO = new Date($(this).find("time").attr("datetime"));
-		time.max = timeinISO.getTime();
-	});
+	var now = new Date();
+	var time = {
+		min : now.getTime(),
+		max : 0,
+	};
 
-	$("#projetContainer").find(".postContainer").first().each(function(){
-		timeinISO = new Date($(this).find("time").attr("datetime"));
-		time.min = timeinISO.getTime();
-	});
+	if($("#projetContainer").find(".postContainer").length > 1){
+		$("#projetContainer").find(".postContainer").last().each(function(){
+			timeinISO = new Date($(this).find("time").attr("datetime"));
+			time.max = timeinISO.getTime();
+		});
+
+		$("#projetContainer").find(".postContainer").first().each(function(){
+			timeinISO = new Date($(this).find("time").attr("datetime"));
+			time.min = timeinISO.getTime();
+		});
+	}
 
 
 
@@ -363,6 +371,7 @@ function createTimeline() {
 		.attr("x", 0)
 		.attr("y", 6)
 		.attr("width", "0%")
+		.attr("fill", "#F2682C")
 		.attr("height", 4);
 
 
@@ -383,7 +392,7 @@ function createTimeline() {
 
 		var last_circle_cx = parseInt( $(".timeline-circle").last().attr('cx') ) || -1;
 
-		if(last_circle_cx !== timeRangeFrom0to100){
+		// if(last_circle_cx !== timeRangeFrom0to100){
 			circles_position_y = 8;
 
 			makeTimeline.append("circle")
@@ -406,6 +415,7 @@ function createTimeline() {
 				})
 				.attr('data-title', t.find('.entry-title').text())
 				.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
+				.attr('data-toggle-tooltip-color', (dataStatus === "publish") ? '#293275' : '#fbb41d')
 				.attr('class', 'timeline-circle')
 				.attr("data-status", dataStatus)
 				.attr("r", 0)
@@ -419,54 +429,54 @@ function createTimeline() {
 				.duration(300)
 				.ease("in-out")
 				.attr("r", options.radius.min);
-		}else{
-			circles_position_y += 10;
+		// }else{
+			// circles_position_y += 10;
 
-			makeTimeline.append("circle")
-				.on({
-					click : function(d){
-						jumpTo(index);
-					},
-					mouseover : function(d){
-						d3.select(this)
-							.transition()
-							.duration(300)
-							.attr("r", options.radius.max);
-					},
-					mouseleave : function(d){
-						d3.select(this)
-							.transition()
-							.duration(300)
-							.attr("r", options.radius.min);
-					},
-				})
-				.attr('class', 'timeline-circle')
-				.attr('data-title', t.find('.entry-title').text())
-				.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
-				.attr("data-status", dataStatus)
-				.attr("r", 0)
-				.attr("fill", fillColor)
-				.attr("style", "cursor: pointer")
-				.attr("stroke", "transparent")
-				.attr("cx", timeRangeFrom0to100 + "%")
-				.attr("cy", circles_position_y)
-				.transition()
-				.delay(function(){ return index * 150; })
-				.duration(300)
-				.ease("in-out")
-				.attr("r", options.radius.min);
-		}
+			// makeTimeline.append("circle")
+			// 	.on({
+			// 		click : function(d){
+			// 			jumpTo(index);
+			// 		},
+			// 		mouseover : function(d){
+			// 			d3.select(this)
+			// 				.transition()
+			// 				.duration(300)
+			// 				.attr("r", options.radius.max);
+			// 		},
+			// 		mouseleave : function(d){
+			// 			d3.select(this)
+			// 				.transition()
+			// 				.duration(300)
+			// 				.attr("r", options.radius.min);
+			// 		},
+			// 	})
+			// 	.attr('class', 'timeline-circle')
+			// 	.attr('data-title', t.find('.entry-title').text())
+			// 	.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
+			// 	.attr("data-status", dataStatus)
+			// 	.attr("r", 0)
+			// 	.attr("fill", fillColor)
+			// 	.attr("style", "cursor: pointer")
+			// 	.attr("stroke", "transparent")
+			// 	.attr("cx", timeRangeFrom0to100 + "%")
+			// 	.attr("cy", circles_position_y)
+			// 	.transition()
+			// 	.delay(function(){ return index * 150; })
+			// 	.duration(300)
+			// 	.ease("in-out")
+			// 	.attr("r", options.radius.min);
+		// }
 	});
 
 
 
 	// create popovers
 	$('.timelineContainer').find("circle").each(function(){
-		$(this).popover({
+		$(this).tooltip({
 			container: 'body',
-			template: '<div class="marie-popin popover" role="tooltip"><div class="arrow"></div><h3 class="marie-popin-title">'+$(this).attr('data-title')+'</h3><div class="marie-popin-content">'+ $(this).attr('data-content')+'</div></div>',
+			// template: '<div class="marie-popin" role="tooltip"><div class="arrow"></div><h3 class="marie-popin-title">'+$(this).attr('data-title')+'</h3><div class="marie-popin-content">'+ $(this).attr('data-content')+'</div></div>',
 			trigger: 'hover',
-			placement: 'bottom'
+			placement: 'top'
 		});
 	});
 
@@ -506,7 +516,7 @@ function createTimeline() {
 				makeTimeline.select(".repere")
 					.transition()
 					.duration(300)
-					.attr("fill", colorofNewCircle)
+					// .attr("fill", colorofNewCircle)
 					.attr("x", 0)
 					.attr("width", posXofNewCircle);
 			}
