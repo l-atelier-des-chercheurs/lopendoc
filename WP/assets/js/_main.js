@@ -272,6 +272,7 @@ jQuery.fn.fixedUI = function(){
 
 	this.init = function(){
 		if($(this.selector).length){
+			self.fixGallery();
 
 			console.log("fixedUI start");
 			//fix lateral filter and gallery on scrolling
@@ -311,8 +312,17 @@ jQuery.fn.reverse = [].reverse;
 
 
 function createTimeline() {
+
+	var options = {
+		radius : {
+			min: 6,
+			max: 10
+		},
+	};
+
+
 	// create object
-	var navbarContainer = d3.select( $(".banner")[0]);
+	var navbarContainer = d3.select( $("#colonnesOptionsTopBar")[0]);
 	var makeTimeline = navbarContainer
 		.append("svg")
 		.on({
@@ -322,29 +332,36 @@ function createTimeline() {
 				// });
 			},
 			mouseleave : function(d, i){
-					// $(this).find('circle').each(function(){
-					// 	$(this).attr('r', 2.5);
-					// });
+				// $(this).find('circle').each(function(){
+				// 	$(this).attr('r', 2.5);
+				// });
 			}
 		})
 		.attr("width", "95%")
 		.attr("height","20px")
 		.attr("class", "timelineContainer")
-		.attr("style", "overflow:visible; bottom:-14px; position: absolute; margin-left: 2.5%");
+		.attr("style", "left: 0; overflow:visible; bottom:-14px; position: absolute; margin-left: 2.5%");
 
 
 
 	// min/max time
-	var time = {};
-	$(".projetContainer").find(".postContainer").last().each(function(){
-		timeinISO = new Date($(this).find("time").attr("datetime"));
-		time.max = timeinISO.getTime();
-	});
+	var now = new Date();
+	var time = {
+		min : now.getTime(),
+		max : 0,
+	};
 
-	$(".projetContainer").find(".postContainer").first().each(function(){
-		timeinISO = new Date($(this).find("time").attr("datetime"));
-		time.min = timeinISO.getTime();
-	});
+	if($("#projetContainer").find(".postContainer").length > 1){
+		$("#projetContainer").find(".postContainer").last().each(function(){
+			timeinISO = new Date($(this).find("time").attr("datetime"));
+			time.max = timeinISO.getTime();
+		});
+
+		$("#projetContainer").find(".postContainer").first().each(function(){
+			timeinISO = new Date($(this).find("time").attr("datetime"));
+			time.min = timeinISO.getTime();
+		});
+	}
 
 
 
@@ -354,13 +371,14 @@ function createTimeline() {
 		.attr("x", 0)
 		.attr("y", 6)
 		.attr("width", "0%")
+		.attr("fill", "#F2682C")
 		.attr("height", 4);
 
 
 
 	// spawn circles
 	var circles_position_y;
-	$(".projetContainer").find(".postContainer").each(function(index){
+	$("#projetContainer").find(".postContainer").each(function(index){
 		t = $(this);
 
 		// get time range
@@ -374,7 +392,7 @@ function createTimeline() {
 
 		var last_circle_cx = parseInt( $(".timeline-circle").last().attr('cx') ) || -1;
 
-		if(last_circle_cx !== timeRangeFrom0to100){
+		// if(last_circle_cx !== timeRangeFrom0to100){
 			circles_position_y = 8;
 
 			makeTimeline.append("circle")
@@ -386,17 +404,18 @@ function createTimeline() {
 						d3.select(this)
 							.transition()
 							.duration(300)
-							.attr("r", 10);
+							.attr("r", options.radius.max);
 					},
 					mouseleave : function(d){
 						d3.select(this)
 							.transition()
 							.duration(300)
-							.attr("r", 4.5);
+							.attr("r", options.radius.min);
 					},
 				})
 				.attr('data-title', t.find('.entry-title').text())
 				.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
+				.attr('data-toggle-tooltip-color', (dataStatus === "publish") ? '#293275' : '#fbb41d')
 				.attr('class', 'timeline-circle')
 				.attr("data-status", dataStatus)
 				.attr("r", 0)
@@ -409,55 +428,55 @@ function createTimeline() {
 				.delay(function(){ return index * 150; })
 				.duration(300)
 				.ease("in-out")
-				.attr("r", 4.5);
-		}else{
-			circles_position_y += 10;
+				.attr("r", options.radius.min);
+		// }else{
+			// circles_position_y += 10;
 
-			makeTimeline.append("circle")
-				.on({
-					click : function(d){
-						jumpTo(index);
-					},
-					mouseover : function(d){
-						d3.select(this)
-							.transition()
-							.duration(300)
-							.attr("r", 10);
-					},
-					mouseleave : function(d){
-						d3.select(this)
-							.transition()
-							.duration(300)
-							.attr("r", 4.5);
-					},
-				})
-				.attr('class', 'timeline-circle')
-				.attr('data-title', t.find('.entry-title').text())
-				.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
-				.attr("data-status", dataStatus)
-				.attr("r", 0)
-				.attr("fill", fillColor)
-				.attr("style", "cursor: pointer")
-				.attr("stroke", "transparent")
-				.attr("cx", timeRangeFrom0to100 + "%")
-				.attr("cy", circles_position_y)
-				.transition()
-				.delay(function(){ return index * 150; })
-				.duration(300)
-				.ease("in-out")
-				.attr("r", 4.5);
-		}
+			// makeTimeline.append("circle")
+			// 	.on({
+			// 		click : function(d){
+			// 			jumpTo(index);
+			// 		},
+			// 		mouseover : function(d){
+			// 			d3.select(this)
+			// 				.transition()
+			// 				.duration(300)
+			// 				.attr("r", options.radius.max);
+			// 		},
+			// 		mouseleave : function(d){
+			// 			d3.select(this)
+			// 				.transition()
+			// 				.duration(300)
+			// 				.attr("r", options.radius.min);
+			// 		},
+			// 	})
+			// 	.attr('class', 'timeline-circle')
+			// 	.attr('data-title', t.find('.entry-title').text())
+			// 	.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
+			// 	.attr("data-status", dataStatus)
+			// 	.attr("r", 0)
+			// 	.attr("fill", fillColor)
+			// 	.attr("style", "cursor: pointer")
+			// 	.attr("stroke", "transparent")
+			// 	.attr("cx", timeRangeFrom0to100 + "%")
+			// 	.attr("cy", circles_position_y)
+			// 	.transition()
+			// 	.delay(function(){ return index * 150; })
+			// 	.duration(300)
+			// 	.ease("in-out")
+			// 	.attr("r", options.radius.min);
+		// }
 	});
 
 
 
 	// create popovers
 	$('.timelineContainer').find("circle").each(function(){
-		$(this).popover({
+		$(this).tooltip({
 			container: 'body',
-			template: '<div class="marie-popin" role="tooltip"><div class="arrow"></div><h3 class="marie-popin-title">'+$(this).attr('data-title')+'</h3><div class="marie-popin-content">'+ $(this).attr('data-content')+'</div></div>',
+			// template: '<div class="marie-popin" role="tooltip"><div class="arrow"></div><h3 class="marie-popin-title">'+$(this).attr('data-title')+'</h3><div class="marie-popin-content">'+ $(this).attr('data-content')+'</div></div>',
 			trigger: 'hover',
-			placement: 'bottom'
+			placement: 'top'
 		});
 	});
 
@@ -474,7 +493,7 @@ function createTimeline() {
 				.filter(function (d, i) { return i === ppostVisible;})
 				.transition()
 				.duration(300)
-				.attr("r", 4.5);
+				.attr("r", options.radius.min);
 
 			$('.postContainer').eq(postVisible).addClass("is-active");
 
@@ -491,13 +510,13 @@ function createTimeline() {
 				})
 				.transition()
 				.duration(300)
-				.attr("r", 8.5);
+				.attr("r", options.radius.max);
 
 			if(posXofNewCircle.length > 0){
 				makeTimeline.select(".repere")
 					.transition()
 					.duration(300)
-					.attr("fill", colorofNewCircle)
+					// .attr("fill", colorofNewCircle)
 					.attr("x", 0)
 					.attr("width", posXofNewCircle);
 			}
@@ -766,7 +785,7 @@ function newPost() {
 			console.log( "$thisContent");
 	//		console.log(  $thisContent );
 
-			$(".projetContainer .topIcons").after( $thisPost);
+			$("#projetContainer .topIcons").after( $thisPost);
 			$("body").removeClass("is-overlaid");
 
 			$thisPost.find(".post").post_view_routine();
@@ -1468,6 +1487,7 @@ var Roots = {
 			//initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
 
 			createCustomFavicon();
+			$(".main").fixedUI();
 
 			if( $(window).width() > 1024) {
 				animateLogo();
@@ -1699,7 +1719,7 @@ var Roots = {
 					$(".sort-list .contenu").sort_items();
 				}
 
-				$(".main").fixedUI();
+
 
 
 			}, 500);
