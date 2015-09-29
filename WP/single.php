@@ -5,7 +5,10 @@
 
 <div class='colTitle'>
 	<h1 class="entry-title">
-		<?php echo '<a href="' . get_term_link($term->slug, 'projets') . '">' . $term->name . '</a>,' ?>
+		<?php
+			if( has_term('projets') )
+				echo '<a href="' . get_term_link($term->slug, 'projets') . '">' . $term->name . '</a>,';
+			?>
 	</h1>
 </div>
 

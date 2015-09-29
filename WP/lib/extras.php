@@ -869,21 +869,23 @@ function redirect_single_to_tax() {
 	if ( is_single() ) {
 
 		$terms = get_the_terms( get_the_ID(), 'projets');
-		$term = array_pop($terms);
-		$projet = $term->slug;
+		if( $terms && ! is_wp_error( $terms ) ) {
+			$term = array_pop($terms);
+			$projet = $term->slug;
 
-		if (
-			(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
-			||
-			current_user_can('administrator')
-			||
-			(isset( $_GET['comments']) && $_GET['comments'] === 'show')
-		) {
-			return;
-    }
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				||
+				current_user_can('administrator')
+				||
+				(isset( $_GET['comments']) && $_GET['comments'] === 'show')
+			) {
+				return;
+	    }
 
-		wp_safe_redirect( get_term_link( $term));
-		exit;
+			wp_safe_redirect( get_term_link( $term));
+			exit;
+		}
 
   }
 }
