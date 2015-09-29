@@ -205,7 +205,6 @@ Template Name: Accueil avec cartes
 				<?php if( $timeCreated != '') { 					 	echo " data-timecreated='$timeCreated'"; } ?>
 				<?php if( $term_name != '') { 							echo " data-name='" . strtoupper( $term_name) . "'"; } ?>
 				<?php if( has_post_thumbnail()) { 	 				echo " data-hasthumb "; } ?>
-				<?php if( $term_count != '') { 							echo " data-count='" . $term_count . "'"; } ?>
 					>
 				<section  class="colonnes" >
 
@@ -293,30 +292,39 @@ Template Name: Accueil avec cartes
 
 										<?php if( $lastPostDateHuman !== '' || isset($hascategory) ) { ?>
 											<div class="entry-meta">
+												<?php if( $term_count !== '') { ?>
+													<div class="metablock">
+														<div class="legende">
+															<?php _e('Articles count:', 'opendoc'); ?>
+														</div>
+														<div class="contenu">
+															<?php echo $term_count; ?>
+														</div>
+													</div>
+												<?php } ?>
 												<?php if( $lastPostDateHuman !== '') { ?>
-													<time class="metablock half modDate edited" datetime="<?php echo get_the_modified_time('c'); ?>"
+													<div class="metablock half modDate edited"
 													data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_time(''); ?>" data-toggle-tooltip-color="#3C3C3C">
 														<div class="legende">
 															<?php _e('Edited: ', 'opendoc'); ?>
 														</div>
-														<div class="contenu">
+														<time class="contenu" datetime="<?php echo get_the_modified_time('c'); ?>">
 															<?php echo $lastPostDateHuman;?>
-														</div>
-													</time>
+														</time>
+													</div>
 												<?php } ?>
 												<?php if( $createdDateHuman !== '') { ?>
-													<time class="metablock half createdDate added" datetime="<?php echo get_the_time('c'); ?>"
+													<div class="metablock half createdDate added" datetime="<?php echo get_the_time('c'); ?>"
 													data-toggle="tooltip" data-placement="top" title="<?php echo get_the_time(''); ?> " data-toggle-tooltip-color="#3C3C3C"
 													>
 														<div class="legende">
 															<?php _e('Created: ', 'opendoc'); ?>
 														</div>
-														<div class="contenu">
+														<time class="contenu">
 															<?php echo $createdDateHuman;?>
-														</div>
-													</time>
+														</time>
+													</div>
 												<?php } ?>
-
 
 												<?php
 													if( isset($hascategory)) {
