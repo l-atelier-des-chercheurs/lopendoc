@@ -27,7 +27,14 @@ function roots_setup() {
 	update_option('thumbnail_size_w', 400);
 	update_option('thumbnail_size_h', '');
 
+// ajouter la possibilité d'ajouter des catégories pour les auteurs
+  $role = get_role( 'author' );
+  // This only works, because it accesses the class instance.
+  // would allow the author to edit others' posts for current theme only
+  $role->add_cap('manage_categories');
+
 }
+
 add_action('after_setup_theme', 'roots_setup');
 
 /**
@@ -43,6 +50,7 @@ function roots_widgets_init() {
     'after_title'   => '</h3>',
   ));
 
+/*
   register_sidebar(array(
     'name'          => __('Footer', 'roots'),
     'id'            => 'sidebar-footer',
@@ -51,5 +59,6 @@ function roots_widgets_init() {
     'before_title'  => '<h3>',
     'after_title'   => '</h3>',
   ));
+*/
 }
 add_action('widgets_init', 'roots_widgets_init');

@@ -225,6 +225,7 @@ set_post_thumbnail_size( 1200, 800, true );
 
 
 
+
 add_action( 'wp_enqueue_scripts', 'mytheme_scripts' );
 /**
  * Enqueue Dashicons style for frontend use
@@ -447,9 +448,9 @@ function ajax_create_private_post_with_tax()
     if(!empty($_POST['userid']) && !empty($_POST['term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 
-			$projet = $_POST['term'];
+			$projetslug = $_POST['term'];
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
 				||
 				current_user_can('administrator')
 			) {
@@ -478,9 +479,11 @@ function ajax_change_post_visibility()
     if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
 
-			$projet = wp_get_object_terms( $_POST['post_id'], 'projets');
+			$projet = array_pop(wp_get_object_terms( $_POST['post_id'], 'projets'));
+			$projetslug = $projet->slug;
+
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
 				||
 				current_user_can('administrator')
 			) {
@@ -506,10 +509,11 @@ function ajax_remove_post()
     if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 
-			$projet = wp_get_object_terms( $_POST['post_id'], 'projets');
+			$projet = array_pop(wp_get_object_terms( $_POST['post_id'], 'projets'));
+			$projetslug = $projet->slug;
 
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
 				||
 				current_user_can('administrator')
 			) {
@@ -545,9 +549,6 @@ function ajax_add_tax_term()
 				$userid = $_POST['userid'];
 
 				//récupération du slug
-
-
-
 				$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
 				$userProjects = explode(',', $hasProjects);
 
@@ -586,9 +587,11 @@ function ajax_add_tax_term()
 add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
 function ajax_edit_projet_authors()
 {
+/*
     error_log("debug ajout meta autheur");
     error_log("projet ? " . $_POST['projet']);
     error_log("validité nonce ? " . check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ));
+*/
 
     if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
@@ -673,13 +676,15 @@ function ajax_spam_comment()
     	 check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 
-			$projet = wp_get_object_terms( $_POST['post_id'], 'projets');
+			$projet = array_pop(wp_get_object_terms( $_POST['post_id'], 'projets'));
+			$projetslug = $projet->slug;
 
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
 				||
 				current_user_can('administrator')
 			) {
+
 
 				wp_set_comment_status( $_POST['comment_id'], 'spam');
 
@@ -720,6 +725,8 @@ function can_user_edit_project() {
 		return true;
 	}
 
+	$term = '';
+
   if( get_query_var( 'term' ) !== '') {
 		$term = get_query_var( 'term' );
 	}
@@ -753,8 +760,8 @@ function can_user_edit_this_project($projet) {
 		$GLOBALS["listeProjet"] = $userProjects;
 	}
 
-	error_log( "-- listeprojets " . $GLOBALS["listeProjet"]);
-	error_log( "-- projet in array listeprojets ? " . in_array( $projet, $GLOBALS["listeProjet"]));
+//	error_log( "-- listeprojets " . $GLOBALS["listeProjet"]);
+//	error_log( "-- projet in array listeprojets ? " . in_array( $projet, $GLOBALS["listeProjet"]));
 
 	if( $projet != '') {
 		if( in_array( $projet, $GLOBALS["listeProjet"])) {
