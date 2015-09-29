@@ -24,14 +24,14 @@ Template Name: Accueil avec cartes
 
 		<div class='sort-list'>
 			<div class="legende">
-		  	<?php	_e("sort projects by&nbsp;: ", 'opendoc'); ?>
+		  	<?php	_e("sort projects by: ", 'opendoc'); ?>
 			</div>
 			<div class="contenu">
 				<span class="sort-term" data-type="edited">
-			  	<?php	_e("edited", 'opendoc'); ?>
+			  	<?php	_e("last modified", 'opendoc'); ?>
 				</span>
 				<span class="sort-term" data-type="created">
-			  	<?php	_e("created", 'opendoc'); ?>
+			  	<?php	_e("last created", 'opendoc'); ?>
 				</span>
 				<span class="sort-term" data-type="ab">
 		  		<?php	_e("alphabetical", 'opendoc'); ?>
@@ -79,6 +79,7 @@ Template Name: Accueil avec cartes
 	<!-- barre sur le côté de la page -->
 	<div id="colonnesOptionsSidebar">
 
+<!--
 		<div class="module-side topIcons">
 			<div class="legende">
 		  	<?php	_e("Actions: ", 'opendoc'); ?>
@@ -94,11 +95,14 @@ Template Name: Accueil avec cartes
 				</button>
 			</div>
 		</div>
+-->
 
 		<div class="module-side category-list category-filters">
+<!--
 			<div class="legende">
 		  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
 			</div>
+-->
 			<div class="contenu">
 			</div>
 		</div>

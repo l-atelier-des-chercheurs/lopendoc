@@ -371,7 +371,7 @@ function createTimeline() {
 		.attr("x", 0)
 		.attr("y", 6)
 		.attr("width", "0%")
-		.attr("fill", "#F2682C")
+		.attr("fill", "#f2682c")
 		.attr("height", 4);
 
 
@@ -785,16 +785,16 @@ function newPost() {
 			console.log( "$thisContent");
 	//		console.log(  $thisContent );
 
-			$("#projetContainer .topIcons").after( $thisPost);
+			$("#projetContainer").prepend( $thisPost);
 			$("body").removeClass("is-overlaid");
 
 			$thisPost.find(".post").post_view_routine();
 
 			$thisPost.find(".button-right .edit-post").trigger("click");
 
-		$('html, body').animate({
-			scrollTop: $thisPost.offset().top - $(".banner").height() * 1.5
-		}, 600);
+			$('html, body').animate({
+				scrollTop: $thisPost.offset().top - $(".banner").height() * 1.5
+			}, 600);
 
 		});
 
@@ -1144,6 +1144,9 @@ jQuery.fn.post_view_routine = function(){
 			e.preventDefault();
 			$thisPost = $(this).parents(".post");
 			self.display_comments($thisPost);
+	    $('html, body').animate({
+	        scrollTop: $thisPost.find(".entry-footer").offset().top - $(".banner").height() * 1.5
+	    }, 600);
 			return false;
 		});
 	};
@@ -1153,9 +1156,6 @@ jQuery.fn.post_view_routine = function(){
 		$thisPost.find(".entry-footer").addClass("is-loading");
 		var pageLink = $thisPost.attr("data-singleurl") + "?comments=show";
 
-    $('html, body').animate({
-        scrollTop: $thisPost.find(".entry-footer").offset().top - $(".banner").height() * 1.5
-    }, 600);
 
 		$.get( pageLink, function( data ) {
 			$data = $(data);
@@ -1758,8 +1758,13 @@ var Roots = {
 						console.log( "Reload page ");
 						console.log( "Response = " + response);
 						$this = $(this);
-						window.top.location.reload(true);
 
+						if( JSON.parse(response) !== "success") {
+							$popover.find(".ajax-feedback").remove();
+							$popover.find("#projectName").after( "<div class='ajax-feedback'>" + JSON.parse(response) + "</div>");
+						} else {
+							window.top.location.reload(true);
+						}
 					});
 				});
 			});

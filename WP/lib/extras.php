@@ -475,8 +475,8 @@ function ajax_create_private_post_with_tax()
 
 				$userid = $_POST['userid'];
 				$newpost = array(
-					'post_title'					=> '-',
-					'post_content'				=> '',
+					'post_title'					=> __('Untitled post', 'opendoc'),
+					'post_content'				=> __('-', 'opendoc'),
 					'post_status'					=> 'private',
 					'post_author'					=> $userid,
 				);
@@ -560,7 +560,7 @@ function ajax_add_tax_term()
 			$leuserid = $_POST['userid'];
 			$leaddDescription = $_POST['add-description'];
 
-			addTermAndCreateDescription( $leprojet, $leuserid, $leaddDescription);
+			echo json_encode( addTermAndCreateDescription( $leprojet, $leuserid, $leaddDescription));
 
     }
 
@@ -568,6 +568,10 @@ function ajax_add_tax_term()
 }
 
 function addTermAndCreateDescription( $projet, $userid, $addDescription) {
+
+	if( term_exists($projet, 'projets')) {
+		return __('This name is already taken.', 'opendoc');
+	}
 
 	wp_insert_term(
     $projet,
@@ -602,8 +606,11 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 			$newpostID = wp_insert_post( $newpost);
 			wp_set_object_terms( $newpostID, $projetslug, 'projets');
 			wp_set_object_terms( $newpostID, $userid, 'auteur');
+			return "success";
 		}
 	}
+
+	return "success";
 
 }
 

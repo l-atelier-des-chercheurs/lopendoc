@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-09-29 14:50+0100\n"
+"POT-Creation-Date: 2015-09-29 17:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -48,11 +48,11 @@ msgstr ""
 msgid "Sorry, no results were found."
 msgstr ""
 
-#: index.php:16 taxonomy-projets.php:177
+#: index.php:16
 msgid "&larr; Older posts"
 msgstr ""
 
-#: index.php:17 taxonomy-projets.php:178
+#: index.php:17
 msgid "Newer posts &rarr;"
 msgstr ""
 
@@ -265,20 +265,31 @@ msgstr ""
 msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
 msgstr ""
 
-#: lib/extras.php:597
-#, fuzzy
+#: lib/extras.php:478
+msgid "Untitled post"
+msgstr "Post sans titre"
+
+#: lib/extras.php:479
+msgid "Untitled content"
+msgstr "Post sans contenu"
+
+#: lib/extras.php:573
+msgid "This name is already taken."
+msgstr ""
+
+#: lib/extras.php:601
 msgid "No content for this project yet."
 msgstr "Ce projet n'a pas encore de description."
 
-#: lib/extras.php:839
+#: lib/extras.php:846
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:845
+#: lib/extras.php:852
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:846
+#: lib/extras.php:853
 msgid "séparés par une virgule"
 msgstr ""
 
@@ -319,95 +330,96 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: taxonomy-projets.php:75
-msgid ""
-"No description for this project yet. To add one send an email to this "
-"project's mail with the subject line <strong>Description</strong>."
-msgstr ""
-"Ce projet n'a pas encore de description. Pour en ajouter une, envoyez un "
-"email à l'adresse mail avec pour sujet <strong>Description</strong>."
-
-#: taxonomy-projets.php:89
+#: taxonomy-projets.php:93
 msgid "To contribute, send an email to "
 msgstr "Pour contribuer, envoyez un email à "
 
-#: taxonomy-projets.php:91
+#: taxonomy-projets.php:95
 msgid ", or click on <strong>Add a post</strong>."
 msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
 
-#: taxonomy-projets.php:102 template-page-accueil.php:92
+#: taxonomy-projets.php:113 template-page-accueil.php:100
 msgid "Filter by categories: "
 msgstr "Filtrer par catégories : "
 
-#: taxonomy-projets.php:112 template-page-accueil.php:76
-msgid "Actions: "
-msgstr ""
-
-#: taxonomy-projets.php:116
+#: taxonomy-projets.php:127
 msgid "Add a post"
 msgstr "Ajouter un post"
 
-#: taxonomy-projets.php:119
+#: taxonomy-projets.php:139
 msgid "Edit project contributors"
 msgstr "Éditer les contributeurs du projet"
 
-#: taxonomy-projets.php:154 templates/content-carte.php:24
+#: taxonomy-projets.php:206 templates/content-carte.php:24
 msgid "Post currently edited by "
 msgstr "Contenu édité par"
 
 #: template-page-accueil.php:27
-msgid "sort projects by&nbsp;: "
+msgid "sort projects by: "
 msgstr "organiser les projets par&nbsp;: "
 
 #: template-page-accueil.php:31
-msgid "edited"
-msgstr "édité"
+msgid "last modified"
+msgstr "date d'édition"
 
 #: template-page-accueil.php:34
-msgid "created"
-msgstr "créé"
+msgid "last created"
+msgstr "date de création"
 
 #: template-page-accueil.php:37
 msgid "alphabetical"
 msgstr "alphabétique"
 
-#: template-page-accueil.php:81 template-page-accueil.php:101
+#: template-page-accueil.php:47 template-page-accueil.php:89
+#: template-page-accueil.php:109
 msgid "Add a project"
 msgstr "Ajouter un projet"
 
-#: template-page-accueil.php:85
+#: template-page-accueil.php:61
+msgid "Search on l'Opendoc"
+msgstr "Rechercher sur l'Opendoc"
+
+#: template-page-accueil.php:84
+msgid "Actions: "
+msgstr ""
+
+#: template-page-accueil.php:93
 msgid "Search"
 msgstr "Recherche"
 
-#: template-page-accueil.php:104
+#: template-page-accueil.php:112
 msgid "Write your project's name"
 msgstr "Nom de votre projet"
 
-#: template-page-accueil.php:109
+#: template-page-accueil.php:117
 msgid "Add the project"
 msgstr "Ajouter le projet"
 
-#: template-page-accueil.php:115
+#: template-page-accueil.php:123
 msgid "Search on l'opendoc"
 msgstr "Rechercher sur l'Opendoc"
 
-#: template-page-accueil.php:218 templates/content-modules/meta.php:30
+#: template-page-accueil.php:225 templates/content-modules/meta.php:30
 msgid "Categories: "
 msgstr "Catégories :"
 
-#: template-page-accueil.php:264
+#: template-page-accueil.php:271
 msgid "Editor of this project"
 msgstr "Éditeur de ce projet"
 
-#: template-page-accueil.php:292 templates/content-modules/meta.php:97
+#: template-page-accueil.php:298
+msgid "Articles count:"
+msgstr "nombre d'articles&nbsp;:"
+
+#: template-page-accueil.php:309 templates/content-modules/meta.php:97
 msgid "Edited: "
 msgstr "Édité le :"
 
-#: template-page-accueil.php:304 templates/content-modules/meta.php:86
+#: template-page-accueil.php:321 templates/content-modules/meta.php:86
 msgid "Created: "
 msgstr "Créé le :"
 
-#: template-page-accueil.php:339
+#: template-page-accueil.php:355
 msgid "Filter"
 msgstr "Filtrer"
 
@@ -485,9 +497,8 @@ msgid "Edit categories"
 msgstr "Éditer les catégories"
 
 #: templates/content-modules/meta.php:49
-#, fuzzy
 msgid "Edit"
-msgstr "Mode édition"
+msgstr "Éditer"
 
 #: templates/content-modules/meta.php:67
 msgid "Comments: "
@@ -1367,6 +1378,16 @@ msgstr ""
 #: node_modules/grunt/node_modules/underscore.string/test/strings.js:425
 msgid "I know latin characters: á í ó ú ç ã õ ñ ü"
 msgstr ""
+
+#~ msgid "edited"
+#~ msgstr "édité"
+
+#~ msgid ""
+#~ "No description for this project yet. To add one send an email to this "
+#~ "project's mail with the subject line <strong>Description</strong>."
+#~ msgstr ""
+#~ "Ce projet n'a pas encore de description. Pour en ajouter une, envoyez un "
+#~ "email à l'adresse mail avec pour sujet <strong>Description</strong>."
 
 #~ msgid "Order: "
 #~ msgstr "Ordre : "

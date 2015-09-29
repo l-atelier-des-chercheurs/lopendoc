@@ -56,7 +56,7 @@
 						<?php echo custom_bloginfo(); ?>
 	        </div>
 	        <div class="lopendocProjet">
-						<?php echo roots_title( ); ?>
+						<?php //echo roots_title( ); ?>
 					</div>
 	      </a>
 	    </div>
