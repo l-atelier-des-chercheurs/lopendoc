@@ -21,27 +21,27 @@ var mapRange = function(from, to, s) {
 };
 
 var startDetectEnregistrementNewPost = function() {
-    setTimeout(function () {
+	setTimeout(function () {
 			if( $("#fee-notice-area .updated").length > 0) {
 			} else {
 				startDetectEnregistrementNewPost();
 			}
-    }, 1000);
+	}, 1000);
 };
 
 
 
 // voir http://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
 Array.prototype.diff = function(arr2) {
-    var ret = [];
-    this.sort();
-    arr2.sort();
-    for(var i = 0; i < this.length; i += 1) {
-        if(arr2.indexOf( this[i] ) > -1){
-            ret.push( this[i] );
-        }
-    }
-    return ret;
+	var ret = [];
+	this.sort();
+	arr2.sort();
+	for(var i = 0; i < this.length; i += 1) {
+		if(arr2.indexOf( this[i] ) > -1){
+			ret.push( this[i] );
+		}
+	}
+	return ret;
 };
 
 jQuery.fn.the_filters = function(){
@@ -102,7 +102,7 @@ jQuery.fn.the_filters = function(){
 					// s'il y a des colonnes wrappers
 					if( $(".filter-elements .colonneswrappers").length > 0) {
 						if( activetags.length === 0) {
-	 						$(".filter-elements .colonneswrappers").removeClass("is-shown");
+							$(".filter-elements .colonneswrappers").removeClass("is-shown");
 							$(".filter-elements .colonneswrappers").find(".category-list span").removeClass("is-active");
 						} else {
 
@@ -152,8 +152,8 @@ jQuery.fn.the_filters = function(){
 					if( $(".filter-elements .postContainer").length > 0) {
 
 						if( activetags.length === 0) {
-	 						$(".filter-elements .postContainer").removeClass("is-filtered");
-	 						$(".filter-elements .postContainer").slideDown();
+							$(".filter-elements .postContainer").removeClass("is-filtered");
+							$(".filter-elements .postContainer").slideDown();
 							$(".filter-elements .postContainer").find(".category-list span").removeClass("is-active");
 						} else {
 
@@ -257,136 +257,215 @@ jQuery.fn.sort_items = function(){
 	this.init();
 };
 
+
+function jumpTo(index){
+	$(window).scrollTop($('.postContainer:eq('+index+')').offset().top - 100, 300);
+}
+
+d3.selection.prototype.first = function() {
+  return d3.select(this[0][0]);
+};
+d3.selection.prototype.last = function() {
+  var last = this.size() - 1;
+  return d3.select(this[0][last]);
+};
+
+
+jQuery.fn.reverse = [].reverse;
+
+
+
 function createTimeline() {
 
-
+	// create object
 	var navbarContainer = d3.select( $(".banner")[0]);
+	var makeTimeline = navbarContainer
+		.append("svg")
+		.on({
+			mouseover : function(d, i){
+				// $(this).find('circle').each(function(){
+				// 	$(this).attr('r', 4.5);
+				// });
+			},
+			mouseleave : function(d, i){
+					// $(this).find('circle').each(function(){
+					// 	$(this).attr('r', 2.5);
+					// });
+			}
+		})
+		.attr("width", "95%")
+		.attr("height","20px")
+		.attr("class", "timelineContainer")
+		.attr("style", "overflow:visible; bottom:-14px; position: absolute; margin-left: 2.5%");
 
-	var makeTimeline = navbarContainer.append("svg")
-																	.attr("width", "95%")
-																	.attr("margin-left", "2.5%")
-																	.attr("height","20px")
-																	.attr("display", "block")
-																	.attr("class", "timelineContainer")
-																	.attr("style", "overflow:visible; bottom:-14px; position: absolute")
-
-																	;
 
 
-
-
-
-
-	// récupérer le temps actuel
-	var timeinMSNow = new Date().getTime();
-	var maxtimeinMS;
-
-	$(".projetContainer").find(".postContainer").last().each(function() {
-
-		$this = $(this);
-
-		timeinISO = new Date( $this.find("time").attr("datetime") );
-		maxtimeinMS = timeinISO.getTime();
-
+	// min/max time
+	var time = {};
+	$(".projetContainer").find(".postContainer").last().each(function(){
+		timeinISO = new Date($(this).find("time").attr("datetime"));
+		time.max = timeinISO.getTime();
 	});
 
-	// pour chaque post de la page
-	$(".projetContainer").find(".postContainer").each(function(index) {
-
-		$this = $(this);
-
-		timeinISO = new Date( $this.find("time").attr("datetime") );
-		timeinMS = timeinISO.getTime();
-		//console.log(" TIME : " + timeinMS);
-
-		// faire un pourcentage un placement sur X
-		var timeRangeFrom0to100 = mapRange([timeinMSNow, maxtimeinMS], [0, 100], timeinMS);
-
-		var dataStatus = $this.find(".publish-private-post").attr("data-status");
-
-		fillColor = dataStatus === "publish" ? "#45C1B4" : "#F2682C";
-
-		makeTimeline.append("circle")
-								.attr("data-status", dataStatus)
-								.attr("r", 0)
-								.attr("fill", fillColor)
-								.attr("stroke", "transparent")
-								.style("opacity",0.6)
-								.attr("cx", timeRangeFrom0to100 + "%")
-								.attr("cy", "7")
-								.transition()
-								.delay(function() {
-								    return index * 110; // Or whatever you want the delay to be.
-								})
-								.duration(300)
-								.ease("in-out")
-								.attr("r", 6.5)
-
-								;
-
-
+	$(".projetContainer").find(".postContainer").first().each(function(){
+		timeinISO = new Date($(this).find("time").attr("datetime"));
+		time.min = timeinISO.getTime();
 	});
 
 
 
-// repère vertical qui traverse la timeline
-/*
+	// timeline stroke
 	makeTimeline.append("rect")
-							.attr("class", "repere")
-							.attr("x", -2)
-							.attr("y", -6)
-							.attr("width",1)
-							.attr("height", 26)
-							.attr("fill", "#333")
-							.style("opacity",0.9)
-							;
-*/
+		.attr("class", "repere")
+		.attr("x", 0)
+		.attr("y", 6)
+		.attr("width", "0%")
+		.attr("height", 4);
 
+
+
+	// spawn circles
+	var circles_position_y;
+	$(".projetContainer").find(".postContainer").each(function(index){
+		t = $(this);
+
+		// get time range
+		var timeinISO = new Date(t.find("time").attr("datetime"));
+		var timeRangeFrom0to100 = parseInt( mapRange([time.min, time.max], [0, 100], timeinISO.getTime()) );
+
+		// color
+		var dataStatus = t.find(".publish-private-post").attr("data-status");
+		var fillColor = (dataStatus === "publish") ? "#45C1B4" : "#F2682C";
+
+
+		var last_circle_cx = parseInt( $(".timeline-circle").last().attr('cx') ) || -1;
+
+		if(last_circle_cx !== timeRangeFrom0to100){
+			circles_position_y = 8;
+
+			makeTimeline.append("circle")
+				.on({
+					click : function(d){
+						jumpTo(index);
+					},
+					mouseover : function(d){
+						d3.select(this)
+							.transition()
+							.duration(300)
+							.attr("r", 10);
+					},
+					mouseleave : function(d){
+						d3.select(this)
+							.transition()
+							.duration(300)
+							.attr("r", 4.5);
+					},
+				})
+				.attr('data-title', t.find('.entry-title').text())
+				.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
+				.attr('class', 'timeline-circle')
+				.attr("data-status", dataStatus)
+				.attr("r", 0)
+				.attr("fill", fillColor)
+				.attr("style", "cursor: pointer")
+				.attr("stroke", "transparent")
+				.attr("cx", timeRangeFrom0to100 + "%")
+				.attr("cy", "8")
+				.transition()
+				.delay(function(){ return index * 150; })
+				.duration(300)
+				.ease("in-out")
+				.attr("r", 4.5);
+		}else{
+			circles_position_y += 10;
+
+			makeTimeline.append("circle")
+				.on({
+					click : function(d){
+						jumpTo(index);
+					},
+					mouseover : function(d){
+						d3.select(this)
+							.transition()
+							.duration(300)
+							.attr("r", 10);
+					},
+					mouseleave : function(d){
+						d3.select(this)
+							.transition()
+							.duration(300)
+							.attr("r", 4.5);
+					},
+				})
+				.attr('class', 'timeline-circle')
+				.attr('data-title', t.find('.entry-title').text())
+				.attr('data-content', "crée le : " + t.find('time.createdDate .contenu').text())
+				.attr("data-status", dataStatus)
+				.attr("r", 0)
+				.attr("fill", fillColor)
+				.attr("style", "cursor: pointer")
+				.attr("stroke", "transparent")
+				.attr("cx", timeRangeFrom0to100 + "%")
+				.attr("cy", circles_position_y)
+				.transition()
+				.delay(function(){ return index * 150; })
+				.duration(300)
+				.ease("in-out")
+				.attr("r", 4.5);
+		}
+	});
+
+
+
+	// create popovers
+	$('.timelineContainer').find("circle").each(function(){
+		$(this).popover({
+			container: 'body',
+			template: '<div class="marie-popin" role="tooltip"><div class="arrow"></div><h3 class="marie-popin-title">'+$(this).attr('data-title')+'</h3><div class="marie-popin-content">'+ $(this).attr('data-content')+'</div></div>',
+			trigger: 'hover',
+			placement: 'bottom'
+		});
+	});
+
+
+
+	// onscroll function
 	ppostVisible = -1;
 	$(window).on('scroll', function () {
-
 		postVisible = whichPostIndexIsVisible(window.pageYOffset);
-		if( postVisible !== ppostVisible ) {
 
-			$('.postContainer').eq(	ppostVisible).removeClass("is-active");
+		if(postVisible !== ppostVisible){
+			$('.postContainer').eq(ppostVisible).removeClass("is-active");
 			makeTimeline.selectAll("circle")
-									.filter(function (d, i) { return i === ppostVisible;})
-									.transition()
-									.duration(300)
-									.attr("r", 6.5)
-									.style("opacity",0.6)
+				.filter(function (d, i) { return i === ppostVisible;})
+				.transition()
+				.duration(300)
+				.attr("r", 4.5);
 
-									;
-
-
-
-			$('.postContainer').eq(	postVisible).addClass("is-active");
+			$('.postContainer').eq(postVisible).addClass("is-active");
 
 			var posXofNewCircle = 0;
 			var colorofNewCircle;
 
 			makeTimeline.selectAll("circle")
-										.filter(function (d, i) {
-											if( i === postVisible) {
-												posXofNewCircle = d3.select(this).attr("cx");
-												colorofNewCircle = d3.select(this).attr("fill");
-												return true;
-											}
-										})
-										.transition()
-										.duration(300)
-										.style("opacity",0.9)
-										.attr("r", 8.5);
+				.filter(function (d, i) {
+					if( i === postVisible ){
+						posXofNewCircle = d3.select(this).attr("cx");
+						colorofNewCircle = d3.select(this).attr("fill");
+						return true;
+					}
+				})
+				.transition()
+				.duration(300)
+				.attr("r", 8.5);
 
-			console.log( "posXofNewCircle " + posXofNewCircle);
-
-			if ( posXofNewCircle.length > 0 ) {
+			if(posXofNewCircle.length > 0){
 				makeTimeline.select(".repere")
-						.transition()
-						.duration(300)
-						.attr("fill", colorofNewCircle)
-						.attr("x", posXofNewCircle)
-						;
+					.transition()
+					.duration(300)
+					.attr("fill", colorofNewCircle)
+					.attr("x", 0)
+					.attr("width", posXofNewCircle);
 			}
 
 			ppostVisible = postVisible;
@@ -399,9 +478,9 @@ function createTimeline() {
 
 function createCustomFavicon() {
 	var canvas = document.createElement('canvas'),
-	    ctx,
-	    img = document.createElement('img'),
-	    link = document.getElementById('favicon');
+		ctx,
+		img = document.createElement('img'),
+		link = document.getElementById('favicon');
 
 	if (canvas.getContext) {
 	  canvas.height = canvas.width = 32; // set the size
@@ -410,18 +489,18 @@ function createCustomFavicon() {
 		ctx.beginPath();
 		ctx.arc(16, 16, 16, 0, Math.PI*2, true);
 		ctx.closePath();
-    ctx.fillStyle = couleurSecondaire;
-    ctx.fill();
+	ctx.fillStyle = couleurSecondaire;
+	ctx.fill();
 
 		ctx.globalAlpha=0.8; // Half opacity
 		ctx.beginPath();
 		ctx.arc(16, 16, 8, 0, Math.PI*2, true);
 		ctx.closePath();
 
-    ctx.fillStyle = couleurPrimaire;
-    ctx.fill();
+	ctx.fillStyle = couleurPrimaire;
+	ctx.fill();
 
-    link.href = canvas.toDataURL('image/png');
+	link.href = canvas.toDataURL('image/png');
 	}
 }
 
@@ -558,16 +637,16 @@ function textToCanvas( $this ) {
   var thisCanvas = processingCanvas[0];
   var canvas;
   if (thisScript.type === "application/processing") {
-    console.log("Trying to P5");
+	console.log("Trying to P5");
 		try {
-    	new Processing(thisCanvas, thisScript.text);
+		new Processing(thisCanvas, thisScript.text);
 		}
 		catch (e) {
 			console.log("GODDAMMIT");
 			$(thisCanvas).before("<div clas='errorMessage sketchNotValid'><small>Le sketch n'a pas pu être chargé car le script contient des erreurs. Corrigez-le en cliquant sur le crayon.</small></div>");
 			$(thisCanvas).remove();
 		}
-    console.log("Pfewww passed");
+	console.log("Pfewww passed");
   }
 
 	//Processing.getInstanceById(canvas).noLoop();
@@ -586,7 +665,7 @@ function animateLogo() {
 	$(".navbar-brand svg").find("rect,circle,polyline,line,path").velocity({
 			scale: 0.8
 		}, {
-    	duration: 0,
+		duration: 0,
 		});
 
 	$(".navbar-brand svg").velocity({ opacity: 1} );
@@ -594,8 +673,8 @@ function animateLogo() {
 		$(this).delay(i*40).velocity({
 			scale: 1
 		}, {
-    	duration: 800,
-    	easing: "spring"
+		duration: 800,
+		easing: "spring"
 		});
 	});
 
@@ -620,14 +699,14 @@ function makeLinksBlank() {
 }
 
 function urlParam(name, url) {
-    if (!url) {
-    	url = window.location.href;
-    }
-    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
-    if (!results) {
-        return undefined;
-    }
-    return results[1] || undefined;
+	if (!url) {
+		url = window.location.href;
+	}
+	var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+	if (!results) {
+		return undefined;
+	}
+	return results[1] || undefined;
 }
 
 function newPost() {
@@ -638,7 +717,7 @@ function newPost() {
 
 	// créer un post
 	var data = {
-      'action': 'create_private_post_with_tax',
+	  'action': 'create_private_post_with_tax',
 			'security': ajaxnonce,
 			'term': nomProjet,
 			'userid'	: userid,
@@ -660,9 +739,9 @@ function newPost() {
 
 			$thisPost.find(".button-right .edit-post").trigger("click");
 
-	    $('html, body').animate({
-	        scrollTop: $thisPost.offset().top - $(".banner").height() * 1.5
-	    }, 600);
+		$('html, body').animate({
+			scrollTop: $thisPost.offset().top - $(".banner").height() * 1.5
+		}, 600);
 
 		});
 
@@ -693,13 +772,13 @@ function updateProjectAuthors( newauthors) {
 	console.log('nomProjet : ' + nomProjet);
 	console.log('newauthors : ' + newauthors);
   var data = {
-      'action': 'edit_projet_authors',
+	  'action': 'edit_projet_authors',
 			'projet': nomProjet,
 			'security': ajaxnonce,
 			'newauthors': newauthors
   };
   $.post(ajaxurl, data, function(response) {
-    console.log('Server response from the AJAX URL : ' + response);
+	console.log('Server response from the AJAX URL : ' + response);
 		$(".popover").removeClass("is-loading");
 		window.top.location.reload(true);
   });
@@ -754,23 +833,23 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 	quickViewLeft = (windowWidth - quickViewWidth)/2;
 
 	$('.popover').css({
-	    "top": topSelected,
-	    "left": leftSelected,
-	    "width": widthSelected,
-	    "height": heightSelected
+		"top": topSelected,
+		"left": leftSelected,
+		"width": widthSelected,
+		"height": heightSelected
 	}).velocity({
 		//animate the quick view: animate its width and center it in the viewport
 		//during this animation, only the slider button is visible
-	    'top': finalTop+ 'px',
-	    'left': finalLeft+'px',
-	    'width': finalWidth+'px',
-	    'height': finalHeight+'px'
+		'top': finalTop+ 'px',
+		'left': finalLeft+'px',
+		'width': finalWidth+'px',
+		'height': finalHeight+'px'
 	}, 1000, [ 400, 0 ], function(){
 		//animate the quick view: animate its width to the final value
 /*
 		$('.popover').addClass('animate-width').velocity({
 			'left': quickViewLeft+'px',
-	    	'width': quickViewWidth+'px',
+			'width': quickViewWidth+'px',
 		}, 300, 'ease' ,function(){
 			//show quick view content
 //					$('.cd-quick-view').addClass('add-content');
@@ -785,12 +864,12 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 	});
 	$(document).keyup(function(event){
 		console.log( "event.which :  " + event.which);
-  	if(event.keyCode === 27){
+	if(event.keyCode === 27){
 			closePopover();
 		}
-    if (event.keyCode === 13) {
+	if (event.keyCode === 13) {
 			$popover.find("button").trigger("click");
-    }
+	}
 	});
 }
 
@@ -839,7 +918,7 @@ jQuery.fn.post_view_routine = function(){
 
 						e.preventDefault();
 
-    				var image = new Image();
+					var image = new Image();
 						image.src = $imgSrc;
 						image.onload = function() {
 							$that.removeClass("is-loading");
@@ -883,20 +962,20 @@ jQuery.fn.post_view_routine = function(){
 
 				$thisPost.parents(".postContainer").addClass("is-loading");
 
-		    var data = {
-		        'action': 'change_post_visibility',
+			var data = {
+				'action': 'change_post_visibility',
 						'security': ajaxnonce,
 						'post_id': thisID,
 						'post_status': newStatus
-		    };
+			};
 
-		    $.post(ajaxurl, data, function(response) {
+			$.post(ajaxurl, data, function(response) {
 					var str = JSON.parse(response);
 					$thisPost.parents(".postContainer").removeClass("is-loading").attr("data-status", str);
 					$thisPost.attr("data-status", str);
 					$thisPost.siblings(".publish-private-post").attr("data-status", str);
 					console.log( "response : " + str);
-		    });
+			});
 
 
 				e.preventDefault();
@@ -951,18 +1030,18 @@ jQuery.fn.post_view_routine = function(){
 
 			$thisPost.addClass("is-removing");
 
-	    var data = {
-	        'action': 'remove_post',
+		var data = {
+			'action': 'remove_post',
 					'security': ajaxnonce,
 					'post_id': thisID,
-	    };
-	    $.post(ajaxurl, data, function(response) {
+		};
+		$.post(ajaxurl, data, function(response) {
 					console.log("SuccessAjaxPost!");
 					console.log("Removed post!");
 					console.log(response);
 
 					$thisPost.parents(".postContainer").slideUp("normal", function() { $(this).remove(); } );
-	    });
+		});
 
 			return false;
 
@@ -1036,16 +1115,16 @@ jQuery.fn.post_view_routine = function(){
 
 				thisCommentID = $(this).attr("data-commentID");
 
-		    var data = {
-		        'action': 'spam_comment',
+			var data = {
+				'action': 'spam_comment',
 						'security': ajaxnonce,
 						'comment_id': thisCommentID,
 						'post_id': thisID
-		    };
+			};
 
-		    $.post(ajaxurl, data, function(response) {
+			$.post(ajaxurl, data, function(response) {
 					self.display_comments( $thisPost);
-		    });
+			});
 
 			});
 
@@ -1060,32 +1139,32 @@ jQuery.fn.post_view_routine = function(){
 			$commentform.prepend('<div class="comment-status" ></div>');
 			var $statusdiv = $thisFooter.find('.comment-status');
 
-	    $commentform.submit(function(){
+		$commentform.submit(function(){
 
 				var formdata = $commentform.serialize();
 				$statusdiv.html('<p class="ajax-placeholder">Processing...</p>');
-      	var formurl = $commentform.attr('action');
+		var formurl = $commentform.attr('action');
 
-	      $.ajax({
-	        type: 'post',
-	        url: formurl,
-	        data: formdata,
-	        error: function(XMLHttpRequest, textStatus, errorThrown){
-	          $statusdiv.html('<p class="ajax-error" >Certains champs sont manquants. Veuillez les ajouter.</p>');
-	        },
-	        success: function(data, textStatus){
-	          if(data === "success" || textStatus === "success") {
-	            $statusdiv.html('<p class="ajax-success" >Merci pour votre commentaire !</p>');
-	          } else {
-	            $statusdiv.html('<p class="ajax-error" >Erreur de publication du commentaire...</p>');
-	          }
+		  $.ajax({
+			type: 'post',
+			url: formurl,
+			data: formdata,
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+			  $statusdiv.html('<p class="ajax-error" >Certains champs sont manquants. Veuillez les ajouter.</p>');
+			},
+			success: function(data, textStatus){
+			  if(data === "success" || textStatus === "success") {
+				$statusdiv.html('<p class="ajax-success" >Merci pour votre commentaire !</p>');
+			  } else {
+				$statusdiv.html('<p class="ajax-error" >Erreur de publication du commentaire...</p>');
+			  }
 						$commentform.find('textarea[name=comment]').val('');
 						self.display_comments( $thisPost);
-	        }
-	      });
+			}
+		  });
 				return false;
 
-	    });
+		});
 
 			});
 	};
@@ -1096,201 +1175,201 @@ jQuery.fn.post_view_routine = function(){
 
 var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 
-    console.log("INIT photoswipe forgalleries");
+	console.log("INIT photoswipe forgalleries");
 
-    // parse slide data (url, title, size ...) from DOM elements
-    // (children of gallerySelector)
-    var parseThumbnailElements = function(el) {
-        var thumbElements = el.childNodes,
-            numNodes = thumbElements.length,
-            items = [],
-            figureEl,
-            linkEl,
-            size,
-            item;
+	// parse slide data (url, title, size ...) from DOM elements
+	// (children of gallerySelector)
+	var parseThumbnailElements = function(el) {
+		var thumbElements = el.childNodes,
+			numNodes = thumbElements.length,
+			items = [],
+			figureEl,
+			linkEl,
+			size,
+			item;
 
-		    console.log("numNodes : " + numNodes);
-
-
-        for(var i = 0; i < numNodes; i++) {
-
-            figureEl = thumbElements[i]; // <figure> element
-
-            // include only element nodes
-            if(figureEl.nodeType !== 1) {
-                continue;
-            }
-
-            linkEl = figureEl.children[0]; // <a> element
-
-            console.log("figureEl : " + figureEl );
-            console.log("figureEl.getAttribute('data-fullimagesize') : " + figureEl.getAttribute('data-fullimagesize') );
-
-            size = figureEl.getAttribute('data-fullimagesize').split('x');
-
-            // create slide object
-            item = {
-                src: linkEl.getAttribute('href'),
-                w: parseInt(size[0], 10),
-                h: parseInt(size[1], 10)
-            };
+			console.log("numNodes : " + numNodes);
 
 
+		for(var i = 0; i < numNodes; i++) {
 
-            if(figureEl.children.length > 1) {
-                // <figcaption> content
-                item.title = figureEl.children[1].innerHTML;
-            }
+			figureEl = thumbElements[i]; // <figure> element
 
-            if(linkEl.children.length > 0) {
-                // <img> thumbnail element, retrieving thumbnail url
-                item.msrc = linkEl.children[0].getAttribute('src');
-            }
+			// include only element nodes
+			if(figureEl.nodeType !== 1) {
+				continue;
+			}
 
-            item.el = figureEl; // save link to element for getThumbBoundsFn
-            items.push(item);
-        }
+			linkEl = figureEl.children[0]; // <a> element
 
-        return items;
-    };
+			console.log("figureEl : " + figureEl );
+			console.log("figureEl.getAttribute('data-fullimagesize') : " + figureEl.getAttribute('data-fullimagesize') );
 
-    // find nearest parent element
-    var closest = function closest(el, fn) {
-        return el && ( fn(el) ? el : closest(el.parentNode, fn) );
-    };
+			size = figureEl.getAttribute('data-fullimagesize').split('x');
 
-    // triggers when user clicks on thumbnail
-    var onThumbnailsClick = function(e) {
-
-	    	console.log( "--onThumbnailsClick");
-
-        e = e || window.event;
-        if( e.preventDefault ) {
-	        e.preventDefault();
-	      } else {
-		      e.returnValue = false;
-		    }
-
-        var eTarget = e.target || e.srcElement;
-
-        // find root element of slide
-        var clickedListItem = closest(eTarget, function(el) {
-            return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
-        });
-
-        if(!clickedListItem) {
-            return;
-        }
-
-        // find index of clicked item by looping through all child nodes
-        // alternatively, you may define index via data- attribute
-        var clickedGallery = clickedListItem.parentNode,
-            childNodes = clickedListItem.parentNode.childNodes,
-            numChildNodes = childNodes.length,
-            nodeIndex = 0,
-            index;
-
-        for (var i = 0; i < numChildNodes; i++) {
-            if(childNodes[i].nodeType !== 1) {
-                continue;
-            }
-
-            if(childNodes[i] === clickedListItem) {
-                index = nodeIndex;
-                break;
-            }
-            nodeIndex++;
-        }
+			// create slide object
+			item = {
+				src: linkEl.getAttribute('href'),
+				w: parseInt(size[0], 10),
+				h: parseInt(size[1], 10)
+			};
 
 
 
-        if(index >= 0) {
-            // open PhotoSwipe if valid index found
-            openPhotoSwipe( index, clickedGallery );
-        }
-        return false;
-    };
+			if(figureEl.children.length > 1) {
+				// <figcaption> content
+				item.title = figureEl.children[1].innerHTML;
+			}
 
-    // parse picture index and gallery index from URL (#&pid=1&gid=2)
-    var photoswipeParseHash = function() {
-        var hash = window.location.hash.substring(1),
-        params = {};
+			if(linkEl.children.length > 0) {
+				// <img> thumbnail element, retrieving thumbnail url
+				item.msrc = linkEl.children[0].getAttribute('src');
+			}
 
-        if(hash.length < 5) {
-            return params;
-        }
+			item.el = figureEl; // save link to element for getThumbBoundsFn
+			items.push(item);
+		}
 
-        var vars = hash.split('&');
-        for (var i = 0; i < vars.length; i++) {
-            if(!vars[i]) {
-                continue;
-            }
-            var pair = vars[i].split('=');
-            if(pair.length < 2) {
-                continue;
-            }
-            params[pair[0]] = pair[1];
-        }
+		return items;
+	};
 
-        if(params.gid) {
-            params.gid = parseInt(params.gid, 10);
-        }
+	// find nearest parent element
+	var closest = function closest(el, fn) {
+		return el && ( fn(el) ? el : closest(el.parentNode, fn) );
+	};
 
-        if(!params.hasOwnProperty('pid')) {
-            return params;
-        }
-        params.pid = parseInt(params.pid, 10);
-        return params;
-    };
+	// triggers when user clicks on thumbnail
+	var onThumbnailsClick = function(e) {
 
-    var openPhotoSwipe = function(index, galleryElement, disableAnimation) {
-        var pswpElement = document.querySelectorAll('.pswp')[0],
-            gallery,
-            options,
-            items;
+			console.log( "--onThumbnailsClick");
 
-        items = parseThumbnailElements(galleryElement);
+		e = e || window.event;
+		if( e.preventDefault ) {
+			e.preventDefault();
+		  } else {
+			  e.returnValue = false;
+			}
 
-        // define options (if needed)
-        options = {
-            index: index,
+		var eTarget = e.target || e.srcElement;
 
-            // define gallery index (for URL)
-            galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+		// find root element of slide
+		var clickedListItem = closest(eTarget, function(el) {
+			return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+		});
 
-            getThumbBoundsFn: function(index) {
-                // See Options -> getThumbBoundsFn section of documentation for more info
-                var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
-                    pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-                    rect = thumbnail.getBoundingClientRect();
+		if(!clickedListItem) {
+			return;
+		}
 
-                return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
-            }
+		// find index of clicked item by looping through all child nodes
+		// alternatively, you may define index via data- attribute
+		var clickedGallery = clickedListItem.parentNode,
+			childNodes = clickedListItem.parentNode.childNodes,
+			numChildNodes = childNodes.length,
+			nodeIndex = 0,
+			index;
 
-        };
+		for (var i = 0; i < numChildNodes; i++) {
+			if(childNodes[i].nodeType !== 1) {
+				continue;
+			}
 
-        if(disableAnimation) {
-            options.showAnimationDuration = 0;
-        }
+			if(childNodes[i] === clickedListItem) {
+				index = nodeIndex;
+				break;
+			}
+			nodeIndex++;
+		}
 
-        // Pass data to PhotoSwipe and initialize it
-        gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-        gallery.init();
-    };
 
-    // loop through all gallery elements and bind events
-    var galleryElements = document.querySelectorAll( gallerySelector );
 
-    for(var i = 0, l = galleryElements.length; i < l; i++) {
-        galleryElements[i].setAttribute('data-pswp-uid', i+1);
-        galleryElements[i].onclick = onThumbnailsClick;
-    }
+		if(index >= 0) {
+			// open PhotoSwipe if valid index found
+			openPhotoSwipe( index, clickedGallery );
+		}
+		return false;
+	};
 
-    // Parse URL and open gallery if it contains #&pid=3&gid=1
-    var hashData = photoswipeParseHash();
-    if(hashData.pid > 0 && hashData.gid > 0) {
-        //openPhotoSwipe( hashData.pid - 1 ,  galleryElements[ hashData.gid - 1 ], true );
-    }
+	// parse picture index and gallery index from URL (#&pid=1&gid=2)
+	var photoswipeParseHash = function() {
+		var hash = window.location.hash.substring(1),
+		params = {};
+
+		if(hash.length < 5) {
+			return params;
+		}
+
+		var vars = hash.split('&');
+		for (var i = 0; i < vars.length; i++) {
+			if(!vars[i]) {
+				continue;
+			}
+			var pair = vars[i].split('=');
+			if(pair.length < 2) {
+				continue;
+			}
+			params[pair[0]] = pair[1];
+		}
+
+		if(params.gid) {
+			params.gid = parseInt(params.gid, 10);
+		}
+
+		if(!params.hasOwnProperty('pid')) {
+			return params;
+		}
+		params.pid = parseInt(params.pid, 10);
+		return params;
+	};
+
+	var openPhotoSwipe = function(index, galleryElement, disableAnimation) {
+		var pswpElement = document.querySelectorAll('.pswp')[0],
+			gallery,
+			options,
+			items;
+
+		items = parseThumbnailElements(galleryElement);
+
+		// define options (if needed)
+		options = {
+			index: index,
+
+			// define gallery index (for URL)
+			galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+
+			getThumbBoundsFn: function(index) {
+				// See Options -> getThumbBoundsFn section of documentation for more info
+				var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
+					pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+					rect = thumbnail.getBoundingClientRect();
+
+				return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+			}
+
+		};
+
+		if(disableAnimation) {
+			options.showAnimationDuration = 0;
+		}
+
+		// Pass data to PhotoSwipe and initialize it
+		gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+		gallery.init();
+	};
+
+	// loop through all gallery elements and bind events
+	var galleryElements = document.querySelectorAll( gallerySelector );
+
+	for(var i = 0, l = galleryElements.length; i < l; i++) {
+		galleryElements[i].setAttribute('data-pswp-uid', i+1);
+		galleryElements[i].onclick = onThumbnailsClick;
+	}
+
+	// Parse URL and open gallery if it contains #&pid=3&gid=1
+	var hashData = photoswipeParseHash();
+	if(hashData.pid > 0 && hashData.gid > 0) {
+		//openPhotoSwipe( hashData.pid - 1 ,  galleryElements[ hashData.gid - 1 ], true );
+	}
 };
 
 
@@ -1323,12 +1402,12 @@ var Roots = {
 
   // All pages
   common: {
-    init: function() {
-      // JavaScript to be fired on all pages
+	init: function() {
+	  // JavaScript to be fired on all pages
 
-      // désactive les console.log si pas un superadmin
-			if( !$("body").hasClass("is-superadmin") ) {
-		    logger.disableLogger();
+	  // désactive les console.log si pas un superadmin
+			if( !$("body").hasClass("is-superadmin") || username !== "arnaudjuracek") {
+			// logger.disableLogger();
 			} else {
 			}
 
@@ -1427,12 +1506,12 @@ var Roots = {
 				console.log("Submitted ajax post request");
 				console.log("TO : " + thisActionUrl);
 
-	      $.ajax({
-          type: "POST",
-          url: thisActionUrl,
-          data: {},
-          success: function(data)
-          {
+		  $.ajax({
+		  type: "POST",
+		  url: thisActionUrl,
+		  data: {},
+		  success: function(data)
+		  {
 						console.log("SuccessAjax !");
 						console.log("Refreshed Postie !");
 						console.log( data );
@@ -1490,8 +1569,8 @@ var Roots = {
 
 						}
 
-          }
-	      });
+		  }
+		  });
 
 			});
 
@@ -1503,12 +1582,12 @@ var Roots = {
 				var decoURL = $("#wp-logout").attr("href");
 				window.location.href = decoURL;
 */
-		    var data = {
-		        'action': 'logout_user',
+			var data = {
+				'action': 'logout_user',
 						'security': ajaxnonce,
 						'userid'	: userid
-		    };
-		    $.post(ajaxurl, data, function(response) {
+			};
+			$.post(ajaxurl, data, function(response) {
 					$("body").addClass("is-overlaid");
 					window.top.location.reload(true);
 				});
@@ -1527,16 +1606,16 @@ var Roots = {
 
 			$('[data-toggle="tooltip"]').tooltip();
 
-    }
+	}
 
   },
   // Home page
   home: {
-    init: function() {
+	init: function() {
 
 
 
-    }
+	}
   },
 
   page_template_template_page_accueil: {
@@ -1563,8 +1642,8 @@ var Roots = {
 				  sortAscending: true,
 
 				  getSortData: {
-				    edited: '[data-timesincelastpostdate] parseInt',
-				    created: '[data-timecreated] parseInt',
+					edited: '[data-timesincelastpostdate] parseInt',
+					created: '[data-timecreated] parseInt',
 						titreproj: '[data-name]'
 				  },
 				  sortBy : ['edited', 'titreproj', 'created']
@@ -1600,14 +1679,14 @@ var Roots = {
 					var projName = $popover.find("#projectName").val();
 
 					// ajouter en ajax un nouveau terme
-			    var data = {
-			        'action': 'add_tax_term',
+				var data = {
+					'action': 'add_tax_term',
 							'security': ajaxnonce,
 							'tax_term': projName,
 							'userid'	: userid,
 							'add-description' : true,
-			    };
-			    $.post(ajaxurl, data, function(response) {
+				};
+				$.post(ajaxurl, data, function(response) {
 						// recharger la page
 
 						console.log( "Reload page ");
@@ -1655,17 +1734,17 @@ var Roots = {
 				var $thisPost = $(this).parents(".post");
 				thisID = $thisPost.attr("data-id");
 
-		    var data = {
-		        'action': 'remove_post',
+			var data = {
+				'action': 'remove_post',
 						'security': ajaxnonce,
 						'post_id': thisID
-		    };
-		    $.post(ajaxurl, data, function(response) {
+			};
+			$.post(ajaxurl, data, function(response) {
 						$("body").addClass("is-overlaid");
 						$this = $(this);
 						window.top.location.reload(true);
 
-		    });
+			});
 
 				return false;
 
@@ -1676,13 +1755,13 @@ var Roots = {
 
   // About us page, note the change from about-us to about_us.
   about_us: {
-    init: function() {
-      // JavaScript to be fired on the about us page
-    }
+	init: function() {
+	  // JavaScript to be fired on the about us page
+	}
   },
 
   tax_projets: {
-	 	init: function() {
+		init: function() {
 			createTimeline();
 
 			// si click sur le bouton "edit", alors lancer l'action d'éditer
@@ -1705,8 +1784,8 @@ var Roots = {
 	},
 
 	single_post: {
-	 	init: function() {
-		 	console.log("init single_post");
+		init: function() {
+			console.log("init single_post");
 
 			$(".edit-categories").on("click", function() {
 				$(".category-list a").remove();
@@ -1741,18 +1820,18 @@ var Roots = {
 // Add additional events for more control over timing e.g. a finalize event
 var UTIL = {
   fire: function(func, funcname, args) {
-    var namespace = Roots;
-    funcname = (funcname === undefined) ? 'init' : funcname;
-    if (func !== '' && namespace[func] && typeof namespace[func][funcname] === 'function') {
-      namespace[func][funcname](args);
-    }
+	var namespace = Roots;
+	funcname = (funcname === undefined) ? 'init' : funcname;
+	if (func !== '' && namespace[func] && typeof namespace[func][funcname] === 'function') {
+	  namespace[func][funcname](args);
+	}
   },
   loadEvents: function() {
-    UTIL.fire('common');
+	UTIL.fire('common');
 
-    $.each(document.body.className.replace(/-/g, '_').split(/\s+/),function(i,classnm) {
-      UTIL.fire(classnm);
-    });
+	$.each(document.body.className.replace(/-/g, '_').split(/\s+/),function(i,classnm) {
+	  UTIL.fire(classnm);
+	});
   }
 };
 
