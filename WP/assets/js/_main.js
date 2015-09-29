@@ -293,20 +293,6 @@ jQuery.fn.fixedUI = function(){
 	this.init();
 };
 
-
-function createTimeline() {
-
-
-	var navbarContainer = d3.select( $(".banner")[0]);
-
-	var makeTimeline = navbarContainer.append("svg")
-																	.attr("width", "95%")
-																	.attr("margin-left", "2.5%")
-																	.attr("height","20px")
-																	.attr("display", "block")
-																	.attr("class", "timelineContainer")
-																	.attr("style", "overflow:visible; bottom:-14px; position: absolute")
-
 function jumpTo(index){
 	$(window).scrollTop($('.postContainer:eq('+index+')').offset().top - 100, 300);
 }
