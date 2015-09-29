@@ -325,7 +325,6 @@ jQuery.fn.reverse = [].reverse;
 
 
 function createTimeline() {
-
 	// create object
 	var navbarContainer = d3.select( $(".banner")[0]);
 	var makeTimeline = navbarContainer
