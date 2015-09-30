@@ -4,19 +4,19 @@ Template Name: Accueil avec cartes
 */
 ?>
 
-<header id="presentationActions">
-	<div class='colTitle'>
-		<h1>
-			<?php echo roots_title( ); ?>
-		</h1>
-	</div>
-
-	<?php if( get_post()->post_content != '') { ?>
-		<div class="pageText">
-			<?php echo( get_post()->post_content); ?>
+<?php while (have_posts()) : the_post(); ?>
+	<header id="presentationActions">
+		<div class='colTitle'>
+			<h1>
+				<?php echo roots_title(); ?>
+			</h1>
 		</div>
-	<?php } ?>
-</header>
+		<div class="pageText">
+			<?php the_content(); ?> <!-- Page Content -->
+    </div>
+	</header>
+<?php endwhile; ?>
+<?php wp_reset_query(); ?>
 
 <main class="main" role="main">
 	<!-- barre du haut de la page -->
@@ -175,6 +175,7 @@ Template Name: Accueil avec cartes
 			$timeCreated = '';
 
 			$descriptionPostID = -1;
+			$descriptionTitle = '';
 
 			if ( $get_description->have_posts() ) {
 				// The Loop
@@ -186,6 +187,7 @@ Template Name: Accueil avec cartes
 					$timeCreated = get_the_date('U');
 					$lastPostDate = get_the_modified_date('U');
 					$lastPostDateHuman = get_the_modified_date('d/m/Y');
+					$descriptionTitle = get_the_title();
 
 				endwhile;
 			}
@@ -194,6 +196,10 @@ Template Name: Accueil avec cartes
 	    $term_name = $term->name;
 	    $term_slug = $term->slug;
 	    $term_count = $term->count;
+
+	    // override de $term_name avec le titre de la description si elle existe
+	    if( $descriptionTitle !== '')
+	    	$term_name = $descriptionTitle;
 
 	    // calculer lastpostdate en partant de now
 	    $nowts = current_time('U');
@@ -291,6 +297,7 @@ Template Name: Accueil avec cartes
 													$content = apply_filters( 'the_content', $description_content );
 													echo str_replace( ']]>', ']]&gt;', $content );
 												}
+												unset( $description_content);
 											?>
 										</div><!-- .entry-content -->
 

@@ -363,7 +363,7 @@ label#doorbell-feedback-label {
 			.navbar-header {
 				.make-xs-column(12);
 				.make-sm-column(8);
-				height: 	65px;
+				min-height: 	65px;
 		    margin-top:    		@grid-gutter-width/4;
 		    margin-bottom: 		@grid-gutter-width/4;
 
@@ -375,19 +375,34 @@ label#doorbell-feedback-label {
 
 			    color: @text-color;
 
+					@media @phone-only {
+						text-align: center;
+						top:auto;
+						.translate(0, 0);
+					}
+
 					#logo_opendoc {
-						.make-xs-column(4);
-
-						.make-sm-column(3);
-
+						width: 220px;
+						padding: @grid-gutter-width/2;
 						.vaMid2014;
+
+						@media @phone-only {
+							position: relative;
+							margin: 0 auto;
+							top:auto;
+							.translate(0, 0);
+						}
 					}
 					.lopendocInstance {
 
-						.make-xs-column-push(4);
-						.make-xs-column(4);
+						margin-left: 220px;
+						.make-sm-column(6);
 
-						.make-sm-column-push(3);
+						@media @phone-only {
+							position: relative;
+							width: 	100%;
+							margin-left: 	0;
+						}
 
 						.vaMid2014;
 					}
@@ -669,6 +684,10 @@ label#doorbell-feedback-label {
 	font-weight: 	700;
 	letter-spacing: 0.02em;
 	text-transform: uppercase;
+
+	&:hover {
+		background-color: @cbleuefonce;
+	}
 
 }
 
@@ -1298,6 +1317,10 @@ body {
 			background-color: #fff;
 			border-bottom: 2px solid @clightgrey;
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+			&:hover {
+				box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+			}
 		}
 
 		.js & {
@@ -1402,14 +1425,11 @@ body {
 
 		&:hover {
 			opacity: 1;
-
 		}
 	}
 
-
 	.headerProject, .entry-content, .entry-meta {
 		padding: @grid-gutter-width/2;
-
 	}
 
 
@@ -2373,7 +2393,7 @@ body {
 
 		    background-color: #fff;
 
-		    width: 560px;
+		    width: 700px;
 		    max-width: 100%;
 
 		    margin-top: 0;
@@ -2410,10 +2430,10 @@ body {
 			margin-bottom: 	@grid-gutter-width/2;
 
 			.comment-author {
-				.make-sm-column(4);
+				.make-sm-column(3);
 			}
 			.comment-metadata {
-				.make-sm-column(8);
+				.make-sm-column(9);
 			}
 
 			.comment-author {

@@ -897,7 +897,7 @@ function fillPopOver( content, thisbutton, finalWidth, finalHeight ) {
 		'left': finalLeft+'px',
 		'width': finalWidth+'px',
 		'height': finalHeight+'px'
-	}, 1000, [ 400, 0 ], function(){
+	}, 1000, [ 200, 0 ], function(){
 		//animate the quick view: animate its width to the final value
 /*
 		$('.popover').addClass('animate-width').velocity({

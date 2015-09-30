@@ -593,9 +593,7 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 	if( !empty($addDescription)) {
 
 		if( $addDescription == true) {
-
 			error_log('ajout projet description');
-
 			$newpost = array(
 				'post_title'					=> $projet,
 				'post_content'				=> __('No content for this project yet.', 'opendoc'),

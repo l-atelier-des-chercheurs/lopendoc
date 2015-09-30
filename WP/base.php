@@ -49,7 +49,6 @@
     get_template_part('templates/header');
   ?>
 
-  <div class="wrap" role="document">
 
     <main class="main" role="main">
       <?php include roots_template_path(); ?>
@@ -65,8 +64,6 @@
     <?php
       endif;
     ?>
-
-  </div><!-- /.wrap -->
 
   <?php get_template_part('templates/footer'); ?>
 
