@@ -119,7 +119,7 @@ Template Name: Accueil avec cartes
 			</p>
 
 	    <input type="text" name="userInput" id="projectName">
-	    <button>
+	    <button data-submitted="<?php  _e('Adding…', 'opendoc'); ?>">
 				<?php _e('Add the project', 'opendoc'); ?>
 	    </button>
 		</div>

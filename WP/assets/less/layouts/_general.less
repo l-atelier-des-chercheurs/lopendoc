@@ -66,7 +66,7 @@ a:hover, a:focus {
 h1, .h1 {
 
 	font-size: 4rem;
-	line-height: 1;
+	line-height: 1.2;
 	font-weight: normal;
 
 	font-weight: 300;
@@ -678,8 +678,9 @@ label#doorbell-feedback-label {
 	-webkit-font-smoothing: antialiased;
 	letter-spacing: .02em;
 
-	background-color: @cdarkgrey;
+	background-color: @cvert;
 	color: #fff;
+	font-size: 12px;
 
 	.fira-sans;
 	font-weight: 	700;
@@ -687,7 +688,12 @@ label#doorbell-feedback-label {
 	text-transform: uppercase;
 
 	&:hover {
-		background-color: @cbleuefonce;
+		background-color: @cbleue;
+	}
+
+	&.is--disabled {
+		background-color: #999;
+		transition: background-color .4s;
 	}
 
 }
@@ -965,8 +971,6 @@ body {
 	.category-term, li, .sort-term {
 		display: inline-block;
 		color: @text-color;
-    padding: 6px 12px 4px 6px;
-		margin: 2px 0px;
 
 		cursor: pointer;
 
@@ -981,18 +985,23 @@ body {
     background-repeat: no-repeat;
     background-size: 200% 2px;
 
-		transition:	background .15s ease-in-out, color .2s ease-out;
+    padding: 6px 0px 4px 0px;
+    margin: 0 6px;
 
+		transition:	background .15s ease-in-out, color .2s ease-out, padding .2s, margin .2s;
 
 		&.is-active {
 			color: #fff;
 			background-size: 200% 100%;
+	    padding: 6px 6px 4px 6px;
+	    margin: 0;
 		}
-	}
 
-	// exceptions sort-term
-	.sort-term {
-    padding: 6px 6px 4px 6px;
+		&:hover {
+	    padding: 6px 6px 4px 6px;
+	    margin: 0;
+
+		}
 	}
 
 	.category-term, li {
@@ -1112,7 +1121,7 @@ body {
 #colonnesOptionsSidebar {
 	float: left;
 	width: 	20%;
-  background-color: #fff;
+  background-color: @cfondclair;
 
 	position: absolute;
 	top: @grid-gutter-width*2;

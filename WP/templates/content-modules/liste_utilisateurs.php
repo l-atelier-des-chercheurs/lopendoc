@@ -13,7 +13,7 @@
 	  foreach ($users as $user) {
 			$userID = $user->ID;
 			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
-			$userProjects = explode(',', $hasProject);
+			$userProjects = explode('|', $hasProject);
 
 
 			$ifchecked = '';

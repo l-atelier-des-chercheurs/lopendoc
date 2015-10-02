@@ -628,90 +628,6 @@ function updatePostContent( $thisPost, pageLink ) {
 
 }
 
-function textToCanvas( $this ) {
-
-	$thisPost = $this.parents(".post");
-	thisPostID = $thisPost.attr("data-id");
-
-	// poulet basquaise aux pâtes
-	sketch = $this.text();
-
-	var mapObj = {
-	   "«":"\"",
-	   "»":"\"",
-	};
-	var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
-	sketch = sketch.replace(re, function(matched){
-		console.log("matched : "  + mapObj[matched]);
-	  return mapObj[matched];
-	});
-
-	sketch = sketch
-		.replace("void setup() {", "void setup() { noLoop();")
-		.replace("void setup(){", "void setup(){ noLoop();")
-		.replace("void setup () {", "void setup(){ noLoop();")
-		.replace("void setup (){", "void setup(){ noLoop();");
-
-	// supprimer le println
-	var reg = /(println(.*?);)/gi;
-	sketch = sketch.replace(reg,"");
-
-	//.replace(/<br>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '')
-
-	// console.log( sketch );
-
-	//sketch = "void setup() { size(200, 200); } void draw() { background(155); }";
-
-	var processingScript = $("<script type='application/processing'>" + sketch + "</script>");
-	var processingCanvas = $("<canvas id=" + thisPostID + "></canvas>");
-
-	$this.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
-
-	$thisCode = $this.find(".thisCode");
-
-	// Code affiché
-	$thisCode.html( $thisCode.text().replace("<","&lt;").replace(">","&gt;").replace(/«/g, "\"").replace(/»/g, "\"") );
-
-	SyntaxHighlighter.all();
-
-/*
-<script src="sh/shCore.js"></script>
-<link rel=stylesheet href="sh/shCore.css">
-<script src="sh/shBrushProcessing.js"></script>
-<link rel=stylesheet href="sh/shProcessing2Theme.css">
-<link rel=stylesheet href="sh/customStyleTricodeurInitiation.css">
-<script>SyntaxHighlighter.all();</script>
-*/
-
-	$thisCode.before( processingScript );
-	$thisCode.before( processingCanvas );
-
-  var thisScript = processingScript[0];
-  var thisCanvas = processingCanvas[0];
-  var canvas;
-  if (thisScript.type === "application/processing") {
-	console.log("Trying to P5");
-		try {
-		new Processing(thisCanvas, thisScript.text);
-		}
-		catch (e) {
-			console.log("GODDAMMIT");
-			$(thisCanvas).before("<div clas='errorMessage sketchNotValid'><small>Le sketch n'a pas pu être chargé car le script contient des erreurs. Corrigez-le en cliquant sur le crayon.</small></div>");
-			$(thisCanvas).remove();
-		}
-	console.log("Pfewww passed");
-  }
-
-	//Processing.getInstanceById(canvas).noLoop();
-	$this.find("canvas#" + thisPostID).hover(function() {
-		var thisID = this.id;
-		console.log(thisID);
-		Processing.getInstanceById(thisID).loop();
-	}, function() {
-		var thisID = this.id;
-		Processing.getInstanceById(thisID).noLoop();
-	});
-}
 
 function animateLogo() {
 
@@ -1115,25 +1031,112 @@ jQuery.fn.post_view_routine = function(){
 			script.src = scriptSrc;
 			script.id = 'pjs';
 
+			var $thisPost = $(this);
+
 			script.onload = function() {
-				this.convertThisPostToCanvas();
+				self.convertThisPostToCanvas( $thisPost);
 			};
 
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(script);
 		}	else if( this.find(".entry-content:contains(void setup)").length > 0 && $.find("#pjs").length > 0) {
 			$.find("#pjs").onload = function() {
-				this.convertThisPostToCanvas();
+				self.convertThisPostToCanvas( $thisPost);
 			};
 		}
 	};
 
-	this.convertThisPostToCanvas = function() {
-		this.find(".entry-content:not(.is-sketch):contains(void setup)").each( function() {
-			this.addClass("is-sketch");
-			textToCanvas(this);
+	this.convertThisPostToCanvas = function( $thisPost) {
+		$thisPost.addClass("is-sketch");
+		this.textToCanvas( $thisPost);
+	};
+
+	this.textToCanvas = function( $thisPost) {
+
+		thisPostID = $thisPost.attr("data-id");
+
+		$thisPostContent = $thisPost.find('.entry-content');
+
+		// poulet basquaise aux pâtes
+		sketch = $thisPostContent.text();
+
+		var mapObj = {
+		   "«":"\"",
+		   "»":"\"",
+		};
+		var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
+		sketch = sketch.replace(re, function(matched){
+			console.log("matched : "  + mapObj[matched]);
+		  return mapObj[matched];
+		});
+
+		sketch = sketch
+			.replace("void setup() {", "void setup() { noLoop();")
+			.replace("void setup(){", "void setup(){ noLoop();")
+			.replace("void setup () {", "void setup(){ noLoop();")
+			.replace("void setup (){", "void setup(){ noLoop();");
+
+		// supprimer le println
+		var reg = /(println(.*?);)/gi;
+		sketch = sketch.replace(reg,"");
+
+		//.replace(/<br>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '')
+
+		// console.log( sketch );
+
+		//sketch = "void setup() { size(200, 200); } void draw() { background(155); }";
+
+		var processingScript = $("<script type='application/processing'>" + sketch + "</script>");
+		var processingCanvas = $("<canvas id=" + thisPostID + "></canvas>");
+
+		$thisPostContent.wrapInner("<pre class='thisCode brush:pde; gutter: false; '></pre>");
+		$thisCode = $thisPostContent.find(".thisCode");
+
+		// Code affiché
+		$thisCode.html( $thisCode.text().replace("<","&lt;").replace(">","&gt;").replace(/«/g, "\"").replace(/»/g, "\"") );
+
+		SyntaxHighlighter.all();
+
+	/*
+	<script src="sh/shCore.js"></script>
+	<link rel=stylesheet href="sh/shCore.css">
+	<script src="sh/shBrushProcessing.js"></script>
+	<link rel=stylesheet href="sh/shProcessing2Theme.css">
+	<link rel=stylesheet href="sh/customStyleTricodeurInitiation.css">
+	<script>SyntaxHighlighter.all();</script>
+	*/
+
+		$thisCode.before( processingScript );
+		$thisCode.before( processingCanvas );
+
+	  var thisScript = processingScript[0];
+	  var thisCanvas = processingCanvas[0];
+	  var canvas;
+
+	  if (thisScript.type === "application/processing") {
+		console.log("Trying to P5");
+			try {
+			new Processing(thisCanvas, thisScript.text);
+			}
+			catch (e) {
+				console.log("GODDAMMIT");
+				$(thisCanvas).before("<div clas='errorMessage sketchNotValid'><small>Le sketch n'a pas pu être chargé car le script contient des erreurs. Corrigez-le en cliquant sur le crayon.</small></div>");
+				$(thisCanvas).remove();
+			}
+			console.log("Pfewww passed");
+	  }
+
+		//Processing.getInstanceById(canvas).noLoop();
+		$thisPost.find("canvas#" + thisPostID).hover(function() {
+			var thisID = this.id;
+			console.log(thisID);
+			Processing.getInstanceById(thisID).loop();
+		}, function() {
+			var thisID = this.id;
+			Processing.getInstanceById(thisID).noLoop();
 		});
 	};
+
 
 	this.activateTooltips = function() {
 		this.find('[data-toggle="tooltip"]').tooltip();
@@ -1169,7 +1172,6 @@ jQuery.fn.post_view_routine = function(){
 				$(this).closest(".comments").fadeOut(400, function() {
 					$(this).closest(".entry-footer").empty();
 				});
-
 			});
 
 			// ajouter lien vers spam
@@ -1207,7 +1209,7 @@ jQuery.fn.post_view_routine = function(){
 		$commentform.submit(function(){
 
 				var formdata = $commentform.serialize();
-				$statusdiv.html('<p class="ajax-placeholder">Processing...</p>');
+				$statusdiv.html('<p class="ajax-placeholder">En cours…</p>');
 		var formurl = $commentform.attr('action');
 
 		  $.ajax({
@@ -1483,7 +1485,7 @@ var Roots = {
 
 			}
 
-			$(".post").post_view_routine();
+			$(".post").each(function() { $(this).post_view_routine(); });
 			//initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');
 
 			createCustomFavicon();
@@ -1532,7 +1534,10 @@ var Roots = {
 
 				$(".popover .submit-updateAuthors").click( function(e) {
 
+					if( $(this).hasClass( "is--disabled")) { return false; }
+
 					$(this).text( $(this).attr("data-submitted"));
+					$(this).addClass( "is--disabled");
 
 					var $authorsList = $(this).closest(".editProjetAuteurs");
 					$(".popover").addClass("is-loading");
@@ -1677,11 +1682,11 @@ var Roots = {
   },
   // Home page
   home: {
-	init: function() {
+		init: function() {
 
 
 
-	}
+		}
   },
 
   page_template_template_page_accueil: {
@@ -1737,6 +1742,11 @@ var Roots = {
 
 				$(".popover .nouveauProjet button").click( function(e) {
 
+					if( $(this).hasClass( "is--disabled")) { return false; }
+
+					$(this).text( $(this).attr("data-submitted"));
+					$(this).addClass( "is--disabled");
+
 					$popover = $(this).closest(".popover");
 					e.preventDefault();
 
@@ -1745,14 +1755,14 @@ var Roots = {
 					var projName = $popover.find("#projectName").val();
 
 					// ajouter en ajax un nouveau terme
-				var data = {
-					'action': 'add_tax_term',
-							'security': ajaxnonce,
-							'tax_term': projName,
-							'userid'	: userid,
-							'add-description' : true,
-				};
-				$.post(ajaxurl, data, function(response) {
+					var data = {
+						'action': 'add_tax_term',
+						'security': ajaxnonce,
+						'tax_term': projName,
+						'userid'	: userid,
+						'add-description' : true,
+					};
+					$.post(ajaxurl, data, function(response) {
 						// recharger la page
 
 						console.log( "Reload page ");
@@ -1769,8 +1779,8 @@ var Roots = {
 				});
 			});
 
-			///////////////////////////////////////////////// ouvrir le champ de recherche /////////////////////////////////////////////////
 
+			///////////////////////////////////////////////// ouvrir le champ de recherche /////////////////////////////////////////////////
 			$(".open-search").click(function() {
 
 				// ouvrir un champ formulaire
