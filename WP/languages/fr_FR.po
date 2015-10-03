@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-09-29 17:20+0100\n"
+"POT-Creation-Date: 2015-10-04 00:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -270,26 +270,26 @@ msgid "Untitled post"
 msgstr "Post sans titre"
 
 #: lib/extras.php:479
-msgid "Untitled content"
-msgstr "Post sans contenu"
+msgid "-"
+msgstr ""
 
 #: lib/extras.php:573
 msgid "This name is already taken."
-msgstr ""
+msgstr "Ce nom est déjà prit."
 
-#: lib/extras.php:601
+#: lib/extras.php:607
 msgid "No content for this project yet."
 msgstr "Ce projet n'a pas encore de description."
 
-#: lib/extras.php:846
+#: lib/extras.php:852
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:852
+#: lib/extras.php:858
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:853
+#: lib/extras.php:859
 msgid "séparés par une virgule"
 msgstr ""
 
@@ -299,7 +299,7 @@ msgstr ""
 
 #: lib/titles.php:10
 msgid "Latest Posts"
-msgstr ""
+msgstr "Derniers posts"
 
 #: lib/titles.php:19
 #, php-format
@@ -338,7 +338,7 @@ msgstr "Pour contribuer, envoyez un email à "
 msgid ", or click on <strong>Add a post</strong>."
 msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
 
-#: taxonomy-projets.php:113 template-page-accueil.php:100
+#: taxonomy-projets.php:113 template-page-accueil.php:105
 msgid "Filter by categories: "
 msgstr "Filtrer par catégories : "
 
@@ -350,7 +350,7 @@ msgstr "Ajouter un post"
 msgid "Edit project contributors"
 msgstr "Éditer les contributeurs du projet"
 
-#: taxonomy-projets.php:206 templates/content-carte.php:24
+#: taxonomy-projets.php:209 templates/content-carte.php:24
 msgid "Post currently edited by "
 msgstr "Contenu édité par"
 
@@ -370,56 +370,64 @@ msgstr "date de création"
 msgid "alphabetical"
 msgstr "alphabétique"
 
-#: template-page-accueil.php:47 template-page-accueil.php:89
-#: template-page-accueil.php:109
+#: template-page-accueil.php:48 template-page-accueil.php:92
+#: template-page-accueil.php:115
 msgid "Add a project"
 msgstr "Ajouter un projet"
 
-#: template-page-accueil.php:61
+#: template-page-accueil.php:63
 msgid "Search on l'Opendoc"
 msgstr "Rechercher sur l'Opendoc"
 
-#: template-page-accueil.php:84
+#: template-page-accueil.php:87
 msgid "Actions: "
 msgstr ""
 
-#: template-page-accueil.php:93
+#: template-page-accueil.php:96
 msgid "Search"
 msgstr "Recherche"
 
-#: template-page-accueil.php:112
+#: template-page-accueil.php:118
 msgid "Write your project's name"
 msgstr "Nom de votre projet"
 
-#: template-page-accueil.php:117
+#: template-page-accueil.php:122
+msgid "Adding…"
+msgstr ""
+
+#: template-page-accueil.php:123
 msgid "Add the project"
 msgstr "Ajouter le projet"
 
-#: template-page-accueil.php:123
+#: template-page-accueil.php:129
 msgid "Search on l'opendoc"
 msgstr "Rechercher sur l'Opendoc"
 
-#: template-page-accueil.php:225 templates/content-modules/meta.php:30
+#: template-page-accueil.php:238 templates/content-modules/meta.php:30
 msgid "Categories: "
 msgstr "Catégories :"
 
-#: template-page-accueil.php:271
+#: template-page-accueil.php:284
 msgid "Editor of this project"
 msgstr "Éditeur de ce projet"
 
-#: template-page-accueil.php:298
-msgid "Articles count:"
-msgstr "nombre d'articles&nbsp;:"
+#: template-page-accueil.php:312
+msgid "Published posts:"
+msgstr "Posts publiés&nbsp;:"
 
-#: template-page-accueil.php:309 templates/content-modules/meta.php:97
+#: template-page-accueil.php:322
+msgid "Private posts:"
+msgstr "Posts Privés&nbsp;:"
+
+#: template-page-accueil.php:332 templates/content-modules/meta.php:97
 msgid "Edited: "
 msgstr "Édité le :"
 
-#: template-page-accueil.php:321 templates/content-modules/meta.php:86
+#: template-page-accueil.php:344 templates/content-modules/meta.php:86
 msgid "Created: "
 msgstr "Créé le :"
 
-#: template-page-accueil.php:355
+#: template-page-accueil.php:378
 msgid "Filter"
 msgstr "Filtrer"
 
@@ -436,7 +444,11 @@ msgstr ""
 msgid "Your comment is awaiting moderation."
 msgstr "Votre commentaire est en attente de modération."
 
-#: templates/comments-modules/comments.php:9
+#: templates/comments-modules/comments.php:10
+msgid "Fermer"
+msgstr "Fermer"
+
+#: templates/comments-modules/comments.php:14
 #, php-format
 msgctxt "comments title"
 msgid "One response to &ldquo;%2$s&rdquo;"
@@ -444,21 +456,17 @@ msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/comments-modules/comments.php:12
-msgid "Fermer"
-msgstr "Fermer"
-
-#: templates/comments-modules/comments.php:35
+#: templates/comments-modules/comments.php:36
 msgid "&larr; Older comments"
 msgstr ""
 
-#: templates/comments-modules/comments.php:38
+#: templates/comments-modules/comments.php:39
 msgid "Newer comments &rarr;"
 msgstr ""
 
-#: templates/comments-modules/comments.php:47
+#: templates/comments-modules/comments.php:48
 msgid "Comments are closed."
-msgstr ""
+msgstr "Les commentaires sont fermés."
 
 #: templates/content-modules/button-right.php:7
 msgid "Toggle edit mode"
@@ -490,7 +498,7 @@ msgstr "Mise à jour"
 
 #: templates/content-modules/meta.php:7
 msgid "Author: "
-msgstr ""
+msgstr "Auteur&nbsp;:"
 
 #: templates/content-modules/meta.php:47
 msgid "Edit categories"
@@ -557,17 +565,17 @@ msgstr "Inscription/connexion"
 msgid "Edit mode"
 msgstr "Mode édition"
 
-#: templates/header.php:93
+#: templates/header.php:97
 msgid "Get mails"
 msgstr "Récupérer les mails"
 
-#: templates/header.php:99
+#: templates/header.php:102
 msgid "Logout"
 msgstr "Déconnexion"
 
 #: templates/searchform.php:2
 msgid "Search for:"
-msgstr ""
+msgstr "Rechercher&nbsp;:"
 
 #: templates/searchform.php:4
 msgid "Recherche"
@@ -1378,6 +1386,12 @@ msgstr ""
 #: node_modules/grunt/node_modules/underscore.string/test/strings.js:425
 msgid "I know latin characters: á í ó ú ç ã õ ñ ü"
 msgstr ""
+
+#~ msgid "Untitled content"
+#~ msgstr "Post sans contenu"
+
+#~ msgid "Articles count:"
+#~ msgstr "nombre d'articles&nbsp;:"
 
 #~ msgid "edited"
 #~ msgstr "édité"

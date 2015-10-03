@@ -35,6 +35,21 @@
 			}
 		}
 
+		// rétro-compatibilité Opendoc : créer un post description s'il n'y en a pas
+		if( $descriptionPostID == -1) {
+			$newpost = array(
+				'post_title'					=> $term,
+				'post_content'				=> __('No content for this project yet.', 'opendoc'),
+				'post_status'					=> 'publish',
+				'post_author'					=> get_current_user_id(),
+				'tags_input'					=> 'featured'
+			);
+			$newpostID = wp_insert_post( $newpost);
+			wp_set_object_terms( $newpostID, $term, 'projets');
+			wp_set_object_terms( $newpostID, get_current_user_id(), 'auteur');
+			$descriptionPostID = $newpostID;
+		}
+
 		if( user_can_edit()) {
 			get_template_part('templates/content-modules/liste_utilisateurs');
 		}
@@ -65,9 +80,9 @@
 			if( $descriptionPostID != -1) {
 				$post = get_post($descriptionPostID);
 				?>
-			<div class="descriptionContainer">
-				<?php get_template_part('templates/content-carte'); ?>
-			</div>
+				<div class="descriptionContainer">
+					<?php get_template_part('templates/content-carte'); ?>
+				</div>
 		<?php
 		} else {
 /*
@@ -181,6 +196,9 @@
 		$modDateDescription = 0;
 		$allposts->rewind_posts();
 
+		$publicPostCount = 0;
+		$privatePostCount = 0;
+
 		if ( $allposts->have_posts() ) {
 			// The Loop
 			while ($allposts->have_posts()) {
@@ -205,6 +223,9 @@
 					$whoIsLocking = get_user_meta( $whoIsLockingID, 'nickname', true);
 					$lockingSentence = __('Post currently edited by ', 'opendoc');
 				}
+
+				if( $status == 'publish') $publicPostCount++;
+				if( $status == 'private') $privatePostCount++;
 
 				?>
 
@@ -232,6 +253,11 @@
 	      $updateDescription['post_modified'] = $modDateRecent;
 				wp_update_post( $updateDescription);
 			}
+		}
+		if( $descriptionPostID != -1) {
+			update_post_meta( $descriptionPostID, '_publishedCount', $publicPostCount);
+			if( user_can_edit())
+				update_post_meta( $descriptionPostID, '_privateCount', $privatePostCount);
 		}
 
 		unset( $whoIsLockingID);

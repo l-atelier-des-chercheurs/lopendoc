@@ -197,7 +197,8 @@ Template Name: Accueil avec cartes
 	    $term_link = get_term_link($term->slug, $tax);
 	    $term_name = $term->name;
 	    $term_slug = $term->slug;
-	    $term_count = $term->count;
+	    $term_published_posts = intval( get_post_meta($descriptionPostID, '_publishedCount', true));
+	    $term_private_posts = intval( get_post_meta($descriptionPostID, '_privateCount', true));
 
 	    // override de $term_name avec le titre de la description si elle existe
 	    if( $descriptionTitle !== '')
@@ -305,17 +306,26 @@ Template Name: Accueil avec cartes
 
 										<?php if( $lastPostDateHuman !== '' || isset($hascategory) ) { ?>
 											<div class="entry-meta">
-												<?php if( $term_count !== '') { ?>
-													<div class="metablock">
+												<?php if( $term_published_posts !== '') { ?>
+													<div class="metablock half">
 														<div class="legende">
-															<?php _e('Articles count:', 'opendoc'); ?>
+															<?php _e('Published posts:', 'opendoc'); ?>
 														</div>
 														<div class="contenu">
-															<?php echo $term_count; ?>
+															<?php echo $term_published_posts; ?>
 														</div>
 													</div>
 												<?php } ?>
-												<?php if( $lastPostDateHuman !== '') { ?>
+												<?php if( $term_private_posts !== '' && can_user_edit_project()) { ?>
+													<div class="metablock half">
+														<div class="legende">
+															<?php _e('Private posts:', 'opendoc'); ?>
+														</div>
+														<div class="contenu">
+															<?php echo $term_private_posts; ?>
+														</div>
+													</div>
+												<?php } ?>												<?php if( $lastPostDateHuman !== '') { ?>
 													<div class="metablock half modDate edited"
 													data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_time(''); ?>" data-toggle-tooltip-color="#3C3C3C">
 														<div class="legende">
