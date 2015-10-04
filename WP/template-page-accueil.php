@@ -133,245 +133,232 @@ Template Name: Accueil avec cartes
 
 	</div>
 
-		<?php
-
-	 $tax = 'projets';
-		 $tax_args = array(
-		 	 'orderby' => 'id',
-		 	 'order' => 'DESC',
-		 	 'hide_empty' => false
-	 );
-	 $terms = get_terms( $tax, $tax_args);
-	 $count = count($terms);
-	?>
-
-
 	<section id="colonnesContainer" class="filter-elements grilleProjets">
 
-		<div class="colonnesContainerInside">
+
 		<?php
+		$args = array(
+	    'post_type'      => 'post', // set the post type to page
+		  'orderby'=> 'modified',
+		  'order' => 'DESC',
+		  'tag'		=> 'featured',
+	    'nopaging' => true,
 
-	 if ( $count > 0 ){
-		foreach ( $terms as $term ) {
-			$args = array(
-			  'tax_query' => array(
-			      array(
-			        'taxonomy' => $tax,
-			        'field' => 'slug',
-			        'terms' => $term->slug,
-			      )
-			  ),
-		    'post_type'      => 'post', // set the post type to page
-			  'orderby'=> 'modified',
-			  'order' => 'DESC',
-			  'tag'		=> 'featured',
+		);
+		$get_description = new WP_Query($args);
 
-	      'nopaging' => true,
+		if ( $get_description->have_posts() ) : ?>
 
-			);
-			$get_description = new WP_Query($args);
+			<div class="colonnesContainerInside">
 
-			$lastPostDate = '1000000000';
-			$lastPostDateHuman = '';
-			$createdDateHuman = '';
-			$timeCreated = '';
+				<?php
 
-			$descriptionPostID = -1;
-			$descriptionTitle = '';
+				$lastPostDate = '1000000000';
+				$lastPostDateHuman = '';
+				$createdDateHuman = '';
+				$timeCreated = '';
 
-			if ( $get_description->have_posts() ) {
-				// The Loop
-				$index = 0;
+				$descriptionPostID = -1;
+				$descriptionTitle = '';
+
 				while ( $get_description->have_posts()) : $get_description->the_post();
 					// chercher le featured, le récupérer puis break
 					$descriptionPostID = get_the_ID();
+					$descriptionPostTitle = get_the_title();
 					$createdDateHuman = get_the_date('d/m/Y');
 					$timeCreated = get_the_date('U');
 					$lastPostDate = get_the_modified_date('U');
 					$lastPostDateHuman = get_the_modified_date('d/m/Y');
 					$descriptionTitle = get_the_title();
 
-				endwhile;
-			}
+					$terms = get_the_terms( $descriptionPostID, 'projets');
 
-	    $term_link = get_term_link($term->slug, $tax);
-	    $term_name = $term->name;
-	    $term_slug = $term->slug;
-	    $term_published_posts = intval( get_post_meta($descriptionPostID, '_publishedCount', true));
-	    $term_private_posts = intval( get_post_meta($descriptionPostID, '_privateCount', true));
+					if( !$terms || is_wp_error( $terms ) ) {
+						//echo "BUG = nom projet : -" . $descriptionTitle . "- nom term : -" . serialize($terms) . "-";
+						continue;
+					}
 
-	    // override de $term_name avec le titre de la description si elle existe
-	    if( $descriptionTitle !== '')
-	    	$term_name = $descriptionTitle;
+					$term = array_pop($terms);
 
-	    // calculer lastpostdate en partant de now
-	    $nowts = current_time('U');
+			    $term_slug = $term->slug;
+			    $term_name = $descriptionPostTitle;
+					$term_link = get_term_link( $term_slug, 'projets');
 
-	    $timeSinceLastPostDate = $nowts - $lastPostDate;
-	    $timeCreated = $nowts - $timeCreated;
+			    $term_published_posts = intval( get_post_meta($descriptionPostID, '_publishedCount', true));
+			    $term_private_posts = intval( get_post_meta($descriptionPostID, '_privateCount', true));
 
-			?>
+			    // calculer lastpostdate en partant de now
+			    $nowts = current_time('U');
 
-			<div class="colonneswrappers make-it-col"
-				<?php if( $lastPostDate != '') {						echo " data-lastpostdate='$lastPostDate'"; } ?>
-				<?php if( $timeSinceLastPostDate != '') { 	echo " data-timesincelastpostdate='$timeSinceLastPostDate'"; } ?>
-				<?php if( $timeCreated != '') { 					 	echo " data-timecreated='$timeCreated'"; } ?>
-				<?php if( $term_name != '') { 							echo " data-name='" . strtoupper( $term_name) . "'"; } ?>
-				<?php if( has_post_thumbnail()) { 	 				echo " data-hasthumb "; } ?>
-					>
-				<section  class="colonnes" >
+			    $timeSinceLastPostDate = $nowts - $lastPostDate;
+			    $timeCreated = $nowts - $timeCreated;
 
-					 <div class="colonnescontent">
+					?>
 
-						<?php
+					<div class="colonneswrappers make-it-col"
+						<?php if( $lastPostDate != '') {						echo " data-lastpostdate='$lastPostDate'"; } ?>
+						<?php if( $timeSinceLastPostDate != '') { 	echo " data-timesincelastpostdate='$timeSinceLastPostDate'"; } ?>
+						<?php if( $timeCreated != '') { 					 	echo " data-timecreated='$timeCreated'"; } ?>
+						<?php if( $term_name != '') { 							echo " data-name='" . strtoupper( $term_name) . "'"; } ?>
+						<?php if( has_post_thumbnail()) { 	 				echo " data-hasthumb "; } ?>
+							>
+						<section  class="colonnes" >
 
-								$img = "";
-								$alltags = '';
-								$htmlTags = '';
+							 <div class="colonnescontent">
 
-									$post = get_post($descriptionPostID);
+								<?php
 
-									if (has_category()) {
-										$tags = get_the_category();
-										$htmlTags = '<div class="category-list metablock">';
-										$htmlTags .= '<div class="legende">';
-										$htmlTags .= __('Categories: ', 'opendoc');
-										$htmlTags .= '</div>';
-										$htmlTags .= '<div class="contenu">';
+										$img = "";
+										$alltags = '';
+										$htmlTags = '';
+
+											$post = get_post($descriptionPostID);
+
+											if (has_category()) {
+												$tags = get_the_category();
+												$htmlTags = '<div class="category-list metablock">';
+												$htmlTags .= '<div class="legende">';
+												$htmlTags .= __('Categories: ', 'opendoc');
+												$htmlTags .= '</div>';
+												$htmlTags .= '<div class="contenu">';
 
 
-										foreach ( $tags as $tag ) {
-											if( $tag->slug === 'non-classe') continue;
+												foreach ( $tags as $tag ) {
+													if( $tag->slug === 'non-classe') continue;
 
-											$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}' data-categorieid='" . intval($tag->term_id)%6 . "'>";
-											$htmlTags .= "{$tag->name}</span>";
-											$alltags .= $tag->slug . " ";
-											$hascategory = true;
-										}
-										$htmlTags .= '</div>';
-										$htmlTags .= '</div>';
-									}
-
-									if( $descriptionPostID != -1)
-										$description_content = get_the_content();
-
-									if( has_post_thumbnail()) {
-										$post_thumbnail_id = get_post_thumbnail_id( );
-										$img = wp_get_attachment_image_src( $post_thumbnail_id, 'medium');
-										$img = $img[0];
-									}
-
-								?>
-
-								<?php if( isset($img) && !empty($img)) { ?>
-									<a class="postThumbLink" href="<?php echo $term_link; ?>">
-											<div class="headerImg" style="background-image: url(<?php echo $img; ?>)">
-												<?php echo '<img src="' . $img . '">'; ?>
-											</div>
-									</a>
-								<?php } ?>
-
-									<div data-post="<?php the_ID(); ?>" <?php post_class(); ?> data-allcategories="<?php if( isset( $alltags)) echo $alltags; ?>" style="" data-isprojecteditor="<?php echo can_user_edit_this_project( $term_slug) ? 'true' : ''; ?>">
-
-										<a href="<?php echo $term_link; ?>">
-											<header class="headerProject">
-													<?php
-														echo '<h2 class="titreProjet">'.$term_name.'</h2>';
-													?>
-													<?php
-														if( can_user_edit_this_project($term_slug)) {
-															?>
-															<svg class="icons edit-post" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve" data-toggle="tooltip" data-placement="left" title="<?php _e('Editor of this project', 'opendoc'); ?>" data-toggle-tooltip-color="#ef474b">
-																	<g>
-																		<circle fill="#EF474B" cx="32.2" cy="32.3" r="31.2"></circle>
-																		<path fill="#293275" d="M51,20.2l-8.6-8.6L17.9,36.2l0,0l-4.3,12.9l12.9-4.3l0,0L51,20.2z M20.7,45.6L17.2,42l1.5-4.6l6.7,6.6
-																			L20.7,45.6z"></path>
-																	</g>
-																</svg>
-															<?php
-														}
-													?>
-											</header>
-										</a>
-
-										<div class="entry-content">
-											<?php
-												if( isset( $description_content) && !empty($description_content)) {
-													$content = apply_filters( 'the_content', $description_content );
-													echo str_replace( ']]>', ']]&gt;', $content );
+													$htmlTags .= "<span class='category-term' data-categorie='{$tag->slug}' data-categorieid='" . intval($tag->term_id)%6 . "'>";
+													$htmlTags .= "{$tag->name}</span>";
+													$alltags .= $tag->slug . " ";
+													$hascategory = true;
 												}
-												unset( $description_content);
-											?>
-										</div><!-- .entry-content -->
+												$htmlTags .= '</div>';
+												$htmlTags .= '</div>';
+											}
 
-										<?php if( $lastPostDateHuman !== '' || isset($hascategory) ) { ?>
-											<div class="entry-meta">
-												<?php if( $term_published_posts !== '') { ?>
-													<div class="metablock half">
-														<div class="legende">
-															<?php _e('Published posts:', 'opendoc'); ?>
-														</div>
-														<div class="contenu">
-															<?php echo $term_published_posts; ?>
-														</div>
-													</div>
-												<?php } ?>
-												<?php if( $term_private_posts !== '' && can_user_edit_project()) { ?>
-													<div class="metablock half">
-														<div class="legende">
-															<?php _e('Private posts:', 'opendoc'); ?>
-														</div>
-														<div class="contenu">
-															<?php echo $term_private_posts; ?>
-														</div>
-													</div>
-												<?php } ?>												<?php if( $lastPostDateHuman !== '') { ?>
-													<div class="metablock half modDate edited"
-													data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_time(''); ?>" data-toggle-tooltip-color="#3C3C3C">
-														<div class="legende">
-															<?php _e('Edited: ', 'opendoc'); ?>
-														</div>
-														<time class="contenu" datetime="<?php echo get_the_modified_time('c'); ?>">
-															<?php echo $lastPostDateHuman;?>
-														</time>
-													</div>
-												<?php } ?>
-												<?php if( $createdDateHuman !== '') { ?>
-													<div class="metablock half createdDate added" datetime="<?php echo get_the_time('c'); ?>"
-													data-toggle="tooltip" data-placement="top" title="<?php echo get_the_time(''); ?> " data-toggle-tooltip-color="#3C3C3C"
-													>
-														<div class="legende">
-															<?php _e('Created: ', 'opendoc'); ?>
-														</div>
-														<time class="contenu">
-															<?php echo $createdDateHuman;?>
-														</time>
-													</div>
-												<?php } ?>
+											if( $descriptionPostID != -1)
+												$description_content = get_the_content();
 
+											if( has_post_thumbnail()) {
+												$post_thumbnail_id = get_post_thumbnail_id( );
+												$img = wp_get_attachment_image_src( $post_thumbnail_id, 'medium');
+												$img = $img[0];
+											}
+
+										?>
+
+										<?php if( isset($img) && !empty($img)) { ?>
+											<a class="postThumbLink" href="<?php echo $term_link; ?>">
+													<div class="headerImg" style="background-image: url(<?php echo $img; ?>)">
+														<?php echo '<img src="' . $img . '">'; ?>
+													</div>
+											</a>
+										<?php } ?>
+
+											<div data-post="<?php the_ID(); ?>" <?php post_class(); ?> data-allcategories="<?php if( isset( $alltags)) echo $alltags; ?>" style="" data-isprojecteditor="<?php echo can_user_edit_this_project( $term_slug) ? 'true' : ''; ?>">
+
+												<a href="<?php echo $term_link; ?>">
+													<header class="headerProject">
+															<?php
+																echo '<h2 class="titreProjet">'.$term_name.'</h2>';
+															?>
+															<?php
+																if( can_user_edit_this_project($term_slug)) {
+																	?>
+																	<svg class="icons edit-post" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64.5 64.5" enable-background="new 0 0 64.5 64.5" xml:space="preserve" data-toggle="tooltip" data-placement="left" title="<?php _e('Editor of this project', 'opendoc'); ?>" data-toggle-tooltip-color="#ef474b">
+																			<g>
+																				<circle fill="#EF474B" cx="32.2" cy="32.3" r="31.2"></circle>
+																				<path fill="#293275" d="M51,20.2l-8.6-8.6L17.9,36.2l0,0l-4.3,12.9l12.9-4.3l0,0L51,20.2z M20.7,45.6L17.2,42l1.5-4.6l6.7,6.6
+																					L20.7,45.6z"></path>
+																			</g>
+																		</svg>
+																	<?php
+																}
+															?>
+													</header>
+												</a>
+
+												<div class="entry-content">
+													<?php
+														if( isset( $description_content) && !empty($description_content)) {
+															$content = apply_filters( 'the_content', $description_content );
+															echo str_replace( ']]>', ']]&gt;', $content );
+														}
+														unset( $description_content);
+													?>
+												</div><!-- .entry-content -->
+
+												<?php if( $lastPostDateHuman !== '' || isset($hascategory) ) { ?>
+													<div class="entry-meta">
+														<?php if( $term_published_posts !== '') { ?>
+															<div class="metablock half">
+																<div class="legende">
+																	<?php _e('Published posts:', 'opendoc'); ?>
+																</div>
+																<div class="contenu">
+																	<?php echo $term_published_posts; ?>
+																</div>
+															</div>
+														<?php } ?>
+														<?php if( $term_private_posts !== '' && can_user_edit_this_project( $term_slug)) { ?>
+															<div class="metablock half">
+																<div class="legende">
+																	<?php _e('Private posts:', 'opendoc'); ?>
+																</div>
+																<div class="contenu">
+																	<?php echo $term_private_posts; ?>
+																</div>
+															</div>
+														<?php } ?>
+														<?php if( $lastPostDateHuman !== '') { ?>
+															<div class="metablock half modDate edited"
+															data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_time(''); ?>" data-toggle-tooltip-color="#3C3C3C">
+																<div class="legende">
+																	<?php _e('Edited: ', 'opendoc'); ?>
+																</div>
+																<time class="contenu" datetime="<?php echo get_the_modified_time('c'); ?>">
+																	<?php echo $lastPostDateHuman;?>
+																</time>
+															</div>
+														<?php } ?>
+														<?php if( $createdDateHuman !== '') { ?>
+															<div class="metablock half createdDate added" datetime="<?php echo get_the_time('c'); ?>"
+															data-toggle="tooltip" data-placement="top" title="<?php echo get_the_time(''); ?> " data-toggle-tooltip-color="#3C3C3C"
+															>
+																<div class="legende">
+																	<?php _e('Created: ', 'opendoc'); ?>
+																</div>
+																<time class="contenu">
+																	<?php echo $createdDateHuman;?>
+																</time>
+															</div>
+														<?php } ?>
+
+														<?php
+															if( isset($hascategory)) {
+																?>
+															<?php echo $htmlTags; ?>
+														<?php } ?>
+													</div><!-- .entry-meta -->
 												<?php
-													if( isset($hascategory)) {
-														?>
-													<?php echo $htmlTags; ?>
-												<?php } ?>
-											</div><!-- .entry-meta -->
-										<?php
-											unset( $hascategory);
+													unset( $hascategory);
 
-										}
+												}
 
-									wp_reset_postdata();
+											wp_reset_postdata();
 
-									?>
-								</div><!-- .post -->
-					 </div>
-				</section>
+											?>
+										</div><!-- .post -->
+							 </div>
+
+						</section>
+					</div>
+				<?php
+				endwhile;
+				?>
 			</div>
 		<?php
-		}
-	}
-	?>
-	</div>
+		endif;
+		?>
 	</section>
 
 	<button class="button open-filters">

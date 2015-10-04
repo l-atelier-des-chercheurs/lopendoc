@@ -162,7 +162,7 @@ jQuery.fn.the_filters = function(){
 
 						if( activetags.length === 0) {
 							$(".filter-elements .postContainer").removeClass("is-filtered");
-							$(".filter-elements .postContainer").slideDown();
+							$(".filter-elements .postContainer").show();
 							$(".filter-elements .postContainer").find(".category-list span").removeClass("is-active");
 						} else {
 
@@ -175,7 +175,7 @@ jQuery.fn.the_filters = function(){
 
 									if( activetags.diff(motsClesFicheArray).length > 0) {
 										$(this).removeClass("is-filtered");
-										$(this).slideDown();
+										$(this).show();
 
 										// mettre en surbrillance son tag
 										$(this).find(".category-list span").each(function() {
@@ -193,11 +193,11 @@ jQuery.fn.the_filters = function(){
 
 									} else {
 										$(this).addClass("is-filtered");
-										$(this).slideUp();
+										$(this).hide();
 									}
 								} else {
 									$(this).addClass("is-filtered");
-									$(this).slideUp();
+									$(this).hide();
 								}
 							});
 

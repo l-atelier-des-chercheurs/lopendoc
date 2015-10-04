@@ -469,8 +469,6 @@ function ajax_create_private_post_with_tax()
 			$projetslug = $_POST['term'];
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
-				||
-				current_user_can('administrator')
 			) {
 
 				$userid = $_POST['userid'];
@@ -503,8 +501,6 @@ function ajax_change_post_visibility()
 
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
-				||
-				current_user_can('administrator')
 			) {
 
 		    $post = array();
@@ -533,8 +529,6 @@ function ajax_remove_post()
 
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
-				||
-				current_user_can('administrator')
 			) {
 
 				wp_trash_post( $_POST['post_id'] );
@@ -638,8 +632,6 @@ function ajax_edit_projet_authors()
 	    // check si l'auteur du changement un est admin, un superadmin, ou un auteur qui a l'accès à ce projet
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
-				||
-				current_user_can('administrator')
 			) {
 
 				$newAuthorsString = $_POST['newauthors'];
@@ -719,8 +711,6 @@ function ajax_spam_comment()
 
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
-				||
-				current_user_can('administrator')
 			) {
 
 
@@ -790,6 +780,9 @@ function can_user_edit_project() {
 function can_user_edit_this_project($projet) {
 
 //	error_log( "-- is authorized ?");
+	if( current_user_can('administrator'))
+		return true;
+
 
 	if( !isset($GLOBALS["listeProjet"])) {
 		$currentuserid = wp_get_current_user()->ID;

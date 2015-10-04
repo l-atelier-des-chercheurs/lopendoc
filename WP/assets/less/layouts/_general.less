@@ -1362,7 +1362,13 @@ body {
 
 	a:hover, .is-shown {
 		.headerProject {
-			transition: background-color 0s;
+			background-color: @cdarkgrey;
+			transition: background-color 0.2s;
+
+			h2 {
+				color: #fff;
+				transition: color 0.2s;
+			}
 		}
 	}
 
