@@ -1360,7 +1360,7 @@ body {
 		}
 	}
 
-	a:hover, .is-shown {
+	.colonnes a:hover, .colonnes.is-shown, .colonnes .postThumbLink:hover + .post {
 		.headerProject {
 			background-color: @cdarkgrey;
 			transition: background-color 0.2s;
@@ -1461,14 +1461,9 @@ body {
 	    margin: 0;
  		}
 	}
-
 	.headerProject {
 		position: relative;
     transition: background-color .4s .0s ease-in;
-
-		&:hover {
-			color: @cprivate;
-		}
 
 		.titreProjet {
 			cursor: pointer;
