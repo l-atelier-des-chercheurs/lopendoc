@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-10-04 00:29+0100\n"
+"POT-Creation-Date: 2015-10-13 12:55+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -20,570 +20,8 @@ msgstr ""
 "esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;"
 "_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.5\n"
 "X-Poedit-SearchPath-0: .\n"
-
-#: 404.php:4
-msgid "Sorry, but the page you were trying to view does not exist."
-msgstr "La page que vous essayez d'atteindre n'existe pas."
-
-#: 404.php:7
-msgid "It looks like this was the result of either:"
-msgstr ""
-
-#: 404.php:9
-msgid "a mistyped address"
-msgstr ""
-
-#: 404.php:10
-msgid "an out-of-date link"
-msgstr ""
-
-#: functions.php:31
-#, php-format
-msgid "Error locating %s for inclusion"
-msgstr ""
-
-#: index.php:4
-msgid "Sorry, no results were found."
-msgstr ""
-
-#: index.php:16
-msgid "&larr; Older posts"
-msgstr ""
-
-#: index.php:17
-msgid "Newer posts &rarr;"
-msgstr ""
-
-#: lib/activation.php:28 lib/activation.php:29
-msgid "Theme Activation"
-msgstr ""
-
-#: lib/activation.php:50
-#, php-format
-msgid "%s Theme Activation"
-msgstr ""
-
-#: lib/activation.php:52
-msgid ""
-"These settings are optional and should usually be used only on a fresh "
-"installation"
-msgstr ""
-
-#: lib/activation.php:59 lib/activation.php:62
-msgid "Create static front page?"
-msgstr ""
-
-#: lib/activation.php:64 lib/activation.php:76 lib/activation.php:88
-#: lib/activation.php:100
-msgid "Yes"
-msgstr "Oui"
-
-#: lib/activation.php:65 lib/activation.php:77 lib/activation.php:89
-#: lib/activation.php:101
-msgid "No"
-msgstr "Non"
-
-#: lib/activation.php:67
-msgid "Create a page called Home and set it to be the static front page"
-msgstr ""
-
-#: lib/activation.php:71
-msgid "Change permalink structure?"
-msgstr ""
-
-#: lib/activation.php:74
-msgid "Update permalink structure?"
-msgstr ""
-
-#: lib/activation.php:79
-msgid "Change permalink structure to /&#37;postname&#37;/"
-msgstr ""
-
-#: lib/activation.php:83 lib/activation.php:86
-msgid "Create navigation menu?"
-msgstr ""
-
-#: lib/activation.php:91
-msgid "Create the Primary Navigation menu and set the location"
-msgstr ""
-
-#: lib/activation.php:95 lib/activation.php:98
-msgid "Add pages to menu?"
-msgstr ""
-
-#: lib/activation.php:103
-msgid "Add all current published pages to the Primary Navigation"
-msgstr ""
-
-#: lib/activation.php:126 lib/activation.php:147
-msgid "Home"
-msgstr ""
-
-#: lib/activation.php:173 lib/activation.php:176 lib/activation.php:190
-msgid "Primary Navigation"
-msgstr ""
-
-#: lib/cmb2.php:18
-msgid "Ajouter des utilisateurs au projet"
-msgstr ""
-
-#: lib/cmb2.php:19
-msgid "field description (optional)"
-msgstr ""
-
-#: lib/extras.php:97
-msgctxt "Taxonomy General Name"
-msgid "Projets"
-msgstr ""
-
-#: lib/extras.php:98
-msgctxt "Taxonomy Singular Name"
-msgid "Projet"
-msgstr ""
-
-#: lib/extras.php:99
-msgid "Projets"
-msgstr ""
-
-#: lib/extras.php:100
-msgid "Tous les projets"
-msgstr ""
-
-#: lib/extras.php:101
-msgid "Projet parent"
-msgstr ""
-
-#: lib/extras.php:102
-msgid "Projet parent:"
-msgstr ""
-
-#: lib/extras.php:103
-msgid "Nouveau projet"
-msgstr ""
-
-#: lib/extras.php:104
-msgid "Ajouter un projet"
-msgstr ""
-
-#: lib/extras.php:105
-msgid "Éditer un projet"
-msgstr ""
-
-#: lib/extras.php:106
-msgid "Mettre à jour un projet"
-msgstr ""
-
-#: lib/extras.php:107
-msgid "Séparer les projets avec une virgule"
-msgstr ""
-
-#: lib/extras.php:108
-msgid "Chercher les projets"
-msgstr ""
-
-#: lib/extras.php:109
-msgid "Ajouter ou enlever un objet"
-msgstr ""
-
-#: lib/extras.php:110 lib/extras.php:146
-msgid "Choisir parmi les plus utilisés"
-msgstr ""
-
-#: lib/extras.php:111 lib/extras.php:147
-msgid "Pas trouvé"
-msgstr ""
-
-#: lib/extras.php:133
-msgctxt "Taxonomy General Name"
-msgid "Auteurs"
-msgstr ""
-
-#: lib/extras.php:134
-msgctxt "Taxonomy Singular Name"
-msgid "Auteur"
-msgstr ""
-
-#: lib/extras.php:135
-msgid "Auteurs"
-msgstr ""
-
-#: lib/extras.php:136
-msgid "Tous les auteurs"
-msgstr ""
-
-#: lib/extras.php:137
-msgid "Auteur parent"
-msgstr ""
-
-#: lib/extras.php:138
-msgid "Auteur parent:"
-msgstr ""
-
-#: lib/extras.php:139
-msgid "Nouvel auteur"
-msgstr ""
-
-#: lib/extras.php:140
-msgid "Ajouter un auteur"
-msgstr ""
-
-#: lib/extras.php:141
-msgid "Éditer un auteur"
-msgstr ""
-
-#: lib/extras.php:142
-msgid "Mettre à jour un auteur"
-msgstr ""
-
-#: lib/extras.php:143
-msgid "Séparer les auteurs avec une virgule"
-msgstr ""
-
-#: lib/extras.php:144
-msgid "Chercher les auteurs"
-msgstr ""
-
-#: lib/extras.php:145
-msgid "Ajouter ou enlever un auteur"
-msgstr ""
-
-#: lib/extras.php:270
-msgid "Couleur primaire"
-msgstr ""
-
-#: lib/extras.php:273
-msgid "Couleur secondaire"
-msgstr ""
-
-#: lib/extras.php:276
-msgid "Chaîne de sécurité pour vérifier l'origine des requêtes ajax"
-msgstr ""
-
-#: lib/extras.php:279
-msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
-msgstr ""
-
-#: lib/extras.php:478
-msgid "Untitled post"
-msgstr "Post sans titre"
-
-#: lib/extras.php:479
-msgid "-"
-msgstr ""
-
-#: lib/extras.php:573
-msgid "This name is already taken."
-msgstr "Ce nom est déjà prit."
-
-#: lib/extras.php:607
-msgid "No content for this project yet."
-msgstr "Ce projet n'a pas encore de description."
-
-#: lib/extras.php:852
-msgid "User Profile Metabox"
-msgstr ""
-
-#: lib/extras.php:858
-msgid "Project's list where a user is author. Write slugs here."
-msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
-
-#: lib/extras.php:859
-msgid "séparés par une virgule"
-msgstr ""
-
-#: lib/init.php:45
-msgid "Primary"
-msgstr ""
-
-#: lib/titles.php:10
-msgid "Latest Posts"
-msgstr "Derniers posts"
-
-#: lib/titles.php:19
-#, php-format
-msgid "Daily Archives: %s"
-msgstr ""
-
-#: lib/titles.php:21
-#, php-format
-msgid "Monthly Archives: %s"
-msgstr ""
-
-#: lib/titles.php:23
-#, php-format
-msgid "Yearly Archives: %s"
-msgstr ""
-
-#: lib/titles.php:26
-#, php-format
-msgid "Author Archives: %s"
-msgstr ""
-
-#: lib/titles.php:31
-#, php-format
-msgid "Search Results for %s"
-msgstr ""
-
-#: lib/titles.php:33
-msgid "Not Found"
-msgstr ""
-
-#: taxonomy-projets.php:93
-msgid "To contribute, send an email to "
-msgstr "Pour contribuer, envoyez un email à "
-
-#: taxonomy-projets.php:95
-msgid ", or click on <strong>Add a post</strong>."
-msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
-
-#: taxonomy-projets.php:113 template-page-accueil.php:105
-msgid "Filter by categories: "
-msgstr "Filtrer par catégories : "
-
-#: taxonomy-projets.php:127
-msgid "Add a post"
-msgstr "Ajouter un post"
-
-#: taxonomy-projets.php:139
-msgid "Edit project contributors"
-msgstr "Éditer les contributeurs du projet"
-
-#: taxonomy-projets.php:209 templates/content-carte.php:24
-msgid "Post currently edited by "
-msgstr "Contenu édité par"
-
-#: template-page-accueil.php:27
-msgid "sort projects by: "
-msgstr "organiser les projets par&nbsp;: "
-
-#: template-page-accueil.php:31
-msgid "last modified"
-msgstr "date d'édition"
-
-#: template-page-accueil.php:34
-msgid "last created"
-msgstr "date de création"
-
-#: template-page-accueil.php:37
-msgid "alphabetical"
-msgstr "alphabétique"
-
-#: template-page-accueil.php:48 template-page-accueil.php:92
-#: template-page-accueil.php:115
-msgid "Add a project"
-msgstr "Ajouter un projet"
-
-#: template-page-accueil.php:63
-msgid "Search on l'Opendoc"
-msgstr "Rechercher sur l'Opendoc"
-
-#: template-page-accueil.php:87
-msgid "Actions: "
-msgstr ""
-
-#: template-page-accueil.php:96
-msgid "Search"
-msgstr "Recherche"
-
-#: template-page-accueil.php:118
-msgid "Write your project's name"
-msgstr "Nom de votre projet"
-
-#: template-page-accueil.php:122
-msgid "Adding…"
-msgstr ""
-
-#: template-page-accueil.php:123
-msgid "Add the project"
-msgstr "Ajouter le projet"
-
-#: template-page-accueil.php:129
-msgid "Search on l'opendoc"
-msgstr "Rechercher sur l'Opendoc"
-
-#: template-page-accueil.php:238 templates/content-modules/meta.php:30
-msgid "Categories: "
-msgstr "Catégories :"
-
-#: template-page-accueil.php:284
-msgid "Editor of this project"
-msgstr "Éditeur de ce projet"
-
-#: template-page-accueil.php:312
-msgid "Published posts:"
-msgstr "Posts publiés&nbsp;:"
-
-#: template-page-accueil.php:322
-msgid "Private posts:"
-msgstr "Posts Privés&nbsp;:"
-
-#: template-page-accueil.php:332 templates/content-modules/meta.php:97
-msgid "Edited: "
-msgstr "Édité le :"
-
-#: template-page-accueil.php:344 templates/content-modules/meta.php:86
-msgid "Created: "
-msgstr "Créé le :"
-
-#: template-page-accueil.php:378
-msgid "Filter"
-msgstr "Filtrer"
-
-#: templates/comments-modules/comment.php:4
-#, php-format
-msgid "%1$s"
-msgstr ""
-
-#: templates/comments-modules/comment.php:5
-msgid "(Edit)"
-msgstr ""
-
-#: templates/comments-modules/comment.php:9
-msgid "Your comment is awaiting moderation."
-msgstr "Votre commentaire est en attente de modération."
-
-#: templates/comments-modules/comments.php:10
-msgid "Fermer"
-msgstr "Fermer"
-
-#: templates/comments-modules/comments.php:14
-#, php-format
-msgctxt "comments title"
-msgid "One response to &ldquo;%2$s&rdquo;"
-msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
-msgstr[0] ""
-msgstr[1] ""
-
-#: templates/comments-modules/comments.php:36
-msgid "&larr; Older comments"
-msgstr ""
-
-#: templates/comments-modules/comments.php:39
-msgid "Newer comments &rarr;"
-msgstr ""
-
-#: templates/comments-modules/comments.php:48
-msgid "Comments are closed."
-msgstr "Les commentaires sont fermés."
-
-#: templates/content-modules/button-right.php:7
-msgid "Toggle edit mode"
-msgstr "Activer le mode édition"
-
-#: templates/content-modules/button-right.php:21
-msgid "Accept modifications"
-msgstr "Valider les modifications"
-
-#: templates/content-modules/button-right.php:44
-msgid "Remove this post"
-msgstr "Supprimer ce contenu"
-
-#: templates/content-modules/liste_utilisateurs.php:4
-msgid "Edit contributors"
-msgstr "Éditer les contributeurs"
-
-#: templates/content-modules/liste_utilisateurs.php:7
-msgid "Add or remove other users who can contribute to this project"
-msgstr "Ajouter ou supprimer des contributeurs au projet."
-
-#: templates/content-modules/liste_utilisateurs.php:31
-msgid "Updating..."
-msgstr "Mise à jour en cours..."
-
-#: templates/content-modules/liste_utilisateurs.php:32
-msgid "Update"
-msgstr "Mise à jour"
-
-#: templates/content-modules/meta.php:7
-msgid "Author: "
-msgstr "Auteur&nbsp;:"
-
-#: templates/content-modules/meta.php:47
-msgid "Edit categories"
-msgstr "Éditer les catégories"
-
-#: templates/content-modules/meta.php:49
-msgid "Edit"
-msgstr "Éditer"
-
-#: templates/content-modules/meta.php:67
-msgid "Comments: "
-msgstr "Commentaires :"
-
-#: templates/content-modules/meta.php:71
-msgid "Add a comment"
-msgstr "Ajouter un commentaire"
-
-#: templates/content-modules/meta.php:71
-msgid "1 comment"
-msgstr "1 commentaire"
-
-#: templates/content-modules/meta.php:71
-#, php-format
-msgid "% comments"
-msgstr "% commentaires"
-
-#: templates/content-modules/meta.php:74
-msgid "Leave a comment"
-msgstr "Laisser un commentaire"
-
-#: templates/content-modules/meta.php:74
-msgid "1 Comment"
-msgstr "1 Commentaire"
-
-#: templates/content-modules/meta.php:74
-msgid "% Comments"
-msgstr "% Commentaires"
-
-#: templates/content-modules/meta.php:104
-msgid "Edited on "
-msgstr "Édité le "
-
-#: templates/content-modules/meta.php:106
-msgid "By"
-msgstr "Par"
-
-#: templates/content-modules/private-publish.php:14
-msgid "Make this private"
-msgstr "Passer ce contenu en privé"
-
-#: templates/content-modules/private-publish.php:37
-msgid "Make this public"
-msgstr "Passer ce contenu en public"
-
-#: templates/header.php:15
-msgid "Toggle navigation"
-msgstr "Navigation"
-
-#: templates/header.php:72
-msgid "Register/login"
-msgstr "Inscription/connexion"
-
-#: templates/header.php:90
-msgid "Edit mode"
-msgstr "Mode édition"
-
-#: templates/header.php:97
-msgid "Get mails"
-msgstr "Récupérer les mails"
-
-#: templates/header.php:102
-msgid "Logout"
-msgstr "Déconnexion"
-
-#: templates/searchform.php:2
-msgid "Search for:"
-msgstr "Rechercher&nbsp;:"
-
-#: templates/searchform.php:4
-msgid "Recherche"
-msgstr ""
-
-#: templates/searchform.php:6
-msgid "Rechercher sur l'opendoc"
-msgstr ""
 
 #: node_modules/grunt/node_modules/grunt-legacy-log/node_modules/underscore.string/test/speed.js:22
 #: node_modules/grunt/node_modules/underscore.string/test/speed.js:12
@@ -1385,6 +823,579 @@ msgstr ""
 
 #: node_modules/grunt/node_modules/underscore.string/test/strings.js:425
 msgid "I know latin characters: á í ó ú ç ã õ ñ ü"
+msgstr ""
+
+#: 404.php:4
+msgid "Sorry, but the page you were trying to view does not exist."
+msgstr "La page que vous essayez d'atteindre n'existe pas."
+
+#: 404.php:7
+msgid "It looks like this was the result of either:"
+msgstr ""
+
+#: 404.php:9
+msgid "a mistyped address"
+msgstr ""
+
+#: 404.php:10
+msgid "an out-of-date link"
+msgstr ""
+
+#: functions.php:31
+#, php-format
+msgid "Error locating %s for inclusion"
+msgstr ""
+
+#: index.php:4
+msgid "Sorry, no results were found."
+msgstr ""
+
+#: index.php:16
+msgid "&larr; Older posts"
+msgstr ""
+
+#: index.php:17
+msgid "Newer posts &rarr;"
+msgstr ""
+
+#: lib/activation.php:28 lib/activation.php:29
+msgid "Theme Activation"
+msgstr ""
+
+#: lib/activation.php:50
+#, php-format
+msgid "%s Theme Activation"
+msgstr ""
+
+#: lib/activation.php:52
+msgid ""
+"These settings are optional and should usually be used only on a fresh "
+"installation"
+msgstr ""
+
+#: lib/activation.php:59 lib/activation.php:62
+msgid "Create static front page?"
+msgstr ""
+
+#: lib/activation.php:64 lib/activation.php:76 lib/activation.php:88
+#: lib/activation.php:100
+msgid "Yes"
+msgstr "Oui"
+
+#: lib/activation.php:65 lib/activation.php:77 lib/activation.php:89
+#: lib/activation.php:101
+msgid "No"
+msgstr "Non"
+
+#: lib/activation.php:67
+msgid "Create a page called Home and set it to be the static front page"
+msgstr ""
+
+#: lib/activation.php:71
+msgid "Change permalink structure?"
+msgstr ""
+
+#: lib/activation.php:74
+msgid "Update permalink structure?"
+msgstr ""
+
+#: lib/activation.php:79
+msgid "Change permalink structure to /&#37;postname&#37;/"
+msgstr ""
+
+#: lib/activation.php:83 lib/activation.php:86
+msgid "Create navigation menu?"
+msgstr ""
+
+#: lib/activation.php:91
+msgid "Create the Primary Navigation menu and set the location"
+msgstr ""
+
+#: lib/activation.php:95 lib/activation.php:98
+msgid "Add pages to menu?"
+msgstr ""
+
+#: lib/activation.php:103
+msgid "Add all current published pages to the Primary Navigation"
+msgstr ""
+
+#: lib/activation.php:126 lib/activation.php:147
+msgid "Home"
+msgstr ""
+
+#: lib/activation.php:173 lib/activation.php:176 lib/activation.php:190
+msgid "Primary Navigation"
+msgstr ""
+
+#: lib/cmb2.php:18
+msgid "Ajouter des utilisateurs au projet"
+msgstr ""
+
+#: lib/cmb2.php:19
+msgid "field description (optional)"
+msgstr ""
+
+#: lib/extras.php:97
+msgctxt "Taxonomy General Name"
+msgid "Projets"
+msgstr ""
+
+#: lib/extras.php:98
+msgctxt "Taxonomy Singular Name"
+msgid "Projet"
+msgstr ""
+
+#: lib/extras.php:99
+msgid "Projets"
+msgstr ""
+
+#: lib/extras.php:100
+msgid "Tous les projets"
+msgstr ""
+
+#: lib/extras.php:101
+msgid "Projet parent"
+msgstr ""
+
+#: lib/extras.php:102
+msgid "Projet parent:"
+msgstr ""
+
+#: lib/extras.php:103
+msgid "Nouveau projet"
+msgstr ""
+
+#: lib/extras.php:104
+msgid "Ajouter un projet"
+msgstr ""
+
+#: lib/extras.php:105
+msgid "Éditer un projet"
+msgstr ""
+
+#: lib/extras.php:106
+msgid "Mettre à jour un projet"
+msgstr ""
+
+#: lib/extras.php:107
+msgid "Séparer les projets avec une virgule"
+msgstr ""
+
+#: lib/extras.php:108
+msgid "Chercher les projets"
+msgstr ""
+
+#: lib/extras.php:109
+msgid "Ajouter ou enlever un objet"
+msgstr ""
+
+#: lib/extras.php:110 lib/extras.php:146
+msgid "Choisir parmi les plus utilisés"
+msgstr ""
+
+#: lib/extras.php:111 lib/extras.php:147
+msgid "Pas trouvé"
+msgstr ""
+
+#: lib/extras.php:133
+msgctxt "Taxonomy General Name"
+msgid "Auteurs"
+msgstr ""
+
+#: lib/extras.php:134
+msgctxt "Taxonomy Singular Name"
+msgid "Auteur"
+msgstr ""
+
+#: lib/extras.php:135
+msgid "Auteurs"
+msgstr ""
+
+#: lib/extras.php:136
+msgid "Tous les auteurs"
+msgstr ""
+
+#: lib/extras.php:137
+msgid "Auteur parent"
+msgstr ""
+
+#: lib/extras.php:138
+msgid "Auteur parent:"
+msgstr ""
+
+#: lib/extras.php:139
+msgid "Nouvel auteur"
+msgstr ""
+
+#: lib/extras.php:140
+msgid "Ajouter un auteur"
+msgstr ""
+
+#: lib/extras.php:141
+msgid "Éditer un auteur"
+msgstr ""
+
+#: lib/extras.php:142
+msgid "Mettre à jour un auteur"
+msgstr ""
+
+#: lib/extras.php:143
+msgid "Séparer les auteurs avec une virgule"
+msgstr ""
+
+#: lib/extras.php:144
+msgid "Chercher les auteurs"
+msgstr ""
+
+#: lib/extras.php:145
+msgid "Ajouter ou enlever un auteur"
+msgstr ""
+
+#: lib/extras.php:270
+msgid "Couleur primaire"
+msgstr ""
+
+#: lib/extras.php:273
+msgid "Couleur secondaire"
+msgstr ""
+
+#: lib/extras.php:276
+msgid "Chaîne de sécurité pour vérifier l'origine des requêtes ajax"
+msgstr ""
+
+#: lib/extras.php:279
+msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
+msgstr ""
+
+#: lib/extras.php:476
+msgid "Untitled post"
+msgstr "Post sans titre"
+
+#: lib/extras.php:477
+msgid "-"
+msgstr ""
+
+#: lib/extras.php:567
+msgid "This name is already taken."
+msgstr "Ce nom est déjà prit."
+
+#: lib/extras.php:601 taxonomy-projets.php:42
+msgid "No content for this project yet."
+msgstr "Ce projet n'a pas encore de description."
+
+#: lib/extras.php:845
+msgid "User Profile Metabox"
+msgstr ""
+
+#: lib/extras.php:851
+msgid "Project's list where a user is author. Write slugs here."
+msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
+
+#: lib/extras.php:852
+msgid "séparés par une virgule"
+msgstr ""
+
+#: lib/init.php:45
+msgid "Primary"
+msgstr ""
+
+#: lib/titles.php:10
+msgid "Latest Posts"
+msgstr "Derniers posts"
+
+#: lib/titles.php:19
+#, php-format
+msgid "Daily Archives: %s"
+msgstr ""
+
+#: lib/titles.php:21
+#, php-format
+msgid "Monthly Archives: %s"
+msgstr ""
+
+#: lib/titles.php:23
+#, php-format
+msgid "Yearly Archives: %s"
+msgstr ""
+
+#: lib/titles.php:26
+#, php-format
+msgid "Author Archives: %s"
+msgstr ""
+
+#: lib/titles.php:31
+#, php-format
+msgid "Search Results for %s"
+msgstr ""
+
+#: lib/titles.php:33
+msgid "Not Found"
+msgstr ""
+
+#: taxonomy-projets.php:111
+msgid "To contribute, send an email to "
+msgstr "Pour contribuer, envoyez un email à "
+
+#: taxonomy-projets.php:113
+msgid ", or click on <strong>Add a post</strong>."
+msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
+
+#: taxonomy-projets.php:130 template-page-accueil.php:118
+msgid "Filter by categories: "
+msgstr "Filtrer par catégories : "
+
+#: taxonomy-projets.php:146
+msgid "Add a post"
+msgstr "Ajouter un post"
+
+#: taxonomy-projets.php:164 template-page-accueil.php:59
+msgid "Get mails"
+msgstr "Récupérer les mails"
+
+#: taxonomy-projets.php:190
+msgid "Edit project contributors"
+msgstr "Éditer les contributeurs du projet"
+
+#: taxonomy-projets.php:260 templates/content-carte.php:24
+msgid "Post currently edited by "
+msgstr "Contenu édité par"
+
+#: template-page-accueil.php:27
+msgid "sort projects by: "
+msgstr "organiser les projets par&nbsp;: "
+
+#: template-page-accueil.php:31
+msgid "last modified"
+msgstr "date d'édition"
+
+#: template-page-accueil.php:34
+msgid "last created"
+msgstr "date de création"
+
+#: template-page-accueil.php:37
+msgid "alphabetical"
+msgstr "alphabétique"
+
+#: template-page-accueil.php:48 template-page-accueil.php:105
+#: template-page-accueil.php:128
+msgid "Add a project"
+msgstr "Ajouter un projet"
+
+#: template-page-accueil.php:76
+msgid "Search on l'Opendoc"
+msgstr "Rechercher sur l'Opendoc"
+
+#: template-page-accueil.php:100
+msgid "Actions: "
+msgstr ""
+
+#: template-page-accueil.php:109
+msgid "Search"
+msgstr "Recherche"
+
+#: template-page-accueil.php:131
+msgid "Write your project's name"
+msgstr "Nom de votre projet"
+
+#: template-page-accueil.php:135
+msgid "Adding…"
+msgstr ""
+
+#: template-page-accueil.php:136
+msgid "Add the project"
+msgstr "Ajouter le projet"
+
+#: template-page-accueil.php:146
+msgid "Search on l'opendoc"
+msgstr "Rechercher sur l'Opendoc"
+
+#: template-page-accueil.php:238 templates/content-modules/meta.php:30
+msgid "Categories: "
+msgstr "Catégories :"
+
+#: template-page-accueil.php:284
+msgid "Editor of this project"
+msgstr "Éditeur de ce projet"
+
+#: template-page-accueil.php:312
+msgid "Published posts:"
+msgstr "Posts publiés&nbsp;:"
+
+#: template-page-accueil.php:322
+msgid "Private posts:"
+msgstr "Posts Privés&nbsp;:"
+
+#: template-page-accueil.php:333 templates/content-modules/meta.php:97
+msgid "Edited: "
+msgstr "Édité le :"
+
+#: template-page-accueil.php:345 templates/content-modules/meta.php:86
+msgid "Created: "
+msgstr "Créé le :"
+
+#: template-page-accueil.php:382
+msgid "Filter"
+msgstr "Filtrer"
+
+#: templates/comments-modules/comment.php:4
+#, php-format
+msgid "%1$s"
+msgstr ""
+
+#: templates/comments-modules/comment.php:5
+msgid "(Edit)"
+msgstr ""
+
+#: templates/comments-modules/comment.php:9
+msgid "Your comment is awaiting moderation."
+msgstr "Votre commentaire est en attente de modération."
+
+#: templates/comments-modules/comments.php:10
+msgid "Fermer"
+msgstr "Fermer"
+
+#: templates/comments-modules/comments.php:14
+#, php-format
+msgctxt "comments title"
+msgid "One response to &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s responses to &ldquo;%2$s&rdquo;"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/comments-modules/comments.php:36
+msgid "&larr; Older comments"
+msgstr ""
+
+#: templates/comments-modules/comments.php:39
+msgid "Newer comments &rarr;"
+msgstr ""
+
+#: templates/comments-modules/comments.php:48
+msgid "Comments are closed."
+msgstr "Les commentaires sont fermés."
+
+#: templates/content-modules/button-right.php:7
+msgid "Toggle edit mode"
+msgstr "Activer le mode édition"
+
+#: templates/content-modules/button-right.php:21
+msgid "Accept modifications"
+msgstr "Valider les modifications"
+
+#: templates/content-modules/button-right.php:44
+msgid "Remove this post"
+msgstr "Supprimer ce contenu"
+
+#: templates/content-modules/liste_utilisateurs.php:4
+msgid "Edit contributors"
+msgstr "Éditer les contributeurs"
+
+#: templates/content-modules/liste_utilisateurs.php:7
+msgid "Add or remove other users who can contribute to this project"
+msgstr "Ajouter ou supprimer des contributeurs au projet."
+
+#: templates/content-modules/liste_utilisateurs.php:31
+#: templates/content-modules/refresh_mails.php:19
+msgid "Updating..."
+msgstr "Mise à jour en cours..."
+
+#: templates/content-modules/liste_utilisateurs.php:32
+#: templates/content-modules/refresh_mails.php:19
+#: templates/content-modules/refresh_mails.php:20
+msgid "Update"
+msgstr "Mise à jour"
+
+#: templates/content-modules/meta.php:7
+msgid "Author: "
+msgstr "Auteur&nbsp;:"
+
+#: templates/content-modules/meta.php:47
+msgid "Edit categories"
+msgstr "Éditer les catégories"
+
+#: templates/content-modules/meta.php:49
+msgid "Edit"
+msgstr "Éditer"
+
+#: templates/content-modules/meta.php:67
+msgid "Comments: "
+msgstr "Commentaires :"
+
+#: templates/content-modules/meta.php:71
+msgid "Add a comment"
+msgstr "Ajouter un commentaire"
+
+#: templates/content-modules/meta.php:71
+msgid "1 comment"
+msgstr "1 commentaire"
+
+#: templates/content-modules/meta.php:71
+#, php-format
+msgid "% comments"
+msgstr "% commentaires"
+
+#: templates/content-modules/meta.php:74
+msgid "Leave a comment"
+msgstr "Laisser un commentaire"
+
+#: templates/content-modules/meta.php:74
+msgid "1 Comment"
+msgstr "1 Commentaire"
+
+#: templates/content-modules/meta.php:74
+msgid "% Comments"
+msgstr "% Commentaires"
+
+#: templates/content-modules/meta.php:104
+msgid "Edited on "
+msgstr "Édité le "
+
+#: templates/content-modules/meta.php:106
+msgid "By"
+msgstr "Par"
+
+#: templates/content-modules/private-publish.php:14
+msgid "Make this private"
+msgstr "Passer ce contenu en privé"
+
+#: templates/content-modules/private-publish.php:37
+msgid "Make this public"
+msgstr "Passer ce contenu en public"
+
+#: templates/content-modules/refresh_mails.php:3
+msgid "Fetch content by mail"
+msgstr "Récupérer le contenu par mail"
+
+#: templates/content-modules/refresh_mails.php:6
+msgid "Get content posted to "
+msgstr "Récupérer le contenu posté sur "
+
+#: templates/header.php:15
+msgid "Toggle navigation"
+msgstr "Navigation"
+
+#: templates/header.php:72
+msgid "Register/login"
+msgstr "Inscription/connexion"
+
+#: templates/header.php:90
+msgid "Edit mode"
+msgstr "Mode édition"
+
+#: templates/header.php:96
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/searchform.php:2
+msgid "Search for:"
+msgstr "Rechercher&nbsp;:"
+
+#: templates/searchform.php:4
+msgid "Recherche"
+msgstr "Recherche"
+
+#: templates/searchform.php:6
+msgid "Rechercher sur l'opendoc"
 msgstr ""
 
 #~ msgid "Untitled content"

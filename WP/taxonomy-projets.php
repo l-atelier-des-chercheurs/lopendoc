@@ -53,6 +53,10 @@
 		if( user_can_edit()) {
 			get_template_part('templates/content-modules/liste_utilisateurs');
 		}
+		if( current_user_can( 'edit_posts' )) {
+			get_template_part('templates/content-modules/refresh_mails');
+		}
+
 	?>
 
 		<?php
@@ -99,7 +103,6 @@
 		if ( user_can_edit() ) {
 		  $mailToContribute =  get_option( "mail_addressTC" );
 	    if( !empty($mailToContribute) ) {
-
 			?>
 			<div class="pageText">
 				<?php
@@ -111,7 +114,6 @@
 		    	echo "</p>";
 		    ?>
 			</div>
-
 		<?php
 			}
 		}
@@ -136,6 +138,8 @@
 			?>
 
 			<div class="edit-all-project">
+
+
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 					 viewBox="0 0 64.5 64.5" style="enable-background:new 0 0 64.5 64.5;" xml:space="preserve" class="options add-post"
 
@@ -146,6 +150,38 @@
 					<path style="fill:#EF474B;" d="M10.2,10.3C-2,22.5-2,42.3,10.2,54.5c12.2,12.2,31.9,12.2,44.1,0c12.2-12.2,12.2-31.9,0-44.1
 						C42.1-1.8,22.4-1.8,10.2,10.3z M50.2,28.5l0,7.8l-14,0l0,14h-7.8l0-14l-14,0l0-7.8l14,0l0-14l7.8,0l0,14H50.2z"/>
 				</svg>
+
+				<?php
+				}
+				?>
+
+				<?php
+				if( current_user_can( 'edit_posts' ) && !empty($mailToContribute)) {
+				?>
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64.5 64.5" style="enable-background:new 0 0 64.5 64.5;" xml:space="preserve" class="options refresh-postie"
+				  data-toggle="tooltip" data-placement="bottom" title="<?php _e('Get mails', 'opendoc'); ?>" data-toggle-tooltip-color="#ef474b"
+	 >
+<g id="fond">
+	<path style="fill:#EF474B;" d="M32.1,63.5c17.2,0,31.2-14,31.2-31.2S49.4,1,32.1,1S0.9,15,0.9,32.2S14.9,63.5,32.1,63.5z"/>
+</g>
+<g id="flc">
+	<polygon style="fill:#FCB421;" points="32.3,37.5 32.3,37.5 32.2,37.5 12.1,23.2 12.1,45.1 52.4,45.1 52.4,23.2 	"/>
+	<polygon style="fill:#FCB421;" points="52.2,19.4 12.3,19.4 32.2,33.5 	"/>
+</g>
+</svg>
+
+				<?php
+				}
+				?>
+		<?php
+		if ( user_can_edit() ) {
+			?>
+
+
+
+
 
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 					 viewBox="0 0 64.5 64.5" style="enable-background:new 0 0 64.5 64.5;" xml:space="preserve"

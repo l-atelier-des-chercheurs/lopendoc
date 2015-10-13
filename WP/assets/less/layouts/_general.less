@@ -754,8 +754,9 @@ label#doorbell-feedback-label {
 
 .refresh-postie {
 	&.is-loading {
-		background-color: rgb(235, 44, 55);
-		color: white;
+		path {
+			fill: #2DB4A5 !important;
+		}
 	}
 }
 
@@ -1075,7 +1076,7 @@ body {
   position: absolute;
 
   padding-left: 	@grid-gutter-width + @grid-gutter-width/2;
-  padding-right: 	@grid-gutter-width + @grid-gutter-width/2;
+  padding-right: 	200px;
 
   height: @grid-gutter-width*2;
 	width: 	100%;
@@ -1083,7 +1084,7 @@ body {
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: initial;
 
 	// sélection
   .sort-list, .category-list {
@@ -1098,7 +1099,7 @@ body {
 	  position: absolute;
 	  right: 			0;
 	  top: 0;
-	  width: 160px;
+	  width: 200px;
 
 		height: @grid-gutter-width*2;
 
@@ -1247,6 +1248,7 @@ body {
 		-webkit-font-smoothing: antialiased;
 
 		background-color: @cpublish;
+
 	}
 }
 
@@ -1261,6 +1263,12 @@ body {
 
 
 .page-template-template-page-accueil {
+
+	#colonnesOptionsTopBar {
+	  padding-left: 	@grid-gutter-width + @grid-gutter-width/2;
+	  padding-right: 	@grid-gutter-width + @grid-gutter-width/2;
+		justify-content: center;
+	}
 
 	.colonneswrappers {
 

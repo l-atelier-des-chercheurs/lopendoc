@@ -91,13 +91,7 @@
 										</li>
 										<?php
 									}
-									if( current_user_can( 'edit_posts' )) {
 									?>
-										<li class="action-button refresh-postie">
-											<?php _e('Get mails', 'opendoc'); ?>
-										</li>
-										<?php
-									} ?>
 									<li class="action-button deconnexion-field">
 										<?php _e('Logout', 'opendoc'); ?>
 									</li>

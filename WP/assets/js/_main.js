@@ -1557,91 +1557,113 @@ var Roots = {
 			///////////////////////////////////////////////// rafraichir postie /////////////////////////////////////////////////
 			$(".refresh-postie").click(function() {
 
-				sendActionToAnalytics("Rafraichissement de Postie");
-
 				$this = $(this);
 
-				if( $this.find(".results").length > 0 ) {
-					location.reload(true);
-					return false;
-				}
+				// ouvrir un champ formulaire
+				$("body").addClass("is-overlaid");
 
-				if( $this.hasClass("is-loading")) {
-					return false;
-				}
+				var refreshMailPopoverContent = $(".refreshMails").clone(true);
+				fillPopOver( refreshMailPopoverContent, $(this), 300, 400 );
 
-				$this.addClass("is-loading");
+				$(".popover .submit-refreshPostie").click( function(e) {
 
-				thisActionUrl = window.location.href;
-				thisActionUrl += "?postie=get-mail";
-				console.log("Submitted ajax post request");
-				console.log("TO : " + thisActionUrl);
+					$thisPopover = $(this).closest(".popover");
+					$this = $(this);
 
-		  $.ajax({
-		  type: "POST",
-		  url: thisActionUrl,
-		  data: {},
-		  success: function(data)
-		  {
-						console.log("SuccessAjax !");
-						console.log("Refreshed Postie !");
-						console.log( data );
+					$this.find(".results").remove();
 
-						var projectTerm = $("article.taxProj").attr("data-term");
+					if( $(this).hasClass( "is--disabled")) { return false; }
 
-						var countNewContent = 0;
-						var countNewContentForProject = 0;
+					$(this).text( $(this).attr("data-submitted"));
+					$(this).addClass( "is--disabled");
 
-						while ( data.search("##") !== -1 ) {
-							project = data.substring( data.indexOf("##")+2 );
-							projectName = project.substring( 0, project.indexOf("##") );
+					$thisPopover.addClass("is-loading");
 
-							data = project.substring( project.indexOf("##")+2 );
+					sendActionToAnalytics("Rafraichissement de Postie");
 
-							if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
-								countNewContentForProject++;
-								countNewContent++;
-							} else {
-								countNewContent++;
-							}
+					thisActionUrl = window.location.href;
+					thisActionUrl += "?postie=get-mail";
+					console.log("Submitted ajax post request");
+					console.log("TO : " + thisActionUrl);
 
-							console.log ( "project gotten = " + projectName);
-						}
+				  $.ajax({
+				  type: "POST",
+				  url: thisActionUrl,
+				  data: {},
+				  success: function(data)
+				  {
+								console.log("SuccessAjax !");
+								console.log("Refreshed Postie !");
+								console.log( data );
+
+								var projectTerm = $("article.taxProj").attr("data-term");
+
+								var countNewContent = 0;
+								var countNewContentForProject = 0;
 
 
+								// ne marche pas !!!!
+/*
+								while ( data.search("##") !== -1 ) {
+									project = data.substring( data.indexOf("##")+2 );
+									projectName = project.substring( 0, project.indexOf("##") );
 
-						$this.removeClass("is-loading");
+									data = project.substring( project.indexOf("##")+2 );
 
-						// récupérer le nombre de mails parsés
-						if ( countNewContent > 0 ) {
+									if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
+										countNewContentForProject++;
+										countNewContent++;
+									} else {
+										countNewContent++;
+									}
 
-							$this.empty();
+									console.log ( "project gotten = " + projectName);
+								}
+								$thisPopover.removeClass("is-loading");
+								// récupérer le nombre de mails parsés
+								if ( countNewContent > 0 ) {
+									if( countNewContentForProject > 0 ) {
+										if( langIsFrench() ) {
+											$this.after("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. Pour les consulter, <a href=''>rafraichissez la page.</a></div>");
+										} else {
+											$this.after("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. To see them, <a href=''>refresh the page.</a></div>");
+										}
+									} else {
 
-							if( countNewContentForProject > 0 ) {
-								if( langIsFrench() ) {
-									$this.append("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. <a href=''>Rafraichissez la page.</a></div>");
+										if( langIsFrench() ) {
+											$this.after("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+										} else {
+											$this.after("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
+										}
+
+									}
+
 								} else {
-									$this.append("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. <a href=''>Refresh the page.</a></div>");
 
 								}
-							} else {
+*/
 
+/*
 								if( langIsFrench() ) {
-									$this.append("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
+									$this.after("<div class='results'>Pas de nouveaux mails récupérés.</div>");
 								} else {
-									$this.append("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
+									$this.after("<div class='results'>No new mails.</div>");
+								}
+*/
+								if( langIsFrench() ) {
+									$this.after("<div class='results'>Résultats de la vérification. <a href=''>Rafraichir la page pour consulter les nouveaux contenus.</a><hr></div>");
+								} else {
+									$this.after("<div class='results'>Monitor log. <a href=''>Refresh the page to see new contents.</a><hr></div>");
 								}
 
-								setTimeout( function() {
-									$this.empty().text("Rafraîchir");
-								}, 2000);
+								$this.siblings(".results").append( data);
+
+								$(this).text( $(this).attr("data-submit"));
+								$(this).removeClass( "is--disabled");
 
 							}
-
-						}
-
-		  }
-		  });
+				  });
+				});
 
 			});
 

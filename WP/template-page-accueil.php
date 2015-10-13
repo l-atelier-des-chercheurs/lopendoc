@@ -54,6 +54,19 @@ Template Name: Accueil avec cartes
 				</svg>
 			<?php } ?>
 
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+				 viewBox="0 0 64.5 64.5" style="enable-background:new 0 0 64.5 64.5;" xml:space="preserve" class="options refresh-postie"
+							  data-toggle="tooltip" data-placement="bottom" title="<?php _e('Get mails', 'opendoc'); ?>" data-toggle-tooltip-color="#ef474b"
+				 >
+			<g id="fond">
+				<path style="fill:#EF474B;" d="M32.1,63.5c17.2,0,31.2-14,31.2-31.2S49.4,1,32.1,1S0.9,15,0.9,32.2S14.9,63.5,32.1,63.5z"/>
+			</g>
+			<g id="flc">
+				<polygon style="fill:#FCB421;" points="32.3,37.5 32.3,37.5 32.2,37.5 12.1,23.2 12.1,45.1 52.4,45.1 52.4,23.2 	"/>
+				<polygon style="fill:#FCB421;" points="52.2,19.4 12.3,19.4 32.2,33.5 	"/>
+			</g>
+			</svg>
+
 			<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In  -->
 			<svg version="1.1"
 				 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
@@ -123,7 +136,11 @@ Template Name: Accueil avec cartes
 				<?php _e('Add the project', 'opendoc'); ?>
 	    </button>
 		</div>
-
+		<?php
+			if( current_user_can( 'edit_posts' )) {
+				get_template_part('templates/content-modules/refresh_mails');
+			}
+		?>
 		<div class="popoverContent champRecherche">
 			<h3>
 				<?php _e('Search on l\'opendoc', 'opendoc'); ?>
