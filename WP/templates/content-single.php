@@ -11,7 +11,7 @@
 		<?php
 
 		if ( user_can_edit() ) {
-			//get_template_part('templates/content-modules/private-publish');
+			get_template_part('templates/content-modules/private-publish');
 		}
 		get_template_part('templates/content-carte');
 		?>

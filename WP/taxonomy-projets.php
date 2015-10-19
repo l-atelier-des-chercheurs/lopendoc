@@ -20,8 +20,6 @@
 
 		$allposts = new WP_Query($args);
 		$descriptionPostID = -1;
-
-
 		if ( $allposts->have_posts() ) {
 			// The Loop
 			while ($allposts->have_posts()) {
@@ -31,7 +29,6 @@
 					$descriptionPostID = get_the_ID();
 					break;
 				}
-
 			}
 		}
 
@@ -101,17 +98,29 @@
 		}
 
 		if ( user_can_edit() ) {
-		  $mailToContribute =  get_option( "mail_addressTC" );
-	    if( !empty($mailToContribute) ) {
-			?>
+
+?>
 			<div class="pageText">
-				<?php
-					echo "<p class='instructions'>";
+<?php
+				$logs = get_post_meta( $descriptionPostID, '_opendoc_editlog', true);
+				if( !empty( $logs)) {
+					$logs = array_reverse($logs);
+					echo "<h4 class='legende'>" . __( "Last edits to this project", 'opendoc') . "</h4>";
+					echo "<ul class='contenu editlog'>";
+					foreach($logs as $log):
+						echo  "<li>$log</li>";
+					endforeach;
+					echo "</ul>";
+				}
+
+			  $mailToContribute =  get_option( "mail_addressTC" );
+		    if( !empty($mailToContribute) ) {
+					echo "<h4 class='legende'>" . __( "To contribute", 'opendoc') . "</h4>";
+					echo "<ul class='contenu instructions'>";
 	      	$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
-	    		_e("To contribute, send an email to ", 'opendoc');
-					echo "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
-	    		_e(", or click on <strong>Add a post</strong>.", 'opendoc');
-		    	echo "</p>";
+		      	echo "<li>" . __("send an email to ", 'opendoc') . "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
+		    		echo "<li>" . __("click on the <em>plus sign</em> icon underneath", 'opendoc') . "</li>";
+		    	echo "</ul>";
 		    ?>
 			</div>
 		<?php

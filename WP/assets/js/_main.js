@@ -20,16 +20,6 @@ var mapRange = function(from, to, s) {
   return to[0] + (s - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
 };
 
-var startDetectEnregistrementNewPost = function() {
-	setTimeout(function () {
-			if( $("#fee-notice-area .updated").length > 0) {
-			} else {
-				startDetectEnregistrementNewPost();
-			}
-	}, 1000);
-};
-
-
 
 // voir http://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
 Array.prototype.diff = function(arr2) {
@@ -962,6 +952,7 @@ jQuery.fn.post_view_routine = function(){
 			console.log("edit-post click");
 
 			var $thisPost = $(this).closest(".post");
+			var thisPostID = $thisPost.attr("data-id");
 			var pageLink = $thisPost.attr("data-singleurl");
 
 			if( $thisPost.hasClass("is-edited") ) {
@@ -969,7 +960,15 @@ jQuery.fn.post_view_routine = function(){
 				// si déja édité, alors revenir au mode normal en replacant le contenu updaté dans la page
 				sendActionToAnalytics("Fin d'édition d'un post");
 				updatePostContent( $thisPost, pageLink );
-
+				// updater le log "derniere edition"
+				//logActionsToProject( $projet, "<span class='edit-by-author'>$username</span>" . __("Removed post ", 'opendoc') . '<em>' . $postTitle . '</em>' );
+				var data = {
+					'action': 'edit_log_postedited',
+					'post_id' : thisPostID,
+					'security': ajaxnonce,
+					'projet': projet,
+				};
+				$.post(ajaxurl, data, function(response) {});
 			} else {
 				sendActionToAnalytics("Édition d'un post");
 				replacePostWithIframe( $thisPost, pageLink );
@@ -1601,55 +1600,6 @@ var Roots = {
 								var countNewContent = 0;
 								var countNewContentForProject = 0;
 
-
-								// ne marche pas !!!!
-/*
-								while ( data.search("##") !== -1 ) {
-									project = data.substring( data.indexOf("##")+2 );
-									projectName = project.substring( 0, project.indexOf("##") );
-
-									data = project.substring( project.indexOf("##")+2 );
-
-									if( projectName.toLowerCase().replace(/ /g, '-') === projectTerm.toLowerCase().replace(/ /g, '-') ) {
-										countNewContentForProject++;
-										countNewContent++;
-									} else {
-										countNewContent++;
-									}
-
-									console.log ( "project gotten = " + projectName);
-								}
-								$thisPopover.removeClass("is-loading");
-								// récupérer le nombre de mails parsés
-								if ( countNewContent > 0 ) {
-									if( countNewContentForProject > 0 ) {
-										if( langIsFrench() ) {
-											$this.after("<div class='results'>" + countNewContentForProject + " nouveaux message(s) pour le projet <em>" + projectTerm + "</em>. Pour les consulter, <a href=''>rafraichissez la page.</a></div>");
-										} else {
-											$this.after("<div class='results'>" + countNewContentForProject + " new message(s) for the project <em>" + projectTerm + "</em>. To see them, <a href=''>refresh the page.</a></div>");
-										}
-									} else {
-
-										if( langIsFrench() ) {
-											$this.after("<div class='results'>" + countNewContent + " nouveaux message(s) pour d'autres projets.</a></div>");
-										} else {
-											$this.after("<div class='results'>" + countNewContent + " new message(s) for other projects.</a></div>");
-										}
-
-									}
-
-								} else {
-
-								}
-*/
-
-/*
-								if( langIsFrench() ) {
-									$this.after("<div class='results'>Pas de nouveaux mails récupérés.</div>");
-								} else {
-									$this.after("<div class='results'>No new mails.</div>");
-								}
-*/
 								if( langIsFrench() ) {
 									$this.after("<div class='results'>Résultats de la vérification. <a href=''>Rafraichir la page pour consulter les nouveaux contenus.</a><hr></div>");
 								} else {
@@ -1817,57 +1767,6 @@ var Roots = {
 					sendActionToAnalytics("Champ de recherche");
 
 				});
-			});
-
-		}
-	},
-
-  new_post: {
-	  init: function() {
-
-			/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
-			// trigger un click sur "Mettre a jour" avant tout
-			var $save_button = $(".save-modifications");
-
-			$save_button.removeClass("is-disabled");
-
-			$save_button.on( "click", function() {
-
-				console.log("clicked save post");
-				$("body").find(".fee-publish").click();
-				sendActionToAnalytics("Fin édition nouveau post");
-
-				$(document).on('fee-after-save', function() {
-					$("body").addClass("is-overlaid");
-					window.top.location.reload();
-				});
-
-			});
-
-
-			$(".remove-post").click( function(e) {
-
-				sendActionToAnalytics("Supprimer un post");
-
-				e.preventDefault();
-
-				var $thisPost = $(this).parents(".post");
-				thisID = $thisPost.attr("data-id");
-
-			var data = {
-				'action': 'remove_post',
-						'security': ajaxnonce,
-						'post_id': thisID
-			};
-			$.post(ajaxurl, data, function(response) {
-						$("body").addClass("is-overlaid");
-						$this = $(this);
-						window.top.location.reload(true);
-
-			});
-
-				return false;
-
 			});
 
 		}

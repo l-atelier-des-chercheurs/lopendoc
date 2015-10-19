@@ -40,7 +40,6 @@
 
 
 a {
-	color: inherit;
 }
 
 
@@ -742,6 +741,40 @@ label#doorbell-feedback-label {
 .pageText {
 	.make-md-column(8);
 	margin-bottom: 	@grid-gutter-width*2;
+}
+
+.editlog {
+
+	max-height: 150px;
+	overflow-y: scroll;
+	position: relative;
+	padding-left: 	0;
+	margin-left: 	0;
+
+
+	&::after {
+	    content: "";
+	    pointer-events: none;
+	    display: block;
+	    position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: 0;
+	    right: 0;
+
+			background: -webkit-linear-gradient(top,rgba(255,255,255,0) 75%, @cfond 100%);
+		  background: -moz-linear-gradient(top,rgba(255,255,255,0) 75%,@cfond 100%);
+		  background: -o-linear-gradient(top,rgba(255,255,255,0) 75%,@cfond 100%);
+		  background: linear-gradient(top,rgba(255,255,255,0) 75%,@cfond 100%);
+	}
+
+	.timeEdited {
+		margin-right: 	@grid-gutter-width/2;
+	}
+	.edit-by-author {
+		margin-right: 	@grid-gutter-width/2;
+		font-weight: 	bold;
+	}
 }
 
 .topIcons	.contenu button {
@@ -1490,6 +1523,14 @@ body {
 
 		margin-bottom: 	@grid-gutter-width;
 
+	  /* These are technically the same, but use both */
+	  overflow-wrap: break-word;
+	  word-wrap: break-word;
+
+		> * {
+			margin-top: 	0;
+		}
+
 		img {
 			max-width: 100%;
 			height: auto
@@ -1591,6 +1632,10 @@ body {
 		.clearfix;
 	  margin-bottom: @grid-gutter-width;
 
+		// masquer le contenu fee, utilisé dans l'édition
+		.fee-content-body {
+			display: none;
+		}
 	}
 	.postContainer[data-status=private] {
 			max-height: 0;
@@ -1930,9 +1975,11 @@ body {
 
 			}
 
+/*
 			.fee-content-body {
 				display: none;
 			}
+*/
 
 		}
 
@@ -2560,6 +2607,11 @@ body {
 	position: relative;
 
 	.entry-content {
+
+		h1 {
+			.h2;
+			font-weight: 	bold;
+		}
 		iframe {
 			max-width: 100%;
 			max-height: 400px;
@@ -2599,15 +2651,6 @@ body {
 
 	padding: 0;
 	background-color: #fff;
-
-
-	.fee-content-original {
-		display: none !important;
-	}
-
-	.fee-content-body {
-		display: block !important;
-	}
 
 	.colTitle {
 		display: none;

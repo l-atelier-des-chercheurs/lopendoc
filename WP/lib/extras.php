@@ -465,23 +465,27 @@ function ajax_create_private_post_with_tax()
 {
     if(!empty($_POST['userid']) && !empty($_POST['term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
-
 			$projetslug = $_POST['term'];
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
 			) {
-
 				$userid = $_POST['userid'];
 				$newpost = array(
-					'post_title'					=> __('Untitled post', 'opendoc'),
-					'post_content'				=> __('-', 'opendoc'),
+					'post_title'					=> __('New post title', 'opendoc'),
+					'post_content'				=> __('New post content.', 'opendoc'),
 					'post_status'					=> 'private',
 					'post_author'					=> $userid,
 				);
 				$newpostID = wp_insert_post( $newpost);
-				wp_set_object_terms( $newpostID, $_POST['term'], 'projets');
+				wp_set_object_terms( $newpostID, $projetslug, 'projets');
 				wp_set_object_terms( $newpostID, $userid, 'auteur');
 	      echo get_permalink( $newpostID);
+	      $projectLink = get_term_link( $projetslug, 'projets');
+				sendMailToAllProjectContributors( $projetslug, html_entity_decode( get_bloginfo('name')), __("A post has been added to ", 'opendoc') . " : " . esc_url( $projectLink ));
+
+				$user = get_user_by( 'id', get_current_user_id());
+				$username = $user->display_name;
+				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("New post", 'opendoc'));
 	    }
     }
 
@@ -508,13 +512,46 @@ function ajax_change_post_visibility()
 	      $post['post_status'] = $_POST['post_status'];
 				wp_update_post($post);
 	      $post = get_post( $_POST['post_id'] );
-	      echo json_encode( get_post_status($_POST['post_id']) );
+	      $newStatus = get_post_status($_POST['post_id']);
+	      echo json_encode( $newStatus);
 
+				$user = get_user_by( 'id', get_current_user_id());
+				$username = $user->display_name;
+				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Changed post status to ", 'opendoc') . '<em>' . $newStatus . '</em>' .  __(" for post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );
       }
     }
 
     die();
 }
+
+// ajouter un log dans le champ edit
+add_action( 'wp_ajax_edit_log_postedited', 'ajax_edit_log_postedited' );
+function ajax_edit_log_postedited()
+{
+
+/*
+					'action': 'edit_log_postedited',
+					'post_id' : thisPostID,
+					'security': ajaxnonce,
+					'projet': projet,
+*/
+
+
+    if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
+    {
+	    $projetslug = $_POST['projet'];
+			if (
+				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
+			) {
+				$user = get_user_by( 'id', get_current_user_id());
+				$username = $user->display_name;
+				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Edited post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );
+      }
+    }
+
+    die();
+}
+
 
 // supprimer un post
 add_action( 'wp_ajax_remove_post', 'ajax_remove_post' );
@@ -526,13 +563,16 @@ function ajax_remove_post()
 
 			$projet = array_pop(wp_get_object_terms( $_POST['post_id'], 'projets'));
 			$projetslug = $projet->slug;
+			$postTitle = get_the_title( $_POST['post_id']);
 
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
 			) {
-
 				wp_trash_post( $_POST['post_id'] );
-        echo json_encode( get_post_status($_POST['post_id']) );
+        echo '';
+				$user = get_user_by( 'id', get_current_user_id());
+				$username = $user->display_name;
+				logActionsToProject( $projet, "<span class='edit-by-author'>$username</span>" . __("Removed post ", 'opendoc') . '<em>' . $postTitle . '</em>' );
       }
     }
 
@@ -606,6 +646,11 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 			$newpostID = wp_insert_post( $newpost);
 			wp_set_object_terms( $newpostID, $projetslug, 'projets');
 			wp_set_object_terms( $newpostID, $userid, 'auteur');
+
+			$user = get_user_by( 'id', get_current_user_id());
+			$username = $user->display_name;
+			logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Created this project", 'opendoc'));
+
 			return "success";
 		}
 	}
@@ -632,10 +677,8 @@ function ajax_edit_projet_authors()
 	    // check si l'auteur du changement un est admin, un superadmin, ou un auteur qui a l'accès à ce projet
 			if (
 				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
-			) {
-
+			){
 				$newAuthorsString = $_POST['newauthors'];
-
 				// liste des ID des utilisateurs à qui ajouter le projet
 				$newAuthorsArray = explode(',', $newAuthorsString);
 
@@ -659,6 +702,10 @@ function ajax_edit_projet_authors()
 							unset($userProjects[$pos]);
 							$hasProjects = implode("|", $userProjects);
 							update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
+
+							$userWhoEdited = get_user_by( 'id', get_current_user_id());
+							$usernameWhoEdited = $userWhoEdited->display_name;
+							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Removed contributor ", 'opendoc') . '<em>' . $user->user_login . '</em>' );
 						}
 
 					} else {
@@ -668,6 +715,10 @@ function ajax_edit_projet_authors()
 							array_push( $userProjects, $projet);
 							$hasProjects = implode("|", $userProjects);
 							update_user_meta( $userid, '_opendoc_user_projets', $hasProjects);
+
+							$userWhoEdited = get_user_by( 'id', get_current_user_id());
+							$usernameWhoEdited = $userWhoEdited->display_name;
+							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Added contributor ", 'opendoc') . '<em>' . $user->user_login . '</em>' );
 						}
 					}
 				}
@@ -856,6 +907,21 @@ function opendoc_contributeur_projets() {
 	) );
 }
 
+// envoyer un mail à tous les contributeurs d'un projet
+function sendMailToAllProjectContributors( $projet, $sujet = '', $content = '') {
+	$users = get_users('role=author');
+	$contributors = array();
+  foreach ($users as $user) {
+		$userID = $user->ID;
+		$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+		$userProjects = explode('|', $hasProject);
+		$ifchecked = '';
+		if( in_array( $projet, $userProjects)) {
+			array_push( $contributors, $user->user_email);
+		}
+	}
+	wp_mail( $contributors, $sujet, $content );
+}
 
 // hide private posts
 add_filter('posts_where', 'no_privates');
@@ -870,8 +936,7 @@ function no_privates($where) {
 function redirect_single_to_tax() {
 
 	global $post;
-
-    // Only modify custom taxonomy template redirect
+  // Only modify custom taxonomy template redirect
 	if ( is_single() ) {
 
 		$terms = get_the_terms( get_the_ID(), 'projets');
@@ -896,6 +961,55 @@ function redirect_single_to_tax() {
   }
 }
 add_action( 'template_redirect', 'redirect_single_to_tax' );
+
+// logger les modifications d'un projet dans un champ _opendoc_edits
+function logActionsToProject( $projet, $string) {
+	$tax = 'projets';
+	$args = array(
+	    'tax_query'         => array(
+	        array(
+	            'taxonomy'  => $tax,
+	            'field'     => 'slug',
+	            'terms'     => $projet,
+	        ),
+	    ),
+	    'post_type'      => 'post', // set the post type to page
+	    'posts_per_page' => -1,
+			'order' => 'DESC',
+			'tags'	 => 'featured',
+		);
+	$description = new WP_Query($args);
+	if ( $description->have_posts() ) {
+		// The Loop
+		while ($description->have_posts()) {
+			$description->the_post();
+			$featured =  has_tag('featured');
+			if( $featured == true ) {
+				$descriptionPostID = get_the_ID();
+				break;
+			}
+
+		}
+	}
+
+	// préfixer la string par l'heure
+	$editedTime = "<span class='timeEdited'>" . date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ) . "</span>";
+	$string = $editedTime . $string;
+
+	$editLog = get_post_meta( $descriptionPostID, '_opendoc_editlog', true);
+	if(is_array($editLog))
+	    array_push( $editLog, $string);
+	else
+	    $editLog = array($string);
+	update_post_meta( $descriptionPostID, '_opendoc_editlog', $editLog);
+}
+
+
+
+
+
+
+
 
 
 // copie de wp_check_post_lock

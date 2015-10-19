@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-10-13 12:55+0200\n"
+"POT-Creation-Date: 2015-10-19 12:16+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -1067,31 +1067,67 @@ msgstr ""
 msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
 msgstr ""
 
-#: lib/extras.php:476
-msgid "Untitled post"
-msgstr "Post sans titre"
+#: lib/extras.php:474
+msgid "New post title"
+msgstr "Titre du nouveau post"
 
-#: lib/extras.php:477
-msgid "-"
+#: lib/extras.php:475
+msgid "New post content."
+msgstr "Contenu du nouveau post."
+
+#: lib/extras.php:484
+msgid "A post has been added to "
 msgstr ""
 
-#: lib/extras.php:567
+#: lib/extras.php:488
+msgid "New post"
+msgstr ""
+
+#: lib/extras.php:520
+msgid "Changed post status to "
+msgstr ""
+
+#: lib/extras.php:520
+msgid " for post "
+msgstr ""
+
+#: lib/extras.php:548
+msgid "Edited post "
+msgstr ""
+
+#: lib/extras.php:575
+msgid "Removed post "
+msgstr ""
+
+#: lib/extras.php:607
 msgid "This name is already taken."
 msgstr "Ce nom est déjà prit."
 
-#: lib/extras.php:601 taxonomy-projets.php:42
+#: lib/extras.php:641 taxonomy-projets.php:39
 msgid "No content for this project yet."
 msgstr "Ce projet n'a pas encore de description."
 
-#: lib/extras.php:845
+#: lib/extras.php:652
+msgid "Created this project"
+msgstr ""
+
+#: lib/extras.php:708
+msgid "Removed contributor "
+msgstr ""
+
+#: lib/extras.php:721
+msgid "Added contributor "
+msgstr ""
+
+#: lib/extras.php:896
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:851
+#: lib/extras.php:902
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:852
+#: lib/extras.php:903
 msgid "séparés par une virgule"
 msgstr ""
 
@@ -1132,31 +1168,39 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: taxonomy-projets.php:111
-msgid "To contribute, send an email to "
-msgstr "Pour contribuer, envoyez un email à "
+#: taxonomy-projets.php:108
+msgid "Last edits to this project"
+msgstr "Dernières modifications pour ce projet"
 
-#: taxonomy-projets.php:113
-msgid ", or click on <strong>Add a post</strong>."
-msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
+#: taxonomy-projets.php:118
+msgid "To contribute"
+msgstr "Pour contribuer"
 
-#: taxonomy-projets.php:130 template-page-accueil.php:118
+#: taxonomy-projets.php:121
+msgid "send an email to "
+msgstr "envoyez un email à "
+
+#: taxonomy-projets.php:122
+msgid "click on the <em>plus sign</em> icon underneath"
+msgstr "cliquez sur le <em>signe plus</em> à droite"
+
+#: taxonomy-projets.php:139 template-page-accueil.php:118
 msgid "Filter by categories: "
 msgstr "Filtrer par catégories : "
 
-#: taxonomy-projets.php:146
+#: taxonomy-projets.php:155
 msgid "Add a post"
 msgstr "Ajouter un post"
 
-#: taxonomy-projets.php:164 template-page-accueil.php:59
+#: taxonomy-projets.php:173 template-page-accueil.php:59
 msgid "Get mails"
 msgstr "Récupérer les mails"
 
-#: taxonomy-projets.php:190
+#: taxonomy-projets.php:199
 msgid "Edit project contributors"
 msgstr "Éditer les contributeurs du projet"
 
-#: taxonomy-projets.php:260 templates/content-carte.php:24
+#: taxonomy-projets.php:269 templates/content-carte.php:24
 msgid "Post currently edited by "
 msgstr "Contenu édité par"
 
@@ -1187,7 +1231,7 @@ msgstr "Rechercher sur l'Opendoc"
 
 #: template-page-accueil.php:100
 msgid "Actions: "
-msgstr ""
+msgstr "Actions : "
 
 #: template-page-accueil.php:109
 msgid "Search"
@@ -1199,7 +1243,7 @@ msgstr "Nom de votre projet"
 
 #: template-page-accueil.php:135
 msgid "Adding…"
-msgstr ""
+msgstr "Ajout en cours…"
 
 #: template-page-accueil.php:136
 msgid "Add the project"
@@ -1397,6 +1441,15 @@ msgstr "Recherche"
 #: templates/searchform.php:6
 msgid "Rechercher sur l'opendoc"
 msgstr ""
+
+#~ msgid "To contribute, send an email to "
+#~ msgstr "Pour contribuer, envoyez un email à "
+
+#~ msgid ", or click on <strong>Add a post</strong>."
+#~ msgstr ", ou cliquez sur <strong>Ajouter un post</strong>."
+
+#~ msgid "Untitled post"
+#~ msgstr "Post sans titre"
 
 #~ msgid "Untitled content"
 #~ msgstr "Post sans contenu"
