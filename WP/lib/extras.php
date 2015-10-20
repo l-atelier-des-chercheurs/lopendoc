@@ -515,6 +515,11 @@ function ajax_change_post_visibility()
 	      $newStatus = get_post_status($_POST['post_id']);
 	      echo json_encode( $newStatus);
 
+				if( $newStatus == 'publish')
+					$newStatus = __("public", 'lopendoc');
+				if( $newStatus == 'private')
+					$newStatus = __("private", 'lopendoc');
+
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
 				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Changed post status to ", 'opendoc') . '<em>' . $newStatus . '</em>' .  __(" for post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );

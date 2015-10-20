@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-10-19 12:16+0200\n"
+"POT-Creation-Date: 2015-10-19 23:51+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -1077,57 +1077,65 @@ msgstr "Contenu du nouveau post."
 
 #: lib/extras.php:484
 msgid "A post has been added to "
-msgstr ""
+msgstr "Un post a été ajouté à "
 
 #: lib/extras.php:488
 msgid "New post"
-msgstr ""
+msgstr "A créé un nouveau post "
 
-#: lib/extras.php:520
+#: lib/extras.php:519
+msgid "public"
+msgstr "public"
+
+#: lib/extras.php:521
+msgid "private"
+msgstr "privé"
+
+#: lib/extras.php:525
 msgid "Changed post status to "
-msgstr ""
+msgstr "A passé en "
 
-#: lib/extras.php:520
+#: lib/extras.php:525
 msgid " for post "
-msgstr ""
+msgstr " le post "
 
-#: lib/extras.php:548
+#: lib/extras.php:553
 msgid "Edited post "
-msgstr ""
+msgstr "A édité le post "
 
-#: lib/extras.php:575
+#: lib/extras.php:580
 msgid "Removed post "
-msgstr ""
+msgstr "A supprimé le post "
 
-#: lib/extras.php:607
+#: lib/extras.php:612
 msgid "This name is already taken."
 msgstr "Ce nom est déjà prit."
 
-#: lib/extras.php:641 taxonomy-projets.php:39
+#: lib/extras.php:646 taxonomy-projets.php:39
 msgid "No content for this project yet."
 msgstr "Ce projet n'a pas encore de description."
 
-#: lib/extras.php:652
+#: lib/extras.php:657
 msgid "Created this project"
-msgstr ""
+msgstr "A créé ce projet"
 
-#: lib/extras.php:708
+#: lib/extras.php:713
 msgid "Removed contributor "
-msgstr ""
+msgstr "A supprimé un contributeur "
 
-#: lib/extras.php:721
+#: lib/extras.php:726
 msgid "Added contributor "
-msgstr ""
+msgstr "A ajouté un contributeur "
 
-#: lib/extras.php:896
+#: lib/extras.php:901
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:902
+#: lib/extras.php:907
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:903
+#: lib/extras.php:908
 msgid "séparés par une virgule"
 msgstr ""
 
