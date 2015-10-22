@@ -850,6 +850,7 @@ jQuery.fn.post_view_routine = function(){
 			this.removePostTap();
 			this.activateTooltips();
 			this.loadProcessingSketch();
+			this.loadJSONtoBlender();
 			this.activate_comments();
 		}
 	};
@@ -1019,8 +1020,11 @@ jQuery.fn.post_view_routine = function(){
 
 	this.loadProcessingSketch = function(){
 
+		console.log( 'postID ' + this.attr('data-id'));
 		console.log( '$(".post .entry-content:contains(void setup())").length = ' + this.find(".entry-content:contains(void setup)").length );
+		console.log( '$.find("#pjs").length ' + $.find("#pjs").length);
 		// si y a besoin de pjs
+
 		if( this.find(".entry-content:contains(void setup)").length > 0 && $.find("#pjs").length === 0) {
 
 			console.log( " PLop");
@@ -1030,31 +1034,95 @@ jQuery.fn.post_view_routine = function(){
 			script.src = scriptSrc;
 			script.id = 'pjs';
 
-			var $thisPost = $(this);
+			script.onload = function() {
+				$(document).trigger("loaded:processingscript");
+			};
+
+
+			var head = document.getElementsByTagName('head')[0];
+			head.appendChild(script);
+		}
+
+		if( this.find(".entry-content:contains(void setup)").length > 0) {
+			self.convertThisPostToCanvas( $(this));
+		}
+	};
+
+
+	this.loadJSONtoBlender = function () {
+
+
+
+		linkToScript = $(this).find("a[href]").filter(function() {
+			return $(this).attr('href').endsWith('.json');
+		});
+
+		// si on a affaire à un json
+		if( linkToScript.length > 0 && $.find("#three").length === 0) {
+			// charger three + orbit
+		  var scriptSrc = 'http://www.lopendoc.org/wp-content/themes/lopendoc2/assets/js/vendor/three.min.js';
+			var script = document.createElement('script');
+			script.src = scriptSrc;
+			script.id = 'three';
 
 			script.onload = function() {
-				self.convertThisPostToCanvas( $thisPost);
+			  var scriptSrc = 'http://www.lopendoc.org/wp-content/themes/lopendoc2/assets/js/vendor/OrbitControls.js';
+				var script = document.createElement('script');
+				script.src = scriptSrc;
+				script.id = 'orbit';
+				script.onload = function() {
+
+				  var scriptSrc = 'http://www.lopendoc.org/wp-content/themes/lopendoc2/assets/js/vendor/blender-json.js';
+					var script = document.createElement('script');
+					script.src = scriptSrc;
+					script.id = 'blenderjson';
+					script.onload = function() {
+						$(document).trigger("loaded:threejsAndOrbitAndAnimate");
+					};
+					var head = document.getElementsByTagName('head')[0];
+					head.appendChild(script);
+				};
+				var head = document.getElementsByTagName('head')[0];
+				head.appendChild(script);
 			};
 
 			var head = document.getElementsByTagName('head')[0];
 			head.appendChild(script);
-		}	else if( this.find(".entry-content:contains(void setup)").length > 0 && $.find("#pjs").length > 0) {
-			$.find("#pjs").onload = function() {
-				self.convertThisPostToCanvas( $thisPost);
-			};
+
+		}
+		if( linkToScript.length > 0) {
+			$that = $(this);
+			linkToScript.each( function() {
+				self.convertThisPostToThree( $that, $(this).attr('href'));
+			});
 		}
 	};
 
 	this.convertThisPostToCanvas = function( $thisPost) {
-		$thisPost.addClass("is-sketch");
-		this.textToCanvas( $thisPost);
+		$(window).on("loaded:processingscript", function() {
+			$thisPost.addClass("is--sketch");
+			self.textToCanvas( $thisPost);
+		});
+	};
+
+	this.convertThisPostToThree = function( $thisPost, jsonLocation) {
+		$(window).on("loaded:threejsAndOrbitAndAnimate", function() {
+			$thisPost.addClass("is--three");
+			$thisPostContent = $thisPost.find('.entry-content');
+			threeContainer = $( "<div class='threeContainer'></div>")[0];
+			$thisPostContent.append( threeContainer);
+
+			jsonToThree( threeContainer, jsonLocation);
+		});
 	};
 
 	this.textToCanvas = function( $thisPost) {
 
 		thisPostID = $thisPost.attr("data-id");
-
 		$thisPostContent = $thisPost.find('.entry-content');
+
+		console.log( "textToCanvas");
+		console.log( "thisPostID : " + thisPostID);
 
 		// poulet basquaise aux pâtes
 		sketch = $thisPostContent.text();
