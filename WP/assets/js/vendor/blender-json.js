@@ -65,7 +65,7 @@ var jsonToThree = function( container, jsonLocation) {
     windowHalfY = window.innerHeight / 2;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( container.offsetWidth, container.offsetWidth * 0.66);
   }
   function onDocumentMouseMove( event ) {
     mouseX = ( event.clientX - windowHalfX );
