@@ -1139,7 +1139,6 @@ class opendoc_walker extends Walker_Comment {
 
 
 // autoriser les json dans l'interface
-/* Autoriser les fichiers SVG */
 function allow_new_mime_types($mimes) {
   $mimes['json'] = 'application/javascript';
   return $mimes;

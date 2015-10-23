@@ -117,9 +117,15 @@
 		    if( !empty($mailToContribute) ) {
 					echo "<h4 class='legende'>" . __( "To contribute", 'opendoc') . "</h4>";
 					echo "<ul class='contenu instructions'>";
-	      	$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
+
+					$hasCheckInPlus = strpos("leprojet", $mailToContribute);
+					if( $hasCheckInPlus) {
+	      		$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
 		      	echo "<li>" . __("send an email to ", 'opendoc') . "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
-		    		echo "<li>" . __("click on the <em>plus sign</em> icon underneath", 'opendoc') . "</li>";
+		      } else {
+			      echo "<li>" . __("send an email to ", 'opendoc') . "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a> " . __("with ", 'opendoc') . "<em>#" . $term . "#</em>" . __(" in the subject line.", 'opendoc');
+		      }
+		      	echo "<li>" . __("click on the <em>plus sign</em> icon underneath", 'opendoc') . "</li>";
 		    	echo "</ul>";
 		    ?>
 			</div>
