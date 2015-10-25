@@ -44,7 +44,7 @@ var jsonToThree = function( container, jsonLocation) {
 
     renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
     renderer.setClearColor( 0x000000, 0 ); // the default
-    renderer.setSize( container.offsetWidth, container.offsetWidth * 0.66);
+    renderer.setSize( container.offsetWidth, container.offsetWidth);
     container.appendChild( renderer.domElement );
     controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.noKeys = true;
@@ -65,7 +65,7 @@ var jsonToThree = function( container, jsonLocation) {
     windowHalfY = window.innerHeight / 2;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( container.offsetWidth, container.offsetWidth * 0.66);
+    renderer.setSize( container.offsetWidth, container.offsetWidth);
   }
   function onDocumentMouseMove( event ) {
     mouseX = ( event.clientX - windowHalfX );
