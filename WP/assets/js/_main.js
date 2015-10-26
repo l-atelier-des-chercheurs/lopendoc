@@ -20,6 +20,11 @@ var mapRange = function(from, to, s) {
   return to[0] + (s - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
 };
 
+String.prototype.endsWith = function(pattern) {
+    var d = this.length - pattern.length;
+    return d >= 0 && this.lastIndexOf(pattern) === d;
+};
+
 
 // voir http://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
 Array.prototype.diff = function(arr2) {

@@ -118,8 +118,8 @@
 					echo "<h4 class='legende'>" . __( "To contribute", 'opendoc') . "</h4>";
 					echo "<ul class='contenu instructions'>";
 
-					$hasCheckInPlus = strpos("leprojet", $mailToContribute);
-					if( $hasCheckInPlus) {
+					$hasCheckInPlus = strpos($mailToContribute, "leprojet");
+					if( $hasCheckInPlus > 0) {
 	      		$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
 		      	echo "<li>" . __("send an email to ", 'opendoc') . "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
 		      } else {
