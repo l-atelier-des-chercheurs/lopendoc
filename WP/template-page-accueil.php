@@ -177,6 +177,7 @@ Template Name: Accueil avec cartes
 
 				$descriptionPostID = -1;
 				$descriptionTitle = '';
+				$userLists = get_users('role=author');
 
 				while ( $get_description->have_posts()) : $get_description->the_post();
 					// chercher le featured, le récupérer puis break
@@ -210,6 +211,21 @@ Template Name: Accueil avec cartes
 			    $timeSinceLastPostDate = $nowts - $lastPostDate;
 			    $timeCreated = $nowts - $timeCreated;
 
+					// si on est sur le post "description", on veut les contributeurs du projet
+					$contributeursName = array();
+					foreach ($userLists as $user) {
+						$userID = $user->ID;
+						$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+						$userProjects = explode('|', $hasProject);
+						$ifchecked = '';
+						if( in_array( $term_slug, $userProjects)) {
+							$contributeursName[] = $user->display_name;
+						}
+					}
+
+					if( count($contributeursName) > 0)
+						$allcontributeurs = implode( ', ', $contributeursName);
+
 					?>
 
 					<div class="colonneswrappers make-it-col"
@@ -218,6 +234,7 @@ Template Name: Accueil avec cartes
 						<?php if( $timeCreated != '') { 					 	echo " data-timecreated='$timeCreated'"; } ?>
 						<?php if( $term_name != '') { 							echo " data-name='" . strtoupper( $term_name) . "'"; } ?>
 						<?php if( has_post_thumbnail()) { 	 				echo " data-hasthumb "; } ?>
+						<?php if( count($contributeursName) > 0) { echo " data-contributors='" . $allcontributeurs . "'"; } ?>
 							>
 						<section  class="colonnes" >
 

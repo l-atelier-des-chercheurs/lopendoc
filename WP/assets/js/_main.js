@@ -1599,7 +1599,7 @@ var Roots = {
 			});
 
 			///////////////////////////////////////////// éditer les auteurs d'un projet ////////////////////////////////////////////
-			$(".edit-authors").click( function(e) {
+			$(document).on("click", ".edit-authors", function(e) {
 
 				// ouvrir un champ formulaire
 				$("body").addClass("is-overlaid");

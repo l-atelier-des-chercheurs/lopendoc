@@ -647,7 +647,7 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 			error_log('ajout projet description');
 			$newpost = array(
 				'post_title'					=> $projet,
-				'post_content'				=> __('No content for this project yet.', 'opendoc'),
+				'post_content'				=> __('Write here a description for your project and add a picture. They will be used to show your project on the front page.', 'opendoc'),
 				'post_status'					=> 'publish',
 				'post_author'					=> $userid,
 				'tags_input'					=> 'featured'

@@ -238,7 +238,7 @@ button{
 .contenu-with-border-left {
   border-left: 2px solid #eee;
 
-  margin: @grid-gutter-width/4 0 @grid-gutter-width/2;
+  margin: @grid-gutter-width/8 0 @grid-gutter-width/4;
   padding: 0 8px;
 
   color: @cgrey;
@@ -366,7 +366,7 @@ label#doorbell-feedback-label {
 	border: none;
 	z-index: 	1500;
 
-	margin-bottom: 	@grid-gutter-width;
+	margin-bottom: 	@grid-gutter-width/2;
 
 	.navbar-container {
 		width: 	100%;
@@ -1109,7 +1109,11 @@ body {
 	.container;
 	padding: 0;
 	margin-bottom: 	@grid-gutter-width;
+
+
 }
+
+
 
 #colonnesOptionsTopBar {
   background-color: #fff;
@@ -1630,7 +1634,7 @@ body {
 	.pageText {
 		.make-md-column(8);
 		.make-md-column-offset(2);
-		margin-bottom: @grid-gutter-width;
+		margin-bottom: 0;
 
 		.contenu {
 			background-color: @clightgrey;
@@ -1646,7 +1650,7 @@ body {
 		top:0;
 
 		.clearfix;
-	  margin-bottom: @grid-gutter-width;
+	  margin-bottom: @grid-gutter-width/2;
 
 		// masquer le contenu fee, utilisé dans l'édition
 		.fee-content-body {
@@ -1684,6 +1688,10 @@ body {
 				padding-right: 0;
     		margin-bottom: 0;
     		margin-top: 	@push-description-content-down;
+
+    		img {
+					max-height: 290px;
+    		}
 			}
 
 			.entry-stuff {
@@ -1899,7 +1907,7 @@ body {
 			text-align: left;
 			text-transform: none;
 
-			margin-bottom: @grid-gutter-width/2;
+			margin-bottom: 0;
 
 			padding: @grid-gutter-width/2 @grid-gutter-width/2;
 			border-right: 1px solid @clightgrey;
@@ -1911,6 +1919,22 @@ body {
 
 			.contenu {
 				.contenu-with-border-left;
+			}
+
+			.modDate, .createdDate {
+				.legende, .contenu {
+					display: inline-block;
+				}
+				.contenu {
+					margin-top: 	0;
+					margin-bottom: 	0;
+				}
+			}
+			.createdDate {
+				margin-bottom: 	0;
+			}
+			.createdDate + .modDate {
+				margin-top: 0;
 			}
 
 			.icons {
@@ -1925,8 +1949,17 @@ body {
 			}
 
 			.auteurs {
+				svg {
+					width: 	32px;
+					cursor: pointer;
+				}
 				.auteur {
 					display: block;
+				}
+
+				.contenu {
+					max-height: 55px;
+					overflow-y: scroll;
 				}
 
 
@@ -1972,7 +2005,13 @@ body {
 				.comment-icon {
 				}
 				.comments-link a {
-					color: @cbleue;
+			    display: inline-block;
+			    background-color: @cbleue;
+			    padding: 0 2px;
+			    cursor: pointer;
+			    font-weight: normal;
+			    text-transform: lowercase;
+			    color: #fff;
 				}
 			}
 		}
@@ -2792,7 +2831,7 @@ body {
 
 
 			.post-thumbnail {
-
+				float: left;
 				display: block;
 				.make-md-column(5);
 				padding-left: 0;
