@@ -21,7 +21,7 @@
 				$ifchecked = 'checked="checked" ';
 			}
 			echo '<div class="checkbox"><label>';
-			echo '<input type="checkbox" name="author" value="' . $userID . '" ' . $ifchecked . '>' . $user->nickname;
+			echo '<input type="checkbox" name="author" value="' . $userID . '" ' . $ifchecked . '>' . $user->display_name;
 			echo '</label></div>';
 			unset($ifchecked);
 		}

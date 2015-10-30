@@ -105,7 +105,7 @@
 				$logs = get_post_meta( $descriptionPostID, '_opendoc_editlog', true);
 				if( !empty( $logs)) {
 					$logs = array_reverse($logs);
-					echo "<h4 class='legende'>" . __( "Last edits to this project", 'opendoc') . "</h4>";
+					echo "<h4 class='legende accordion--toggle'>" . __( "Last edits to this project", 'opendoc') . "</h4>";
 					echo "<ul class='contenu editlog'>";
 					foreach($logs as $log):
 						echo  "<li>$log</li>";
@@ -115,7 +115,7 @@
 
 			  $mailToContribute =  get_option( "mail_addressTC" );
 		    if( !empty($mailToContribute) ) {
-					echo "<h4 class='legende'>" . __( "To contribute", 'opendoc') . "</h4>";
+					echo "<h4 class='legende accordion--toggle'>" . __( "To contribute", 'opendoc') . "</h4>";
 					echo "<ul class='contenu instructions'>";
 
 					$hasCheckInPlus = strpos($mailToContribute, "leprojet");
@@ -125,7 +125,7 @@
 		      } else {
 			      echo "<li>" . __("send an email to ", 'opendoc') . "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a> " . __("with ", 'opendoc') . "<em>#" . $term . "#</em>" . __(" in the subject line.", 'opendoc');
 		      }
-		      	echo "<li>" . __("click on the <em>plus sign</em> icon underneath", 'opendoc') . "</li>";
+		      echo "<li>" . __("click on the <em>plus sign</em> icon underneath", 'opendoc') . "</li>";
 		    	echo "</ul>";
 		    ?>
 			</div>

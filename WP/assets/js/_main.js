@@ -594,7 +594,6 @@ function replacePostWithIframe( $thisPost, pageLink ) {
 	}
 
 	/*********************** ajouter un bouton "Save" a cote de .button-right .edit-post ***********************/
-	// trigger un click sur "Mettre a jour" avant tout
 	var $save_button = $thisPost.find(".save-modifications");
 	$save_button.removeClass("is-disabled");
 	$save_button.bind( "tap", function() {
@@ -1567,6 +1566,10 @@ var Roots = {
 				animateLogo();
 			}
 
+			$('.accordion--toggle').click(function(){
+				//Expand or collapse this panel
+				$(this).toggleClass("is--opened").next().slideToggle(0);
+			}).next().slideToggle(0);
 
 			if( $(".category-filters .contenu").length > 0) {
 				$(".category-filters").the_filters();

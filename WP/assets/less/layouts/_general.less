@@ -207,6 +207,28 @@ button{
 	color: @cgrey;
 	margin-right: 4px;
 	text-transform: lowercase;
+
+	&.accordion--toggle {
+
+		cursor: pointer;
+
+		&::before {
+			content: ">";
+			position: absolute;
+			left: -10px;
+			margin-top: 	5px;
+			transform-origin: center;
+			font-size: 	16px;
+			transition: transform .4s ease-out;
+
+		}
+
+		&.is--opened {
+			&::before {
+				transform: rotate(90deg);
+			}
+		}
+	}
 }
 .contenu {
 	font-weight: 	bold;
@@ -344,7 +366,7 @@ label#doorbell-feedback-label {
 	border: none;
 	z-index: 	1500;
 
-	margin-bottom: 	@grid-gutter-width*2;
+	margin-bottom: 	@grid-gutter-width;
 
 	.navbar-container {
 		width: 	100%;
@@ -730,7 +752,7 @@ label#doorbell-feedback-label {
 	.make-md-column(8);
 
 	text-align: left;
-	margin-top: @grid-gutter-width;
+	margin-top: 0;
 	margin-bottom: @grid-gutter-width;
 
 	h1 {
@@ -740,33 +762,19 @@ label#doorbell-feedback-label {
 
 .pageText {
 	.make-md-column(8);
-	margin-bottom: 	@grid-gutter-width*2;
+	margin-bottom: 	@grid-gutter-width;
 }
 
 .editlog {
 
-	max-height: 150px;
+	max-height: 480px;
+	max-height: 70vh;
 	overflow-y: scroll;
 	position: relative;
 	padding-left: 	0;
 	margin-left: 	0;
 	text-transform: lowercase;
-
-	&::after {
-	    content: "";
-	    pointer-events: none;
-	    display: block;
-	    position: absolute;
-	    top: 0;
-	    bottom: 0;
-	    left: 0;
-	    right: 0;
-
-			background: -webkit-linear-gradient(top,rgba(255,255,255,0) 75%, @cfond 100%);
-		  background: -moz-linear-gradient(top,rgba(255,255,255,0) 75%,@cfond 100%);
-		  background: -o-linear-gradient(top,rgba(255,255,255,0) 75%,@cfond 100%);
-		  background: linear-gradient(top,rgba(255,255,255,0) 75%,@cfond 100%);
-	}
+	list-style: none;
 
 	.timeEdited {
 		margin-right: 	@grid-gutter-width/2;
@@ -1100,7 +1108,7 @@ body {
 	.clearfix;
 	.container;
 	padding: 0;
-	margin-bottom: 	@grid-gutter-width*2;
+	margin-bottom: 	@grid-gutter-width;
 }
 
 #colonnesOptionsTopBar {
@@ -1312,10 +1320,9 @@ body {
 		float: left;
 		vertical-align: top;
 
-		max-height: 900px;
-		//overflow: hidden;
 
 		min-height: 150px;
+		max-height: 900px;
 		background-color: transparent;
 
 		transition: opacity .5s, margin .5s ease;
@@ -1527,6 +1534,10 @@ body {
 	  overflow-wrap: break-word;
 	  word-wrap: break-word;
 
+		max-height: 480px;
+		overflow: hidden;
+
+
 		> * {
 			margin-top: 	0;
 		}
@@ -1620,6 +1631,11 @@ body {
 		.make-md-column(8);
 		.make-md-column-offset(2);
 		margin-bottom: @grid-gutter-width;
+
+		.contenu {
+			background-color: @clightgrey;
+			padding: @grid-gutter-width/2;
+		}
 	}
 
 	.postContainer, .descriptionContainer {
@@ -1655,13 +1671,15 @@ body {
 	  padding-right: @grid-gutter-width/2;
 */
 
-		@push-description-content-down: 78px;
+		@push-description-content-down: 0;
 
 		.post {
 
+			background-color: @clightgrey;
+
 			.post-thumbnail {
 				display: block;	// activer la thumbnail sur les descriptions
-				.make-md-column(5);
+				.make-md-column(4);
 				padding-left: 0;
 				padding-right: 0;
     		margin-bottom: 0;
@@ -1679,7 +1697,7 @@ body {
 			}
 
 			.entry-title-and-content {
-				.make-md-column(5);
+				.make-md-column(6);
 
 				.entry-title {
 					.h1;
@@ -1904,6 +1922,14 @@ body {
 				.contenu {
 					color: @caction;
 				}
+			}
+
+			.auteurs {
+				.auteur {
+					display: block;
+				}
+
+
 			}
 
 			.categories {
@@ -2689,6 +2715,16 @@ body {
 
 	.entry-meta {
 		.make-xs-column(2.666666);
+
+		.auteurs {
+			display: none;
+		}
+		.comments-meta {
+			display: none;
+		}
+		.createdDate, .modDate {
+			display: none;
+		}
 	}
 
 	.entry-title-and-content {

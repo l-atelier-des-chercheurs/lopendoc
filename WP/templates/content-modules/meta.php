@@ -1,22 +1,77 @@
 
 <?php
-	$auteurs = get_the_author();
-	if( !empty($auteurs) ) {
-		$htmlTags = '<div class="auteurs auteurs-list">';
-		$htmlTags .= '<div class="legende">';
-		$htmlTags .= __('Author: ', 'opendoc');
-		$htmlTags .= '</div>';
-		$htmlTags .= '<div class="contenu">';
+	//$auteurs = get_the_author();
+	$term = get_query_var( 'term' );
 
-// 		foreach( $auteurs as $auteur) {
-			$authorName = $auteurs;
-			$htmlTags .= '<span class="auteur">';
-			$htmlTags .= $authorName;
-			$htmlTags .= '</span>';
-// 		}
-		$htmlTags .= '</div>';
-		$htmlTags .= '</div>';
-		echo $htmlTags;
+	// si on est sur le post "description", on veut les contributeurs du projet
+	if( $term && has_tag('featured')) {
+		$users = get_users('role=author');
+		$contributeursName = array();
+	  foreach ($users as $user) {
+			$userID = $user->ID;
+			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+			$userProjects = explode('|', $hasProject);
+			$ifchecked = '';
+			if( in_array( $term, $userProjects)) {
+				$contributeursName[] = $user->display_name;
+			}
+		}
+
+		if( count($contributeursName) > 0) :
+			$htmlTags = '<div class="auteurs auteurs-list">';
+			$htmlTags .= '<div class="legende">';
+			if( count($contributeursName) == 1)
+				$htmlTags .= __('Project contributor: ', 'opendoc');
+			else
+				$htmlTags .= __('Project contributors: ', 'opendoc');
+			$htmlTags .= '</div>';
+			$htmlTags .= '<div class="contenu">';
+
+	 		foreach( $contributeursName as $contributeurName) {
+				$htmlTags .= '<span class="auteur">';
+				$htmlTags .= $contributeurName;
+				$htmlTags .= '</span>';
+	 		}
+
+			$htmlTags .= '</div>';
+			$htmlTags .= '</div>';
+			echo $htmlTags;
+		endif;
+
+	}	else {
+		// sinon, on veut les éditeurs du post
+		$allAuteurs = get_the_terms( get_the_ID(), 'auteur' );
+		if ( $allAuteurs && ! is_wp_error( $allAuteurs ) ) :
+			$auteursName = array();
+			foreach ( $allAuteurs as $auteur ) {
+				// $auteursName[] = get_user_by( 'id', $auteur->name)->display_name;
+				$auteurName = $auteur->name;
+				if( !is_numeric($auteurName))
+					$auteursName[] = $auteurName;
+			}
+			if( count($auteursName) > 0) :
+				//echo join( ", ", $auteursName );
+
+				$htmlTags = '<div class="auteurs auteurs-list">';
+				$htmlTags .= '<div class="legende">';
+				if( count($auteursName) == 1)
+					$htmlTags .= __('Author: ', 'opendoc');
+				else
+					$htmlTags .= __('Authors: ', 'opendoc');
+				$htmlTags .= '</div>';
+				$htmlTags .= '<div class="contenu">';
+
+		 		foreach( $auteursName as $auteurName) {
+					$htmlTags .= '<span class="auteur">';
+					$htmlTags .= $auteurName;
+					$htmlTags .= '</span>';
+		 		}
+
+				$htmlTags .= '</div>';
+				$htmlTags .= '</div>';
+				echo $htmlTags;
+			endif;
+		endif;
 	}
 ?>
 

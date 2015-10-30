@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-10-19 23:51+0200\n"
+"POT-Creation-Date: 2015-10-28 12:28+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -1099,43 +1099,43 @@ msgstr "A passé en "
 msgid " for post "
 msgstr " le post "
 
-#: lib/extras.php:553
+#: lib/extras.php:556
 msgid "Edited post "
 msgstr "A édité le post "
 
-#: lib/extras.php:580
+#: lib/extras.php:584
 msgid "Removed post "
 msgstr "A supprimé le post "
 
-#: lib/extras.php:612
+#: lib/extras.php:616
 msgid "This name is already taken."
 msgstr "Ce nom est déjà prit."
 
-#: lib/extras.php:646 taxonomy-projets.php:39
+#: lib/extras.php:650 taxonomy-projets.php:39
 msgid "No content for this project yet."
 msgstr "Ce projet n'a pas encore de description."
 
-#: lib/extras.php:657
+#: lib/extras.php:661
 msgid "Created this project"
 msgstr "A créé ce projet"
 
-#: lib/extras.php:713
+#: lib/extras.php:717
 msgid "Removed contributor "
 msgstr "A supprimé un contributeur "
 
-#: lib/extras.php:726
+#: lib/extras.php:730
 msgid "Added contributor "
 msgstr "A ajouté un contributeur "
 
-#: lib/extras.php:901
+#: lib/extras.php:905
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:907
+#: lib/extras.php:911
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:908
+#: lib/extras.php:912
 msgid "séparés par une virgule"
 msgstr ""
 
@@ -1184,31 +1184,39 @@ msgstr "Dernières modifications pour ce projet"
 msgid "To contribute"
 msgstr "Pour contribuer"
 
-#: taxonomy-projets.php:121
+#: taxonomy-projets.php:124 taxonomy-projets.php:126
 msgid "send an email to "
 msgstr "envoyez un email à "
 
-#: taxonomy-projets.php:122
+#: taxonomy-projets.php:126
+msgid "with "
+msgstr "avec "
+
+#: taxonomy-projets.php:126
+msgid " in the subject line."
+msgstr " dans le sujet."
+
+#: taxonomy-projets.php:128
 msgid "click on the <em>plus sign</em> icon underneath"
 msgstr "cliquez sur le <em>signe plus</em> à droite"
 
-#: taxonomy-projets.php:139 template-page-accueil.php:118
+#: taxonomy-projets.php:145 template-page-accueil.php:118
 msgid "Filter by categories: "
 msgstr "Filtrer par catégories : "
 
-#: taxonomy-projets.php:155
+#: taxonomy-projets.php:161
 msgid "Add a post"
 msgstr "Ajouter un post"
 
-#: taxonomy-projets.php:173 template-page-accueil.php:59
+#: taxonomy-projets.php:179 template-page-accueil.php:59
 msgid "Get mails"
 msgstr "Récupérer les mails"
 
-#: taxonomy-projets.php:199
+#: taxonomy-projets.php:205
 msgid "Edit project contributors"
 msgstr "Éditer les contributeurs du projet"
 
-#: taxonomy-projets.php:269 templates/content-carte.php:24
+#: taxonomy-projets.php:275 templates/content-carte.php:24
 msgid "Post currently edited by "
 msgstr "Contenu édité par"
 
@@ -1261,7 +1269,7 @@ msgstr "Ajouter le projet"
 msgid "Search on l'opendoc"
 msgstr "Rechercher sur l'Opendoc"
 
-#: template-page-accueil.php:238 templates/content-modules/meta.php:30
+#: template-page-accueil.php:238 templates/content-modules/meta.php:84
 msgid "Categories: "
 msgstr "Catégories :"
 
@@ -1277,11 +1285,11 @@ msgstr "Posts publiés&nbsp;:"
 msgid "Private posts:"
 msgstr "Posts Privés&nbsp;:"
 
-#: template-page-accueil.php:333 templates/content-modules/meta.php:97
+#: template-page-accueil.php:333 templates/content-modules/meta.php:151
 msgid "Edited: "
 msgstr "Édité le :"
 
-#: template-page-accueil.php:345 templates/content-modules/meta.php:86
+#: template-page-accueil.php:345 templates/content-modules/meta.php:140
 msgid "Created: "
 msgstr "Créé le :"
 
@@ -1357,52 +1365,64 @@ msgstr "Mise à jour en cours..."
 msgid "Update"
 msgstr "Mise à jour"
 
-#: templates/content-modules/meta.php:7
-msgid "Author: "
-msgstr "Auteur&nbsp;:"
+#: templates/content-modules/meta.php:23
+msgid "Project contributor: "
+msgstr "Contributeur au projet&nbsp;:"
 
-#: templates/content-modules/meta.php:47
+#: templates/content-modules/meta.php:25
+msgid "Project contributors: "
+msgstr "Contributeurs au projet&nbsp;: "
+
+#: templates/content-modules/meta.php:57
+msgid "Author: "
+msgstr "Auteur&nbsp;: "
+
+#: templates/content-modules/meta.php:59
+msgid "Authors: "
+msgstr "Auteurs"
+
+#: templates/content-modules/meta.php:101
 msgid "Edit categories"
 msgstr "Éditer les catégories"
 
-#: templates/content-modules/meta.php:49
+#: templates/content-modules/meta.php:103
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/content-modules/meta.php:67
+#: templates/content-modules/meta.php:121
 msgid "Comments: "
-msgstr "Commentaires :"
+msgstr "Commentaires&nbsp;:"
 
-#: templates/content-modules/meta.php:71
+#: templates/content-modules/meta.php:125
 msgid "Add a comment"
 msgstr "Ajouter un commentaire"
 
-#: templates/content-modules/meta.php:71
+#: templates/content-modules/meta.php:125
 msgid "1 comment"
 msgstr "1 commentaire"
 
-#: templates/content-modules/meta.php:71
+#: templates/content-modules/meta.php:125
 #, php-format
 msgid "% comments"
 msgstr "% commentaires"
 
-#: templates/content-modules/meta.php:74
+#: templates/content-modules/meta.php:128
 msgid "Leave a comment"
 msgstr "Laisser un commentaire"
 
-#: templates/content-modules/meta.php:74
+#: templates/content-modules/meta.php:128
 msgid "1 Comment"
 msgstr "1 Commentaire"
 
-#: templates/content-modules/meta.php:74
+#: templates/content-modules/meta.php:128
 msgid "% Comments"
 msgstr "% Commentaires"
 
-#: templates/content-modules/meta.php:104
+#: templates/content-modules/meta.php:158
 msgid "Edited on "
 msgstr "Édité le "
 
-#: templates/content-modules/meta.php:106
+#: templates/content-modules/meta.php:160
 msgid "By"
 msgstr "Par"
 
@@ -1448,7 +1468,7 @@ msgstr "Recherche"
 
 #: templates/searchform.php:6
 msgid "Rechercher sur l'opendoc"
-msgstr ""
+msgstr "Rechercher sur l’Opendoc"
 
 #~ msgid "To contribute, send an email to "
 #~ msgstr "Pour contribuer, envoyez un email à "

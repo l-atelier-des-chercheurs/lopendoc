@@ -148,7 +148,7 @@ function auteur_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -529,7 +529,7 @@ function ajax_change_post_visibility()
     die();
 }
 
-// ajouter un log dans le champ edit
+// ajouter un log dans le champ edit car un post vient
 add_action( 'wp_ajax_edit_log_postedited', 'ajax_edit_log_postedited' );
 function ajax_edit_log_postedited()
 {
@@ -541,7 +541,6 @@ function ajax_edit_log_postedited()
 					'projet': projet,
 */
 
-
     if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
 	    $projetslug = $_POST['projet'];
@@ -550,7 +549,12 @@ function ajax_edit_log_postedited()
 			) {
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
+
+				wp_add_object_terms( $_POST['post_id'], $username, 'auteur');
+				error_log( 'new auteur '. $user->ID . ' pour le post ' . $_POST['post_id'] . ' ');
+
 				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Edited post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );
+				// ajout de l'utilisateur dans la liste des terms
       }
     }
 
