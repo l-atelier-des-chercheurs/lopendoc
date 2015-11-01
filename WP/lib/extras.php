@@ -478,13 +478,13 @@ function ajax_create_private_post_with_tax()
 				);
 				$newpostID = wp_insert_post( $newpost);
 				wp_set_object_terms( $newpostID, $projetslug, 'projets');
-				wp_set_object_terms( $newpostID, $userid, 'auteur');
 	      echo get_permalink( $newpostID);
 	      $projectLink = get_term_link( $projetslug, 'projets');
 				sendMailToAllProjectContributors( $projetslug, html_entity_decode( get_bloginfo('name')), __("A post has been added to ", 'opendoc') . " : " . esc_url( $projectLink ));
 
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
+				wp_set_object_terms( $newpostID, $username, 'auteur');
 				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("New post", 'opendoc'));
 	    }
     }
@@ -529,7 +529,7 @@ function ajax_change_post_visibility()
     die();
 }
 
-// ajouter un log dans le champ edit car un post vient
+// ajouter un log dans le champ edit car un post vient d'être édité
 add_action( 'wp_ajax_edit_log_postedited', 'ajax_edit_log_postedited' );
 function ajax_edit_log_postedited()
 {
@@ -550,9 +550,8 @@ function ajax_edit_log_postedited()
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
 
+				//error_log( 'new auteur '. $user->ID . ' pour le post ' . $_POST['post_id'] . ' ');
 				wp_add_object_terms( $_POST['post_id'], $username, 'auteur');
-				error_log( 'new auteur '. $user->ID . ' pour le post ' . $_POST['post_id'] . ' ');
-
 				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Edited post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );
 				// ajout de l'utilisateur dans la liste des terms
       }
@@ -654,10 +653,9 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 			);
 			$newpostID = wp_insert_post( $newpost);
 			wp_set_object_terms( $newpostID, $projetslug, 'projets');
-			wp_set_object_terms( $newpostID, $userid, 'auteur');
-
 			$user = get_user_by( 'id', get_current_user_id());
 			$username = $user->display_name;
+			wp_set_object_terms( $newpostID, $username, 'auteur');
 			logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Created this project", 'opendoc'));
 
 			return "success";
