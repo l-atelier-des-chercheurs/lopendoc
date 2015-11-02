@@ -112,13 +112,20 @@ Template Name: Accueil avec cartes
 		</div>
 -->
 
-		<div class="module-side category-list category-filters">
-<!--
-			<div class="legende">
-		  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
+		<div class="module-side global--filters">
+			<div class="category-list category-filters">
+				<div class="legende">
+			  	<?php	_e("Filter by categories: ", 'opendoc'); ?>
+				</div>
+				<div class="contenu">
+				</div>
 			</div>
--->
-			<div class="contenu">
+			<div class="contributors-list contributors-filters">
+				<div class="legende">
+			  	<?php	_e("Filter by contributors: ", 'opendoc'); ?>
+				</div>
+				<ul class="contenu">
+				</ul>
 			</div>
 		</div>
 

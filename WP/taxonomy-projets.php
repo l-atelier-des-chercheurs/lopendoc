@@ -139,11 +139,13 @@
 <main class="main" role="main">
 	<div id="colonnesOptionsTopBar">
 
-		<div class='category-list category-filters'>
-			<div class="legende">
-<!-- 		  	<?php	_e("Filter by categories: ", 'opendoc'); ?> -->
-			</div>
-			<div class="contenu">
+		<div class="global--filters">
+			<div class='category-list category-filters'>
+				<div class="legende">
+	<!-- 		  	<?php	_e("Filter by categories: ", 'opendoc'); ?> -->
+				</div>
+				<div class="contenu">
+				</div>
 			</div>
 		</div>
 

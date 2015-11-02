@@ -25,6 +25,12 @@ String.prototype.endsWith = function(pattern) {
     return d >= 0 && this.lastIndexOf(pattern) === d;
 };
 
+// http://stackoverflow.com/questions/10191941/jquery-unique-on-an-array-of-strings
+function arrayUnique(array) {
+    return $.grep(array, function(el, index) {
+        return index === $.inArray(el, array);
+    });
+}
 
 // voir http://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
 Array.prototype.diff = function(arr2) {
@@ -39,16 +45,17 @@ Array.prototype.diff = function(arr2) {
 	return ret;
 };
 
+// en page d'accueil et page projet
 jQuery.fn.the_filters = function(){
 	var self = this;
 
 	this.init = function(){
 		if($(this.selector).length){
 
-			console.log("the_filters start");
+			$categoryFilters = $(this).find(".category-filters");
 
-			var elements = ($(".filter-elements>:not(.descriptionContainer) .category-list [data-categorie]").toArray());
-
+			// filtres par catégories
+			var elements = ($(".filter-elements .category-list [data-categorie]").toArray());
 			categories = [];
 			for(var i=0;typeof(elements[i])!=='undefined';) {
 				if( $.inArray(elements[i].outerHTML, categories) === -1) {
@@ -56,16 +63,39 @@ jQuery.fn.the_filters = function(){
 				}
 				i++;
 			}
-			$(this).find(".contenu").append( categories.join(" ") );
 			if( categories.length === 0) {
-				$(this).remove();
+				$categoryFilters.remove();
+			} else {
+				$categoryFilters.find(".contenu").append( categories.join(" ") );
+			}
+			$categoryFilters.find(".category-term").bind("tap", function() {
+				$(this).toggleClass("is-active");
+				//$(".category-term").not($(this)).removeClass("is-active");
+				self.showIntervenants();
+				self.updateIsotope();
+			});
+
+			// filtres par auteurs (uniquement page d'accueil
+			$contributorsFilter = $(this).find(".contributors-filters");
+			var contributors = [];
+			contributors = $(".filter-elements .colonneswrappers[data-contributors]").map(function()
+			{
+	      return $(this).attr("data-contributors").split(", ");
+			});
+
+			contributors = arrayUnique(contributors);
+			if( contributors.length === 0) {
+				$contributorsFilter.remove();
+			} else {
+				$blocToAddTo = $contributorsFilter.find(".contenu");
+				$.each( contributors, function() {
+				    $('<li class="contributor-term"></li>').html(this).appendTo( $blocToAddTo);
+				});
 			}
 
-
-			$(this).find(".category-term").bind("tap", function() {
-
+			$contributorsFilter.find(".contributor-term").bind("tap", function() {
 				$(this).toggleClass("is-active");
-				$(".category-term").not($(this)).removeClass("is-active");
+				//$(".contributor-term").not($(this)).removeClass("is-active");
 				self.showIntervenants();
 				self.updateIsotope();
 			});
@@ -79,11 +109,11 @@ jQuery.fn.the_filters = function(){
 				}
 			});
 
-			// tap sur le tag d'un projet
+			// tap sur le tag d'un projet (vision colonnes de présentation)
 			$(".colonnes .category-term").bind("tap", function() {
 				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
 			});
-			// tap sur le tag d'un projet
+			// tap sur le tag d'un projet (vision page projet)
 			$(".postContainer .category-term").bind("tap", function() {
 				$(".category-filters .category-term[data-categorie=" + $(this).attr("data-categorie")	+ "]").trigger("tap");
 			});
@@ -95,18 +125,19 @@ jQuery.fn.the_filters = function(){
 				// 1. récupérer tous ".filtre" et pusher dans un array
 
 					var activetags = [];
-					$(".category-filters .category-term.is-active").each(function() {
-						activetags.push( $(this).attr("data-categorie"));
+					$(".global--filters .is-active").each(function() {
+						content = $(this).attr("data-categorie") !== undefined ? $(this).attr("data-categorie") : $(this).text();
+						activetags.push( content);
 					});
 
-					console.log( "activetags : " + activetags.toString());
+					console.log( "activetags : " + activetags.join("/"));
 
 					// aucun tag actif : désactiver tout
 
 					// s'il y a des colonnes wrappers
 					if( $(".filter-elements .colonneswrappers").length > 0) {
 						if( activetags.length === 0) {
-							$(".filter-elements .colonneswrappers").removeClass("is-shown");
+							$(".filter-elements .colonneswrappers").addClass("is-shown");
 							$(".filter-elements .colonneswrappers").find(".category-list span").removeClass("is-active");
 						} else {
 
@@ -114,26 +145,30 @@ jQuery.fn.the_filters = function(){
 							// sinon, lui retirer
 
 							$(".colonneswrappers").each( function() {
-								motsClesFiche = $(this).find("[data-allcategories]").attr("data-allcategories");
+								motsClesFiche = [];
+
+								allcategories = $(this).find("[data-allcategories]").attr("data-allcategories");
+								if( allcategories.length > 0) {
+									motsClesFiche = motsClesFiche.concat( allcategories.split(" "));
+								}
+
+								allcontributors = $(this).attr("data-contributors");
+								if( allcontributors) {
+									motsClesFiche = motsClesFiche.concat( allcontributors.split(", "));
+								}
 
 								if( motsClesFiche !== undefined) {
-									motsClesFicheArray = motsClesFiche.split(" ");
-									// si ça fit
 
-									//console.log( "motsClesFicheArray : " + motsClesFicheArray[0]);
-									//console.log( "activetags.diff(motsClesFicheArray) : " + activetags.diff(motsClesFicheArray));
+									// si les différences
+									if( activetags.diff(motsClesFiche).length === activetags.length) {
 
-									if( activetags.diff(motsClesFicheArray).length > 0) {
+
 										$(this).addClass("is-shown");
 										// mettre en surbrillance son tag
 										$(this).find(".category-list span").each(function() {
 											motsClesTag = $(this).attr("data-categorie");
-
-
 											console.log( "Activation du mot-clé dans la vignette --- ");
 											console.log( "motsClesTag = " + motsClesTag);
-
-
 											if( $.inArray( motsClesTag, activetags) > -1) {
 												$(this).addClass("is-active");
 											} else {
@@ -203,16 +238,9 @@ jQuery.fn.the_filters = function(){
 
 	};
 	this.updateIsotope = function() {
-
-		if( $(".colonneswrappers.is-shown").length > 0) {
-			$('#colonnesContainer .colonnesContainerInside').isotope({
-				filter: '.is-shown'
-			});
-		} else {
-			$('#colonnesContainer .colonnesContainerInside').isotope({
-				filter: ''
-			});
-		}
+		$('#colonnesContainer .colonnesContainerInside').isotope({
+			filter: '.is-shown'
+		});
 	};
 
 	this.init();
@@ -1571,12 +1599,7 @@ var Roots = {
 				$(this).toggleClass("is--opened").next().slideToggle(0);
 			}).next().slideToggle(0);
 
-			if( $(".category-filters .contenu").length > 0) {
-				$(".category-filters").the_filters();
-			} else {
-				$(".category-filters").remove();
-			}
-
+			$(".global--filters").the_filters();
 
 			///////////////////////////////////////////////// ajouter un post /////////////////////////////////////////////////
 

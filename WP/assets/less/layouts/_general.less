@@ -994,6 +994,19 @@ body {
 .module-side {
 	margin: 	@grid-gutter-width/2;
 
+	> * {
+		padding-top: 	@grid-gutter-width/2;
+		padding-bottom: 	@grid-gutter-width/2;
+
+		.legende {
+			margin-bottom: 	@grid-gutter-width/4;
+		}
+
+		+ * {
+			padding-top: 	0;
+		}
+	}
+
 }
 
 .category-list, .sort-list {
@@ -1094,6 +1107,39 @@ body {
 
 	}
 }
+
+.contributors-filters {
+
+	ul {
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+
+		color: @text-color;
+		cursor: pointer;
+		text-transform: uppercase;
+    line-height: 1;
+		font-weight: 	normal;
+
+    padding: 6px 0px 4px 0px;
+    margin: 0 6px;
+
+		&.is-active {
+			color: #fff;
+			background-color: #333;
+	    padding: 6px 6px 4px 6px;
+			margin: 0;
+		}
+		&:hover {
+	    padding: 6px 6px 4px 6px;
+	    margin: 0;
+		}
+
+	}
+}
+
 
 /*******************************************************************
 	HOME
