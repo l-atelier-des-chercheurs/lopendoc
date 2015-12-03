@@ -454,7 +454,6 @@ function ajax_get_post_information()
       $post = get_post( $_POST['post_id'] );
       echo json_encode( $post );
     }
-
     die();
 }
 

@@ -1705,7 +1705,12 @@ var Roots = {
 									$this.after("<div class='results'>Monitor log. <a href=''>Refresh the page to see new contents.</a><hr></div>");
 								}
 
-								$this.siblings(".results").append( data);
+								// trouver la chaîne qui comment par "There are " et
+								startIndex =  data.indexOf("There are ");
+								messageNumberMail = data.substring( startIndex, startIndex + 40);
+								messageNumberMail = messageNumberMail.substring( 0, messageNumberMail.indexOf("messages ") + 8);
+
+								$this.siblings(".results").append( "<pre>" + messageNumberMail + "</pre>");
 
 								$(this).text( $(this).attr("data-submit"));
 								$(this).removeClass( "is--disabled");

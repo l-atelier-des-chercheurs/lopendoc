@@ -8,7 +8,7 @@
 		  if( !empty($term)) {
     		$mailToContribute = str_replace("leprojet", $term, $mailToContribute);
     	} else {
-    		$mailToContribute = str_replace("+leprojet", "+<em>le-projet</em>", $mailToContribute);
+    		$mailToContribute = str_replace("+leprojet", "", $mailToContribute);
     	}
 			echo "<a target='_blank' href='mailto:" . $mailToContribute . "'>" . $mailToContribute . "</a>";
 		?>
