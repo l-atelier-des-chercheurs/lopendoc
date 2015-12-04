@@ -1621,7 +1621,7 @@ var Roots = {
 				$("body").toggleClass("is-edition");
 			});
 
-			///////////////////////////////////////////// éditer les auteurs d'un projet ////////////////////////////////////////////
+			/////////////////////////////////// éditer les auteurs d'un projet ///////////////////////////////////
 			$(document).on("click", ".edit-authors", function(e) {
 
 				// ouvrir un champ formulaire
@@ -1650,6 +1650,22 @@ var Roots = {
 					console.log("authors : " + listAllAuthors);
 					updateProjectAuthors( listAllAuthors);
 				});
+			});
+
+			/////////////////////////////////// éditer les auteurs d'un projet ///////////////////////////////////
+			$(document).on("click", ".become_contributor", function(e) {
+				$this = $(this);
+
+				$this.addClass("is--loading");
+			  var data = {
+				  'action': 'ask_to_become_author',
+					'projet': nomProjet,
+					'security': ajaxnonce,
+			  };
+			  $.post(ajaxurl, data, function(response) {
+					$this.removeClass("is--loading").addClass("is--finished");
+					$this.text( response);
+			  });
 			});
 
 			///////////////////////////////////////////////// rafraichir postie /////////////////////////////////////////////////

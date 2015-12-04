@@ -13,11 +13,6 @@ function roots_wp_title($title) {
 }
 add_filter('wp_title', 'roots_wp_title', 10);
 
-/**
- * Check to see if the current page is the login/register page
- * Use this in conjunction with is_admin() to separate the front-end from the back-end of your theme
- * @return bool
- */
 
 if ( ! function_exists( 'is_login_page' ) ) {
   function is_login_page() {
@@ -25,11 +20,10 @@ if ( ! function_exists( 'is_login_page' ) ) {
   }
 }
 function prevent_login_page() {
-    if( is_login_page()){
+    if( is_login_page() && !( defined( 'DOING_AJAX' ) && DOING_AJAX )){
 			wp_redirect( home_url() );
       exit();
     }
-
 }
 add_action('init', 'prevent_login_page');
 
@@ -478,13 +472,26 @@ function ajax_create_private_post_with_tax()
 				$newpostID = wp_insert_post( $newpost);
 				wp_set_object_terms( $newpostID, $projetslug, 'projets');
 	      echo get_permalink( $newpostID);
+
+				$userWhoEdited = get_user_by( 'id', $userid);
+				$usernameWhoEdited = $userWhoEdited->display_name;
+
 	      $projectLink = get_term_link( $projetslug, 'projets');
-				sendMailToAllProjectContributors( $projetslug, html_entity_decode( get_bloginfo('name')), __("A post has been added to ", 'opendoc') . " : " . esc_url( $projectLink ));
+				sendMailToAllProjectContributors( $projetslug,
+					html_entity_decode( get_bloginfo('name')),
+					"<strong>" . $usernameWhoEdited . "</strong>" . " " .
+						__("has added a new post to", 'opendoc') . " " .
+						"<strong>" . $projetslug . "</strong>" .
+						"<br/>" .
+						__("You can see this post and contribute by visiting", 'opendoc') . " " .
+						esc_url( $projectLink )
+					);
 
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
 				wp_set_object_terms( $newpostID, $username, 'auteur');
-				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("New post", 'opendoc'));
+				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Has created a new post", 'opendoc'));
+
 	    }
     }
 
@@ -521,7 +528,7 @@ function ajax_change_post_visibility()
 
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
-				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Changed post status to ", 'opendoc') . '<em>' . $newStatus . '</em>' .  __(" for post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );
+				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Changed post status to ", 'opendoc') . '<strong>' . $newStatus . '</strong>' .  __(" for post ", 'opendoc') . '<strong>' . get_the_title( $_POST['post_id']) . '</strong>' );
       }
     }
 
@@ -551,7 +558,7 @@ function ajax_edit_log_postedited()
 
 				//error_log( 'new auteur '. $user->ID . ' pour le post ' . $_POST['post_id'] . ' ');
 				wp_add_object_terms( $_POST['post_id'], $username, 'auteur');
-				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Edited post ", 'opendoc') . '<em>' . get_the_title( $_POST['post_id']) . '</em>' );
+				logActionsToProject( $projetslug, "<span class='edit-by-author'>$username</span>" . __("Edited post ", 'opendoc') . '<strong>' . get_the_title( $_POST['post_id']) . '</strong>' );
 				// ajout de l'utilisateur dans la liste des terms
       }
     }
@@ -579,7 +586,7 @@ function ajax_remove_post()
         echo '';
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
-				logActionsToProject( $projet, "<span class='edit-by-author'>$username</span>" . __("Removed post ", 'opendoc') . '<em>' . $postTitle . '</em>' );
+				logActionsToProject( $projet, "<span class='edit-by-author'>$username</span>" . __("Removed post ", 'opendoc') . '<strong>' . $postTitle . '</strong>' );
       }
     }
 
@@ -697,7 +704,7 @@ function ajax_edit_projet_authors()
 					$hasProjects = get_user_meta( $userid, '_opendoc_user_projets', true );
 					$userProjects = explode('|', $hasProjects);
 
-					// si dans la liste des projets existants d'un user il y a projet, alors
+					// si dans la liste des projets existants d'un user il y a le projet, alors
 					if( in_array( $projet, $userProjects)) {
 						// si son ID figure dans la liste à éditer
 						if( in_array( $userid, $newAuthorsArray)) {
@@ -711,7 +718,7 @@ function ajax_edit_projet_authors()
 
 							$userWhoEdited = get_user_by( 'id', get_current_user_id());
 							$usernameWhoEdited = $userWhoEdited->display_name;
-							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Removed contributor ", 'opendoc') . '<em>' . $user->user_login . '</em>' );
+							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Removed contributor ", 'opendoc') . '<strong>' . $user->user_login . '</strong>' );
 						}
 
 					} else {
@@ -724,7 +731,20 @@ function ajax_edit_projet_authors()
 
 							$userWhoEdited = get_user_by( 'id', get_current_user_id());
 							$usernameWhoEdited = $userWhoEdited->display_name;
-							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Added contributor ", 'opendoc') . '<em>' . $user->user_login . '</em>' );
+							$userWhoEditedMail = $userWhoEdited->user_email;
+							$projectLink = get_term_link( $projet, 'projets');
+
+							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Added contributor ", 'opendoc') . '<strong>' . $user->user_login . '</strong>' );
+							sendMailTo( $userWhoEditedMail,
+								html_entity_decode( get_bloginfo('name')),
+									__("You have been added as a contributor to the project called", 'opendoc') . " " .
+									"<strong>" . $projet . "</strong>" .
+									"<br/>" .
+									__("You can now add posts, edit the informations, see all the private posts and edit the contributor's list in the project's page at", 'opendoc') . " " .
+									esc_url( $projectLink )
+
+								);
+
 						}
 					}
 				}
@@ -733,6 +753,58 @@ function ajax_edit_projet_authors()
 	  }
 
     die();
+}
+
+
+// un utilisateur contributeur non-contributeur du projet demande à le devenir
+// --> envoyer un mail à tous les contributeurs en place
+// nécessit un *projet*,
+add_action( 'wp_ajax_ask_to_become_author', 'ajax_ask_to_become_author' );
+function ajax_ask_to_become_author()
+{
+  if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
+  {
+		$projetslug = $_POST['projet'];
+    // check si l'auteur du changement est admin, un superadmin, ou un auteur qui a l'accès à ce projet
+		if (
+			(current_user_can( 'edit_posts' ) && !can_user_edit_this_project($projetslug))
+		) {
+			$userWhoEdited = get_user_by( 'id', get_current_user_id());
+			$usernameWhoEdited = $userWhoEdited->display_name;
+			$usernameMail = $userWhoEdited->user_email;
+      $projectLink = get_term_link( $projetslug, 'projets');
+
+/*
+			sendMailToAllProjectContributors( $projetslug,
+				html_entity_decode( get_bloginfo('name')),
+					__("Another user has asked to become a contributor to one of your project.", 'opendoc') .
+					"<br/>" .
+					__("Username: ") .
+					$usernameWhoEdited . "(" . $usernameMail . ")" .
+					"<br/>" .
+					__("Name of your project: ", 'opendoc') .
+					$projetslug .
+					"<br/>" .
+					__("To add this user to your project, connect to l'Opendoc and click on the contributor icon in the project information: ", 'opendoc') .
+					esc_url( $projectLink )
+				);
+*/
+
+			sendMailToAllProjectContributors( $projetslug,
+				html_entity_decode( get_bloginfo('name')),
+					"<strong>" . $usernameWhoEdited . "</strong> (" . $usernameMail . ")" . " " .
+					__("has asked to become a contributor to", 'opendoc') . " " .
+					"<strong>" . $projetslug . "</strong>" .
+					"<br/>" .
+					__("To add this user to the list of contributors, click on the contributor icon in the project's information on the project's page at ", 'opendoc') .
+					esc_url( $projectLink )
+
+				);
+
+			echo __("Your request has been sent.", 'opendoc');
+	    die();
+		}
+	}
 }
 
 // log out en ajax en cliquant sur le bouton déconnecter
@@ -926,7 +998,27 @@ function sendMailToAllProjectContributors( $projet, $sujet = '', $content = '') 
 			array_push( $contributors, $user->user_email);
 		}
 	}
-	wp_mail( $contributors, $sujet, $content );
+
+	sendMailTo( $contributors, $sujet, $content);
+
+}
+
+function sendMailTo( $contributors, $sujet, $content) {
+	$content =
+		"<strong>" . __("This is a mail from l'Opendoc", 'opendoc') . " | " . get_bloginfo('name') . "</strong>" .
+		"<br/>" .
+		"<br/>" .
+		$content .
+		"<br/>" .
+		"<br/>" .
+		"<small>" . __("The team at l'Opendoc.", 'opendoc') . "</small>"
+		;
+	add_filter('wp_mail_content_type','set_mail_content_type');
+	wp_mail( $contributors, $sujet, $content);
+}
+
+function set_mail_content_type($content_type){
+	return 'text/html';
 }
 
 // hide private posts

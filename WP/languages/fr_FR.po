@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-11-01 22:36+0100\n"
+"POT-Creation-Date: 2015-12-04 17:13+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -935,183 +935,187 @@ msgstr ""
 msgid "field description (optional)"
 msgstr ""
 
-#: lib/extras.php:97
+#: lib/extras.php:93
 msgctxt "Taxonomy General Name"
 msgid "Projets"
 msgstr ""
 
-#: lib/extras.php:98
+#: lib/extras.php:94
 msgctxt "Taxonomy Singular Name"
 msgid "Projet"
 msgstr ""
 
-#: lib/extras.php:99
+#: lib/extras.php:95
 msgid "Projets"
 msgstr ""
 
-#: lib/extras.php:100
+#: lib/extras.php:96
 msgid "Tous les projets"
 msgstr ""
 
-#: lib/extras.php:101
+#: lib/extras.php:97
 msgid "Projet parent"
 msgstr ""
 
-#: lib/extras.php:102
+#: lib/extras.php:98
 msgid "Projet parent:"
 msgstr ""
 
-#: lib/extras.php:103
+#: lib/extras.php:99
 msgid "Nouveau projet"
 msgstr ""
 
-#: lib/extras.php:104
+#: lib/extras.php:100
 msgid "Ajouter un projet"
 msgstr ""
 
-#: lib/extras.php:105
+#: lib/extras.php:101
 msgid "Éditer un projet"
 msgstr ""
 
-#: lib/extras.php:106
+#: lib/extras.php:102
 msgid "Mettre à jour un projet"
 msgstr ""
 
-#: lib/extras.php:107
+#: lib/extras.php:103
 msgid "Séparer les projets avec une virgule"
 msgstr ""
 
-#: lib/extras.php:108
+#: lib/extras.php:104
 msgid "Chercher les projets"
 msgstr ""
 
-#: lib/extras.php:109
+#: lib/extras.php:105
 msgid "Ajouter ou enlever un objet"
 msgstr ""
 
-#: lib/extras.php:110 lib/extras.php:146
+#: lib/extras.php:106 lib/extras.php:142
 msgid "Choisir parmi les plus utilisés"
 msgstr ""
 
-#: lib/extras.php:111 lib/extras.php:147
+#: lib/extras.php:107 lib/extras.php:143
 msgid "Pas trouvé"
 msgstr ""
 
-#: lib/extras.php:133
+#: lib/extras.php:129
 msgctxt "Taxonomy General Name"
 msgid "Auteurs"
 msgstr ""
 
-#: lib/extras.php:134
+#: lib/extras.php:130
 msgctxt "Taxonomy Singular Name"
 msgid "Auteur"
 msgstr ""
 
-#: lib/extras.php:135
+#: lib/extras.php:131
 msgid "Auteurs"
 msgstr ""
 
-#: lib/extras.php:136
+#: lib/extras.php:132
 msgid "Tous les auteurs"
 msgstr ""
 
-#: lib/extras.php:137
+#: lib/extras.php:133
 msgid "Auteur parent"
 msgstr ""
 
-#: lib/extras.php:138
+#: lib/extras.php:134
 msgid "Auteur parent:"
 msgstr ""
 
-#: lib/extras.php:139
+#: lib/extras.php:135
 msgid "Nouvel auteur"
 msgstr ""
 
-#: lib/extras.php:140
+#: lib/extras.php:136
 msgid "Ajouter un auteur"
 msgstr ""
 
-#: lib/extras.php:141
+#: lib/extras.php:137
 msgid "Éditer un auteur"
 msgstr ""
 
-#: lib/extras.php:142
+#: lib/extras.php:138
 msgid "Mettre à jour un auteur"
 msgstr ""
 
-#: lib/extras.php:143
+#: lib/extras.php:139
 msgid "Séparer les auteurs avec une virgule"
 msgstr ""
 
-#: lib/extras.php:144
+#: lib/extras.php:140
 msgid "Chercher les auteurs"
 msgstr ""
 
-#: lib/extras.php:145
+#: lib/extras.php:141
 msgid "Ajouter ou enlever un auteur"
 msgstr ""
 
-#: lib/extras.php:270
+#: lib/extras.php:266
 msgid "Couleur primaire"
 msgstr ""
 
-#: lib/extras.php:273
+#: lib/extras.php:269
 msgid "Couleur secondaire"
 msgstr ""
 
-#: lib/extras.php:276
+#: lib/extras.php:272
 msgid "Chaîne de sécurité pour vérifier l'origine des requêtes ajax"
 msgstr ""
 
-#: lib/extras.php:279
+#: lib/extras.php:275
 msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
 msgstr ""
 
-#: lib/extras.php:474
+#: lib/extras.php:469
 msgid "New post title"
 msgstr "Titre du nouveau post"
 
-#: lib/extras.php:475
+#: lib/extras.php:470
 msgid "New post content."
 msgstr "Contenu du nouveau post."
 
-#: lib/extras.php:483
-msgid "A post has been added to "
-msgstr "Un post a été ajouté à "
+#: lib/extras.php:485
+msgid "has added a new post to"
+msgstr "a ajouté un nouveau post à"
 
 #: lib/extras.php:488
-msgid "New post"
-msgstr "A créé un nouveau post "
+msgid "You can see this post and contribute by visiting"
+msgstr "Vous pouvez retrouver ce post et y contribuer en visitant"
 
-#: lib/extras.php:519
+#: lib/extras.php:495
+msgid "Has created a new post"
+msgstr "A créé un nouveau post"
+
+#: lib/extras.php:527
 msgid "public"
 msgstr "public"
 
-#: lib/extras.php:521
+#: lib/extras.php:529
 msgid "private"
 msgstr "privé"
 
-#: lib/extras.php:525
+#: lib/extras.php:533
 msgid "Changed post status to "
 msgstr "A passé en "
 
-#: lib/extras.php:525
+#: lib/extras.php:533
 msgid " for post "
 msgstr " le post "
 
-#: lib/extras.php:555
+#: lib/extras.php:563
 msgid "Edited post "
 msgstr "A édité le post "
 
-#: lib/extras.php:583
+#: lib/extras.php:591
 msgid "Removed post "
 msgstr "A supprimé le post "
 
-#: lib/extras.php:615
+#: lib/extras.php:623
 msgid "This name is already taken."
 msgstr "Ce nom est déjà prit."
 
-#: lib/extras.php:649
+#: lib/extras.php:657
 msgid ""
 "Write here a description for your project and add a picture. They will be "
 "used to show your project on the front page."
@@ -1119,29 +1123,66 @@ msgstr ""
 "Écrivez ici une description pour votre projet, et ajoutez une image. Elles "
 "seront utilisés en page d’accueil."
 
-#: lib/extras.php:659
+#: lib/extras.php:667
 msgid "Created this project"
 msgstr "A créé ce projet"
 
-#: lib/extras.php:715
+#: lib/extras.php:723
 msgid "Removed contributor "
-msgstr "A supprimé un contributeur "
+msgstr "A supprimé le contributeur "
 
-#: lib/extras.php:728
+#: lib/extras.php:739
 msgid "Added contributor "
-msgstr "A ajouté un contributeur "
+msgstr "A ajouté le contributeur "
 
-#: lib/extras.php:903
+#: lib/extras.php:742
+msgid "You have been added as a contributor to the project called"
+msgstr "Vous avez été ajouté comme contributeur au projet"
+
+#: lib/extras.php:745
+msgid ""
+"You can now add posts, edit the informations, see all the private posts and "
+"edit the contributor's list in the project's page at"
+msgstr ""
+"Vous pouvez maintenant ajouter des posts, éditer les informations, voir les "
+"autres posts privés et éditer la liste des contributeurs au projet situé à "
+"l’adresse"
+
+#: lib/extras.php:798
+msgid "has asked to become a contributor to"
+msgstr "souhaiterait contribuer à votre projet"
+
+#: lib/extras.php:801
+msgid ""
+"To add this user to the list of contributors, click on the contributor icon "
+"in the project's information on the project's page at "
+msgstr ""
+"Pour l'y autoriser, connectez-vous à l'Opendoc et cliquez sur l'icône des "
+"contributeurs dans la section Informations du projet sur la page suivante "
+
+#: lib/extras.php:806
+msgid "Your request has been sent."
+msgstr "Votre requête a été envoyée."
+
+#: lib/extras.php:976
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:909
+#: lib/extras.php:982
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:910
+#: lib/extras.php:983
 msgid "séparés par une virgule"
 msgstr ""
+
+#: lib/extras.php:1010
+msgid "This is a mail from l'Opendoc"
+msgstr "Notification de l’Opendoc"
+
+#: lib/extras.php:1016
+msgid "The team at l'Opendoc."
+msgstr "L’équipe de l’Opendoc."
 
 #: lib/init.php:45
 msgid "Primary"
@@ -1174,7 +1215,7 @@ msgstr ""
 #: lib/titles.php:31
 #, php-format
 msgid "Search Results for %s"
-msgstr ""
+msgstr "Résultats pour %s"
 
 #: lib/titles.php:33
 msgid "Not Found"
@@ -1281,7 +1322,7 @@ msgstr "Ajouter le projet"
 msgid "Search on l'opendoc"
 msgstr "Rechercher sur l'Opendoc"
 
-#: template-page-accueil.php:262
+#: template-page-accueil.php:262 templates/content-modules/meta.php:173
 msgid "Categories: "
 msgstr "Catégories :"
 
@@ -1385,56 +1426,69 @@ msgstr "Contributeur&nbsp;:"
 msgid "Contributors: "
 msgstr "Contributeurs&nbsp;:"
 
-#: templates/content-modules/meta.php:70
+#: templates/content-modules/meta.php:72
 msgid "Edit project contributors"
 msgstr "Éditer les contributeurs du projet"
 
-#: templates/content-modules/meta.php:120
+#: templates/content-modules/meta.php:106
+msgid "A mail will be sent to all this project's contributors."
+msgstr ""
+"Une demande par mail sera envoyé aux contributeurs actuels de ce projet."
+
+#: templates/content-modules/meta.php:108
+msgid "Send a request to become a contributor"
+msgstr "Demander à devenir contributeur de ce projet"
+
+#: templates/content-modules/meta.php:134
 msgid "Author: "
 msgstr "Auteur&nbsp;: "
 
-#: templates/content-modules/meta.php:122
+#: templates/content-modules/meta.php:136
 msgid "Authors: "
 msgstr "Auteurs"
 
-#: templates/content-modules/meta.php:173
-msgid "Edit categories"
-msgstr "Éditer les catégories"
+#: templates/content-modules/meta.php:190
+msgid "Edit project categories"
+msgstr "Éditer les catégories du projet"
 
-#: templates/content-modules/meta.php:198
+#: templates/content-modules/meta.php:192
+msgid "Edit post categories"
+msgstr "Éditer les catégories du post"
+
+#: templates/content-modules/meta.php:218
 msgid "Comments: "
 msgstr "Commentaires&nbsp;:"
 
-#: templates/content-modules/meta.php:203
+#: templates/content-modules/meta.php:223
 msgid "Add a comment"
 msgstr "Ajouter un commentaire"
 
-#: templates/content-modules/meta.php:203
+#: templates/content-modules/meta.php:223
 msgid "1 comment"
 msgstr "1 commentaire"
 
-#: templates/content-modules/meta.php:203
+#: templates/content-modules/meta.php:223
 #, php-format
 msgid "% comments"
 msgstr "% commentaires"
 
-#: templates/content-modules/meta.php:206
+#: templates/content-modules/meta.php:226
 msgid "Leave a comment"
 msgstr "Laisser un commentaire"
 
-#: templates/content-modules/meta.php:206
+#: templates/content-modules/meta.php:226
 msgid "1 Comment"
 msgstr "1 Commentaire"
 
-#: templates/content-modules/meta.php:206
+#: templates/content-modules/meta.php:226
 msgid "% Comments"
 msgstr "% Commentaires"
 
-#: templates/content-modules/meta.php:214
+#: templates/content-modules/meta.php:234
 msgid "Edited on "
 msgstr "Édité le "
 
-#: templates/content-modules/meta.php:216
+#: templates/content-modules/meta.php:236
 msgid "By"
 msgstr "Par"
 
@@ -1481,6 +1535,15 @@ msgstr "Recherche"
 #: templates/searchform.php:6
 msgid "Rechercher sur l'opendoc"
 msgstr "Rechercher sur l’Opendoc"
+
+#~ msgid "A post has been added to "
+#~ msgstr "Un post a été ajouté à "
+
+#~ msgid "New post"
+#~ msgstr "A créé un nouveau post "
+
+#~ msgid "Edit categories"
+#~ msgstr "Éditer les catégories"
 
 #~ msgid "Tags: "
 #~ msgstr "Catégories&nbsp;:"

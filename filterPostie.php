@@ -100,6 +100,7 @@ add_filter('postie_filter_email2', 'get_mail_auteur', 10, 3);
 
 function get_mail_auteur( $from, $toEmail, $replytoEmail) {
 	global $auteur;
+	global $auteurFullmail;
   DebugEcho("step-01b");
   DebugDump("from " . $from);
   DebugDump("toEmail " . $toEmail);
@@ -107,6 +108,8 @@ function get_mail_auteur( $from, $toEmail, $replytoEmail) {
 
   $fromField = $from;
   $toField = $toEmail;
+
+  $auteurFullmail = $fromField;
 
   $posAt = strpos($fromField, '@');
 
@@ -172,11 +175,11 @@ add_filter('postie_post_before', 'make_sticky_descriptions');
 function check_in_mail( $post, $post_part_to_check, $isTerm) {
 	global $project;
 
-	EchoInfo("Check Description projet (#)");
-  EchoInfo("--> post[post_part_to_check] " . $post[$post_part_to_check] );
-  EchoInfo("--> isTerm " . $isTerm );
+	DebugEcho("Check Description projet (#)");
+  DebugEcho("--> post[post_part_to_check] " . $post[$post_part_to_check] );
+  DebugEcho("--> isTerm " . $isTerm );
 
-  EchoInfo("Found ? " . strpos($post[$post_part_to_check], $isTerm) );
+  DebugEcho("Found ? " . strpos($post[$post_part_to_check], $isTerm) );
 
 	if( strpos($post[$post_part_to_check], $isTerm) !== false ) {
 
@@ -218,6 +221,7 @@ add_filter('postie_post_after', 'tax_tag');
 function tax_tag($post) {
 	global $project;
 	global $auteur;
+	global $auteurFullmail;
 
   DebugEcho("step-02");
   DebugEcho("project " . $project );
@@ -230,14 +234,48 @@ function tax_tag($post) {
 
 	if( strlen( $project ) > 0 ) {
 		$project = str_replace( "-", " ", $project);
-	  EchoInfo( "Ajout au post " . $post['ID'] );
-	  EchoInfo( "Du projet " . $project );
-	  EchoInfo( "##" . $project . "##" );
+	  DebugEcho( "Ajout au post " . $post['ID'] );
+	  DebugEcho( "Du projet " . $project );
+	  DebugEcho( "##" . $project . "##" );
 
 		error_log( "le terme existe t'il ? " . term_exists($project, 'projets'));
 		$term = term_exists($project, 'projets');
 		if( $term === 0 || $term === null) {
 			addTermAndCreateDescription( $project, $auteur, true);
+		} else {
+			$projetslug = $project;
+			$projectLink = get_term_link( $projetslug, 'projets');
+			$lastauteur = $auteur;
+			$userPrivateTag = $auteurFullmail;
+
+			$mailUser = get_user_by( 'email', $auteurFullmail);
+
+			if( $mailUser !== false) {
+				$lastauteur = $mailUser->display_name;
+				$userPrivateTag = $lastauteur;
+			}
+
+/*
+			$userWhoEdited = get_user_by( 'id', $userid);
+			$usernameWhoEdited = $userWhoEdited->display_name;
+*/
+
+			DebugEcho("Sending notifications");
+			DebugEcho("auteur = " . $userPrivateTag);
+
+
+			logActionsToProject( $projetslug, "<span class='edit-by-author'>$lastauteur</span>" . __("Has created a new post by mail.", 'opendoc'));
+
+			sendMailToAllProjectContributors( $projetslug,
+				html_entity_decode( get_bloginfo('name')),
+				"<strong>" . $userPrivateTag . "</strong>" . " " .
+					__("has added a new post by mail to the project", 'opendoc') . " " .
+					"<strong>" . $projetslug . "</strong>" .
+					"<br/>" .
+					__("You can see this post and contribute by visiting", 'opendoc') . " " .
+					esc_url( $projectLink )
+				);
+
 		}
 
 		wp_set_object_terms( $post['ID'], array($project), 'projets');
@@ -246,9 +284,9 @@ function tax_tag($post) {
 	}
 
 	if( strlen( $auteur ) > 0 ) {
-	  EchoInfo( "Ajout au post " . $post['ID'] );
-	  EchoInfo( "De l'auteur " . $auteur );
-	  EchoInfo( "--" . $auteur . "--" );
+	  DebugEcho( "Ajout au post " . $post['ID'] );
+	  DebugEcho( "De l'auteur " . $auteur );
+	  DebugEcho( "--" . $auteur . "--" );
 		wp_set_object_terms( $post['ID'], array($auteur), 'auteur');
 	  DebugEcho( "Vérification du post ---" );
 	  DebugEcho( $post );
