@@ -24,6 +24,8 @@ $roots_includes = array(
 
   'lib/cmb2.php',          // Custom functions
   'lib/extras.php',          // Custom functions
+  'lib/ajax_calls.php',          // Custom functions
+  'lib/query_filters.php',          // Custom functions
 );
 
 foreach ($roots_includes as $file) {
