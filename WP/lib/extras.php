@@ -707,3 +707,71 @@ function allow_new_mime_types($mimes) {
   return $mimes;
 }
 add_filter('upload_mimes', 'allow_new_mime_types');
+
+
+
+
+
+
+
+
+
+
+// notifier les utilisateurs en cas de nouveau commentaire, du plugin
+// https://github.com/valeriosouza/post-notification/blob/master/notify-users-e-mail.php
+/**
+ * Nofity users when publish a comment.
+ *
+ * @param int    $id Comment ID.
+ * @param string $new_status New status of comment.
+ * @param string $old_status Optional old status of comment.
+ *
+ * @return void
+ */
+function send_notification_comment( $id) {
+	$comment         = get_comment( $id );
+	$post			 = get_post($comment->comment_post_ID);
+
+	$userWhoCommented = get_comment_author($comment);
+
+	$projet = array_pop(wp_get_object_terms( $post->ID, 'projets'));
+	$projetslug = $projet->slug;
+	$projectLink = get_term_link( $projetslug, 'projets');
+
+	sendMailToAllProjectContributors( $projetslug,
+		html_entity_decode( get_bloginfo('name')),
+		"<strong>" . $userWhoCommented . "</strong>" . " " .
+			__("has added a comment in", 'opendoc') . " " .
+			"<strong>" . $projetslug . "</strong>" . " " .
+			__("to the post titled", 'opendoc') . " " .
+			"<strong>" . $post->post_title . "</strong>" . " " .
+			"<br/>" .
+			__("Approve and reply by visiting", 'opendoc') . " " .
+			esc_url( $projectLink )
+		);
+
+//	$emails          = get_comment_author_email($comment).','.get_the_author_meta('user_email',$post->post_author );
+/*
+	$subject_comment = $this->apply_comment_placeholders( $settings['subject_comment'], $comment );
+	$body_comment    = $this->apply_comment_placeholders( $settings['body_comment'], $comment );
+	$headers 		 = array(
+		'Content-Type: text/html; charset=UTF-8',
+		'Bcc: ' . $emails
+	);
+	// Send the emails.
+	if ( apply_filters( 'notify_users_email_use_wp_mail', true ) ) {
+		wp_mail( '', $subject_comment, $body_comment, $headers );
+	} else {
+		do_action( 'notify_users_email_custom_mail_engine', $emails, $subject_comment, $body_comment );
+	}
+*/
+}
+add_action( 'wp_insert_comment', 'pre_send_notification_new_comment', 10, 2 );
+
+function pre_send_notification_new_comment( $id, $comment ) {
+	send_notification_comment( $id, $comment->comment_approved );
+}
+
+
+
+

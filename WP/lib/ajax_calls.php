@@ -351,11 +351,14 @@ function ajax_edit_projet_authors()
 
 							$userWhoEdited = get_user_by( 'id', get_current_user_id());
 							$usernameWhoEdited = $userWhoEdited->display_name;
-							$userWhoEditedMail = $userWhoEdited->user_email;
+
+							$userToAdd = get_user_by( 'id', $userid);
+							$usernameOfUserToAdd = $userToAdd->display_name;
+							$mailOfUserToAdd = $userToAdd->user_email;
 							$projectLink = get_term_link( $projet, 'projets');
 
-							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Added contributor ", 'opendoc') . '<strong>' . $user->user_login . '</strong>' );
-							sendMailTo( $userWhoEditedMail,
+							logActionsToProject( $projet, "<span class='edit-by-author'>$usernameWhoEdited</span>" . __("Added contributor ", 'opendoc') . '<strong>' . $userToAdd->user_login . '</strong>' );
+							sendMailTo( $mailOfUserToAdd,
 								html_entity_decode( get_bloginfo('name')),
 									__("You have been added as a contributor to the project called", 'opendoc') . " " .
 									"<strong>" . $projet . "</strong>" .
