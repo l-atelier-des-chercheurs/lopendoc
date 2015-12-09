@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Blank Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2015-12-04 17:13+0100\n"
+"POT-Creation-Date: 2015-12-08 17:54+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -841,7 +841,7 @@ msgstr ""
 msgid "an out-of-date link"
 msgstr ""
 
-#: functions.php:31
+#: functions.php:33
 #, php-format
 msgid "Error locating %s for inclusion"
 msgstr ""
@@ -927,195 +927,55 @@ msgstr ""
 msgid "Primary Navigation"
 msgstr ""
 
-#: lib/cmb2.php:18
-msgid "Ajouter des utilisateurs au projet"
-msgstr ""
-
-#: lib/cmb2.php:19
-msgid "field description (optional)"
-msgstr ""
-
-#: lib/extras.php:93
-msgctxt "Taxonomy General Name"
-msgid "Projets"
-msgstr ""
-
-#: lib/extras.php:94
-msgctxt "Taxonomy Singular Name"
-msgid "Projet"
-msgstr ""
-
-#: lib/extras.php:95
-msgid "Projets"
-msgstr ""
-
-#: lib/extras.php:96
-msgid "Tous les projets"
-msgstr ""
-
-#: lib/extras.php:97
-msgid "Projet parent"
-msgstr ""
-
-#: lib/extras.php:98
-msgid "Projet parent:"
-msgstr ""
-
-#: lib/extras.php:99
-msgid "Nouveau projet"
-msgstr ""
-
-#: lib/extras.php:100
-msgid "Ajouter un projet"
-msgstr ""
-
-#: lib/extras.php:101
-msgid "Éditer un projet"
-msgstr ""
-
-#: lib/extras.php:102
-msgid "Mettre à jour un projet"
-msgstr ""
-
-#: lib/extras.php:103
-msgid "Séparer les projets avec une virgule"
-msgstr ""
-
-#: lib/extras.php:104
-msgid "Chercher les projets"
-msgstr ""
-
-#: lib/extras.php:105
-msgid "Ajouter ou enlever un objet"
-msgstr ""
-
-#: lib/extras.php:106 lib/extras.php:142
-msgid "Choisir parmi les plus utilisés"
-msgstr ""
-
-#: lib/extras.php:107 lib/extras.php:143
-msgid "Pas trouvé"
-msgstr ""
-
-#: lib/extras.php:129
-msgctxt "Taxonomy General Name"
-msgid "Auteurs"
-msgstr ""
-
-#: lib/extras.php:130
-msgctxt "Taxonomy Singular Name"
-msgid "Auteur"
-msgstr ""
-
-#: lib/extras.php:131
-msgid "Auteurs"
-msgstr ""
-
-#: lib/extras.php:132
-msgid "Tous les auteurs"
-msgstr ""
-
-#: lib/extras.php:133
-msgid "Auteur parent"
-msgstr ""
-
-#: lib/extras.php:134
-msgid "Auteur parent:"
-msgstr ""
-
-#: lib/extras.php:135
-msgid "Nouvel auteur"
-msgstr ""
-
-#: lib/extras.php:136
-msgid "Ajouter un auteur"
-msgstr ""
-
-#: lib/extras.php:137
-msgid "Éditer un auteur"
-msgstr ""
-
-#: lib/extras.php:138
-msgid "Mettre à jour un auteur"
-msgstr ""
-
-#: lib/extras.php:139
-msgid "Séparer les auteurs avec une virgule"
-msgstr ""
-
-#: lib/extras.php:140
-msgid "Chercher les auteurs"
-msgstr ""
-
-#: lib/extras.php:141
-msgid "Ajouter ou enlever un auteur"
-msgstr ""
-
-#: lib/extras.php:266
-msgid "Couleur primaire"
-msgstr ""
-
-#: lib/extras.php:269
-msgid "Couleur secondaire"
-msgstr ""
-
-#: lib/extras.php:272
-msgid "Chaîne de sécurité pour vérifier l'origine des requêtes ajax"
-msgstr ""
-
-#: lib/extras.php:275
-msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
-msgstr ""
-
-#: lib/extras.php:469
+#: lib/ajax_calls.php:87
 msgid "New post title"
 msgstr "Titre du nouveau post"
 
-#: lib/extras.php:470
+#: lib/ajax_calls.php:88
 msgid "New post content."
 msgstr "Contenu du nouveau post."
 
-#: lib/extras.php:485
+#: lib/ajax_calls.php:103
 msgid "has added a new post to"
 msgstr "a ajouté un nouveau post à"
 
-#: lib/extras.php:488
+#: lib/ajax_calls.php:106
 msgid "You can see this post and contribute by visiting"
 msgstr "Vous pouvez retrouver ce post et y contribuer en visitant"
 
-#: lib/extras.php:495
+#: lib/ajax_calls.php:113
 msgid "Has created a new post"
 msgstr "A créé un nouveau post"
 
-#: lib/extras.php:527
+#: lib/ajax_calls.php:145
 msgid "public"
 msgstr "public"
 
-#: lib/extras.php:529
+#: lib/ajax_calls.php:147
 msgid "private"
 msgstr "privé"
 
-#: lib/extras.php:533
+#: lib/ajax_calls.php:151
 msgid "Changed post status to "
 msgstr "A passé en "
 
-#: lib/extras.php:533
+#: lib/ajax_calls.php:151
 msgid " for post "
 msgstr " le post "
 
-#: lib/extras.php:563
+#: lib/ajax_calls.php:181
 msgid "Edited post "
 msgstr "A édité le post "
 
-#: lib/extras.php:591
+#: lib/ajax_calls.php:209
 msgid "Removed post "
 msgstr "A supprimé le post "
 
-#: lib/extras.php:623
+#: lib/ajax_calls.php:241
 msgid "This name is already taken."
 msgstr "Ce nom est déjà prit."
 
-#: lib/extras.php:657
+#: lib/ajax_calls.php:275
 msgid ""
 "Write here a description for your project and add a picture. They will be "
 "used to show your project on the front page."
@@ -1123,23 +983,23 @@ msgstr ""
 "Écrivez ici une description pour votre projet, et ajoutez une image. Elles "
 "seront utilisés en page d’accueil."
 
-#: lib/extras.php:667
+#: lib/ajax_calls.php:285
 msgid "Created this project"
 msgstr "A créé ce projet"
 
-#: lib/extras.php:723
+#: lib/ajax_calls.php:341
 msgid "Removed contributor "
 msgstr "A supprimé le contributeur "
 
-#: lib/extras.php:739
+#: lib/ajax_calls.php:360
 msgid "Added contributor "
 msgstr "A ajouté le contributeur "
 
-#: lib/extras.php:742
+#: lib/ajax_calls.php:363
 msgid "You have been added as a contributor to the project called"
 msgstr "Vous avez été ajouté comme contributeur au projet"
 
-#: lib/extras.php:745
+#: lib/ajax_calls.php:366
 msgid ""
 "You can now add posts, edit the informations, see all the private posts and "
 "edit the contributor's list in the project's page at"
@@ -1148,11 +1008,11 @@ msgstr ""
 "autres posts privés et éditer la liste des contributeurs au projet situé à "
 "l’adresse"
 
-#: lib/extras.php:798
+#: lib/ajax_calls.php:419
 msgid "has asked to become a contributor to"
 msgstr "souhaiterait contribuer à votre projet"
 
-#: lib/extras.php:801
+#: lib/ajax_calls.php:422
 msgid ""
 "To add this user to the list of contributors, click on the contributor icon "
 "in the project's information on the project's page at "
@@ -1160,29 +1020,181 @@ msgstr ""
 "Pour l'y autoriser, connectez-vous à l'Opendoc et cliquez sur l'icône des "
 "contributeurs dans la section Informations du projet sur la page suivante "
 
-#: lib/extras.php:806
+#: lib/ajax_calls.php:427
 msgid "Your request has been sent."
 msgstr "Votre requête a été envoyée."
 
-#: lib/extras.php:976
+#: lib/cmb2.php:18
+msgid "Ajouter des utilisateurs au projet"
+msgstr "Ajouter des utilisateurs au projet"
+
+#: lib/cmb2.php:19
+msgid "field description (optional)"
+msgstr ""
+
+#: lib/extras.php:72
+msgctxt "Taxonomy General Name"
+msgid "Projets"
+msgstr ""
+
+#: lib/extras.php:73
+msgctxt "Taxonomy Singular Name"
+msgid "Projet"
+msgstr ""
+
+#: lib/extras.php:74
+msgid "Projets"
+msgstr ""
+
+#: lib/extras.php:75
+msgid "Tous les projets"
+msgstr ""
+
+#: lib/extras.php:76
+msgid "Projet parent"
+msgstr ""
+
+#: lib/extras.php:77
+msgid "Projet parent:"
+msgstr ""
+
+#: lib/extras.php:78
+msgid "Nouveau projet"
+msgstr ""
+
+#: lib/extras.php:79
+msgid "Ajouter un projet"
+msgstr ""
+
+#: lib/extras.php:80
+msgid "Éditer un projet"
+msgstr ""
+
+#: lib/extras.php:81
+msgid "Mettre à jour un projet"
+msgstr ""
+
+#: lib/extras.php:82
+msgid "Séparer les projets avec une virgule"
+msgstr ""
+
+#: lib/extras.php:83
+msgid "Chercher les projets"
+msgstr ""
+
+#: lib/extras.php:84
+msgid "Ajouter ou enlever un objet"
+msgstr ""
+
+#: lib/extras.php:85 lib/extras.php:121
+msgid "Choisir parmi les plus utilisés"
+msgstr ""
+
+#: lib/extras.php:86 lib/extras.php:122
+msgid "Pas trouvé"
+msgstr ""
+
+#: lib/extras.php:108
+msgctxt "Taxonomy General Name"
+msgid "Auteurs"
+msgstr ""
+
+#: lib/extras.php:109
+msgctxt "Taxonomy Singular Name"
+msgid "Auteur"
+msgstr ""
+
+#: lib/extras.php:110
+msgid "Auteurs"
+msgstr ""
+
+#: lib/extras.php:111
+msgid "Tous les auteurs"
+msgstr ""
+
+#: lib/extras.php:112
+msgid "Auteur parent"
+msgstr ""
+
+#: lib/extras.php:113
+msgid "Auteur parent:"
+msgstr ""
+
+#: lib/extras.php:114
+msgid "Nouvel auteur"
+msgstr ""
+
+#: lib/extras.php:115
+msgid "Ajouter un auteur"
+msgstr ""
+
+#: lib/extras.php:116
+msgid "Éditer un auteur"
+msgstr ""
+
+#: lib/extras.php:117
+msgid "Mettre à jour un auteur"
+msgstr ""
+
+#: lib/extras.php:118
+msgid "Séparer les auteurs avec une virgule"
+msgstr ""
+
+#: lib/extras.php:119
+msgid "Chercher les auteurs"
+msgstr ""
+
+#: lib/extras.php:120
+msgid "Ajouter ou enlever un auteur"
+msgstr ""
+
+#: lib/extras.php:209
+msgid "Couleur primaire"
+msgstr ""
+
+#: lib/extras.php:212
+msgid "Couleur secondaire"
+msgstr ""
+
+#: lib/extras.php:215
+msgid "Chaîne de sécurité pour vérifier l'origine des requêtes ajax"
+msgstr ""
+
+#: lib/extras.php:218
+msgid "Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)"
+msgstr ""
+
+#: lib/extras.php:450
 msgid "User Profile Metabox"
 msgstr ""
 
-#: lib/extras.php:982
+#: lib/extras.php:456
 msgid "Project's list where a user is author. Write slugs here."
 msgstr "Liste de projets où un utilisateur est contributeur. En slugs."
 
-#: lib/extras.php:983
+#: lib/extras.php:457
 msgid "séparés par une virgule"
-msgstr ""
+msgstr "séparés par une virgule"
 
-#: lib/extras.php:1010
+#: lib/extras.php:484
 msgid "This is a mail from l'Opendoc"
 msgstr "Notification de l’Opendoc"
 
-#: lib/extras.php:1016
+#: lib/extras.php:490
 msgid "The team at l'Opendoc."
 msgstr "L’équipe de l’Opendoc."
+
+#: lib/extras.php:744
+msgid "has added a comment in"
+msgstr "a ajouté un commentaire au projet"
+
+#: lib/extras.php:746
+msgid "to the post titled"
+msgstr "dans le post intitulé"
+
+#: lib/extras.php:749
+msgid "Approve and reply by visiting"
+msgstr "Approuvez le et répondez-y en visitant"
 
 #: lib/init.php:45
 msgid "Primary"
@@ -1219,7 +1231,7 @@ msgstr "Résultats pour %s"
 
 #: lib/titles.php:33
 msgid "Not Found"
-msgstr ""
+msgstr "Pas de résultats"
 
 #: taxonomy-projets.php:39
 msgid "No content for this project yet."

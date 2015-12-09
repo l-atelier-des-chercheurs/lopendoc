@@ -475,11 +475,16 @@ function sendMailToAllProjectContributors( $projet, $sujet = '', $content = '') 
 		}
 	}
 
-	sendMailTo( $contributors, $sujet, $content);
+	$sujet = str_replace("'", " ", $sujet);
+
+  $mailToContribute =  get_option( "mail_addressTC" );
+	$mailToContribute = str_replace("leprojet", $projet, $mailToContribute);
+
+	sendMailTo( $mailToContribute, $contributors, $sujet, $content);
 
 }
 
-function sendMailTo( $contributors, $sujet, $content) {
+function sendMailTo( $frommail, $contributors, $sujet, $content) {
 	$content =
 		"<strong>" . __("This is a mail from l'Opendoc", 'opendoc') . " | " . get_bloginfo('name') . "</strong>" .
 		"<br/>" .
@@ -489,15 +494,25 @@ function sendMailTo( $contributors, $sujet, $content) {
 		"<br/>" .
 		"<small>" . __("The team at l'Opendoc.", 'opendoc') . "</small>"
 		;
-	add_filter('wp_mail_content_type','set_mail_content_type');
+
+	$sender = get_bloginfo('name') . " <$frommail>";
+
+	// ça bug et je sais pas pourquoi
+/* 	$headers[] = 'From: l\'Opendoc'; */
+/* 	$headers[] = 'Content-Type: text/html'; */
+/*
+	foreach( $contributors as $contributor):
+		$headers[] = 'Bcc: ' . $contributor;
+	endforeach;
+*/
+
+/* 	error_log('plop'); */
+/* 	error_log( 'header : ' . implode( "|", $headers)); */
 	wp_mail( $contributors, $sujet, $content);
 }
-
-function set_mail_content_type($content_type){
+add_filter( 'wp_mail_content_type', function( $content_type ) {
 	return 'text/html';
-}
-
-
+});
 
 // rediriger vers la page taxonomy si pas un éditeur du projet, ou pas administrateur !
 // ATTENTION : pour les éditeurs et admin, ne surtout pas le faire car sinon ça casse le embed iframe (et ça c'est nul)
@@ -769,7 +784,7 @@ function send_notification_comment( $id) {
 add_action( 'wp_insert_comment', 'pre_send_notification_new_comment', 10, 2 );
 
 function pre_send_notification_new_comment( $id, $comment ) {
-	send_notification_comment( $id, $comment->comment_approved );
+	send_notification_comment( $id );
 }
 
 

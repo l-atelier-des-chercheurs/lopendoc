@@ -15,7 +15,7 @@ function select_authorized_user() {
 
 
 	$cmb_user_select->add_field( array(
-		'name'     => __( 'Ajouter des utilisateurs au projet', 'cmb2' ),
+		'name'     => __( 'Add users to this project', 'cmb2' ),
 		'desc'     => __( 'field description (optional)', 'cmb2' ),
 		'id'       => $prefix . 'multitaxonomy',
 		'type'     => 'taxonomy_multicheck',
