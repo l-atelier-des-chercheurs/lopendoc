@@ -26,6 +26,7 @@ $roots_includes = array(
   'lib/extras.php',          // Custom functions
   'lib/ajax_calls.php',          // Custom functions
   'lib/query_filters.php',          // Custom functions
+  'lib/accounts.php',          // Custom functions
 );
 
 foreach ($roots_includes as $file) {

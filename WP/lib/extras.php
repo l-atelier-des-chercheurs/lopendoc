@@ -65,6 +65,14 @@ function doorbell_io() {
 add_action( 'wp_footer', 'doorbell_io');
 
 
+
+
+
+
+
+
+
+
 // Register projets tax
 function projet_taxonomy() {
 
@@ -442,6 +450,7 @@ add_action( 'cmb2_init', 'opendoc_contributeur_projets' );
 function opendoc_contributeur_projets() {
 	// Start with an underscore to hide fields from custom fields list
 	$prefix = '_opendoc_user_';
+
 	/**
 	 * Metabox for the user profile screen
 	 */
@@ -450,6 +459,7 @@ function opendoc_contributeur_projets() {
 		'title'            => __( 'User Profile Metabox', 'opendoc' ),
 		'object_types'     => array( 'user' ), // Tells CMB2 to use user_meta vs post_meta
 		'show_names'       => true,
+    'show_on_cb' => 'cmb2_only_show_to_admin', // function should return a bool value
 		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 	) );
 	$cmb_user->add_field( array(
@@ -460,6 +470,23 @@ function opendoc_contributeur_projets() {
     'type' => 'textarea_small'
 	) );
 }
+
+function cmb2_only_show_to_admin( $field ) {
+    // Returns true if current user's ID is 1, else false
+    return current_user_can('administrator');
+}
+
+function set_default_admin_color($user_id) {
+	$args = array(
+		'ID' => $user_id,
+		'admin_color' => 'light'
+	);
+	wp_update_user( $args );
+}
+add_action('user_register', 'set_default_admin_color');
+
+if ( !current_user_can('administrator') )
+  remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 
 // envoyer un mail à tous les contributeurs d'un projet
 function sendMailToAllProjectContributors( $projet, $sujet = '', $content = '') {
@@ -718,7 +745,9 @@ class opendoc_walker extends Walker_Comment {
 
 // autoriser les json dans l'interface
 function allow_new_mime_types($mimes) {
-  $mimes['json'] = 'application/javascript';
+  $mimes['json']  =     'application/javascript';
+  $mimes['stl']   =     'application/vnd.ms-pki.stl';
+  $mimes['eps']   =      'application/eps';
   return $mimes;
 }
 add_filter('upload_mimes', 'allow_new_mime_types');
@@ -788,5 +817,4 @@ function pre_send_notification_new_comment( $id, $comment ) {
 }
 
 
-
-
+add_filter( 'run_wptexturize', '__return_false' );

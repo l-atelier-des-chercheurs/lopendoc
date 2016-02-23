@@ -24,7 +24,8 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 	//$auteurs = get_the_author();
 	$term = get_query_var( 'term' );
 	if( empty($term)) {
-		$term = array_pop(wp_get_object_terms( get_the_ID(), 'projets'))->slug;
+  	$terms = wp_get_object_terms( get_the_ID(), 'projets');
+		$term = array_pop( $terms)->slug;
 	}
 
 	// si on est sur le post "description", on veut les contributeurs du projet

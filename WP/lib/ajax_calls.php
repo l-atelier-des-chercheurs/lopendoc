@@ -7,6 +7,7 @@ function add_frontend_ajax_javascript_file(){ ?>
     var ajaxurl = <?php echo json_encode( admin_url( "admin-ajax.php" ) ); ?>;
     var ajaxnonce = <?php echo json_encode( wp_create_nonce( get_option( "wp_custom_nonce" ) ) ); ?>;
     var username = "not-logged-in";
+    var instanceName = "<?php echo bloginfo('name'); ?>";
 
 	  <?php
 		  $primaireColor =  get_option( "primary_color" );

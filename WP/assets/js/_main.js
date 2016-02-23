@@ -628,7 +628,11 @@ function replacePostWithIframe( $thisPost, pageLink ) {
 		sendActionToAnalytics("Fin édition d'un post");
 		var $thisPost = $(this).closest(".post");
 
+    // legacy : pour wp front-end version toolbar (pré-mars 2015)
 		$thisPost.find(".edit-frame").contents().find(".fee-save").click();
+
+		// nouvelle version : avec le plugin "wp front-end editor od"
+		$thisPost.find(".edit-frame").contents().trigger( 'fee-save-post');
 	});
 
 
@@ -1059,8 +1063,6 @@ jQuery.fn.post_view_routine = function(){
 
 		if( this.find(".entry-content:contains(void setup)").length > 0 && $.find("#pjs").length === 0) {
 
-			console.log( " PLop");
-
 		  var scriptSrc = '//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js';
 			var script = document.createElement('script');
 			script.src = scriptSrc;
@@ -1407,7 +1409,7 @@ var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 	// triggers when user clicks on thumbnail
 	var onThumbnailsClick = function(e) {
 
-			console.log( "--onThumbnailsClick");
+		console.log( "--onThumbnailsClick");
 
 		e = e || window.event;
 		if( e.preventDefault ) {
@@ -1538,15 +1540,12 @@ var initPhotoSwipeFromDOMForGalleries = function(gallerySelector) {
 	}
 };
 
-
-window.instanceName = $(".navbar-brand").attr("href").substring( $(".navbar-brand").attr("href").indexOf("opendoc.org/") + 12);
-instanceName = instanceName.substring( 0, instanceName.indexOf("\/") );
-
 window.projet = $(".taxProj").data("term");
 
 function sendActionToAnalytics(thisAction ) {
+	console.log("Sent analytics action : instance = " + instanceName + "username = " + username + " projet : "  + projet + " action : " + thisAction);
+
 	if( typeof gaTracker !== 'undefined' ) {
-		console.log("Sent analytics action : instance = " + instanceName + "username = " + username + " projet : "  + projet + " action : " + thisAction);
 		//gaTracker('send', 'event', 'button', 'click', {'instance': instanceName, 'projet': projet, 'action': thisAction});
 /*
 		gaTracker('send', 'event',
@@ -1557,7 +1556,6 @@ function sendActionToAnalytics(thisAction ) {
 		});
 */
 		gaTracker('send', 'event', instanceName + "|" + projet + "|" + username, 'click', thisAction);
-		console.log( instanceName + " " + projet + " " + username);
 	}
 
 }
@@ -1597,7 +1595,7 @@ var Roots = {
 			$('.accordion--toggle').click(function(){
 				//Expand or collapse this panel
 				$(this).toggleClass("is--opened").next().slideToggle(0);
-			}).next().slideToggle(0);
+			}).next().slideUp(0);
 
 			$(".global--filters").the_filters();
 
@@ -1787,17 +1785,7 @@ var Roots = {
 			$('.colonnes img').removeAttr('style');
 
 			setTimeout(function() {
-/*
-
-				tinysort($("#colonnesContainer .colonneswrappers"), {
-					attr: 'data-lastpostdate',
-					order: 'desc',
-				});
-*/
-
 			  $("body").addClass("is-loaded");
-
-
 				var pckry = $('#colonnesContainer .colonnesContainerInside').isotope({
 				  layoutMode: 'packery',
 				  itemSelector: '.colonneswrappers',
@@ -1815,9 +1803,6 @@ var Roots = {
 				if( $(".sort-list").length > 0) {
 					$(".sort-list .contenu").sort_items();
 				}
-
-
-
 
 			}, 500);
 
@@ -1910,7 +1895,9 @@ var Roots = {
 
 			window.addEventListener('message', function(event) {
 
-			  if(event.origin === 'http://www.lopendoc.org')
+  			console.log('got-message');
+
+			  if(event.origin === "http://" + window.location.hostname )
 			  {
 					console.log( "détection de bubble event");
 					$(".post").filter('[data-id="' + event.data.message + '"]').find(".button-right .edit-post").trigger("click");
@@ -1931,11 +1918,17 @@ var Roots = {
 				$(".fee-button-categories").click();
 			});
 
-			// si click sur le bouton save et qu'on est dans un iframe, propagé un événement
+			// si click sur le bouton save et qu'on est dans un iframe, propager un événement
 			$(document).on('fee-after-save', function() {
-				window.parent.postMessage({message: singleID}, 'http://www.lopendoc.org/');
+				window.parent.postMessage({message: singleID}, "http://" + window.location.hostname);
 			});
 
+    	$(".save-modifications").removeClass("is-disabled");
+
+    	$(".save-modifications").bind( "tap", function() {
+    		sendActionToAnalytics("Fin édition d'un post");
+    		$(document).trigger('fee-save-post');
+    	});
 
 			// mettre à jour les categories quand on ferme le pop-up (maintenant pris en charge par FEE grace à la catégorie fee-categories
 /*

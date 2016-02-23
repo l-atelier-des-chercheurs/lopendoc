@@ -108,7 +108,7 @@
 				if( !empty( $logs)) {
 					$logs = array_reverse($logs);
 					echo "<h4 class='legende accordion--toggle'>" . __( "Last edits to this project", 'opendoc') . "</h4>";
-					echo "<ul class='contenu editlog'>";
+					echo "<ul class='contenu editlog' style='display:none;'>";
 					foreach($logs as $log):
 						echo  "<li>$log</li>";
 					endforeach;

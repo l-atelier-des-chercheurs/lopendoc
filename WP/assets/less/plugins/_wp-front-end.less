@@ -1,0 +1,138 @@
+.iframe.single-post {
+
+	.fee-title, .fee-content {
+    border-bottom: 1px solid #ccc;
+   }
+	.fee-button-categories {
+		display: none;
+	}
+	.fee-url {
+		display: none !important;
+	}
+	.wp-core-ui div.updated {
+		body.publish& {
+			border-left: 4px solid @cpublish;
+			background-color: lighten(@cpublish, 40%);
+		}
+		body.private& {
+			border-left: 4px solid @cprivate;
+			background-color: lighten(@cprivate, 40%);
+		}
+	}
+}
+
+#fee-notice-area {
+	position: fixed;
+	top: 66px;
+	right: 0;
+	bottom: auto;
+	left: auto;
+	width: 300px;
+	height: 50px;
+	z-index: 10000;
+}
+
+
+/*
+.new-post, .new-project {
+	#fee-notice-area {
+		right: 48px !important;
+	}
+	.fee-toolbar {
+		display: none;
+	}
+}
+*/
+
+.fee-insert-thumbnail {
+	background: transparent;
+	position: absolute;
+	z-index: 9998;
+	top: 0;
+	left: 0;
+	font-size: 16px;
+	line-height: 20px;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	padding-left: 5px;
+	opacity: 0.5;
+	cursor: pointer;
+	-webkit-transition: opacity 0.1s ease-in 0;
+	-moz-transition: opacity 0.1s ease-in 0;
+	transition: opacity 0.1s ease-in 0;
+	outline: none;
+
+	margin: 	@grid-gutter-width/2;
+}
+
+
+/*
+.tax-projets .descriptionContainer .post .fee-insert-thumbnail,
+.tax-projets .descriptionContainer .post .fee-thumbnail-toolbar {
+  display: none;
+}
+*/
+
+/*
+.tax-projets .descriptionContainer .fee-content-body {
+  display: none;
+}
+.tax-projets .postContainer .fee-content-body {
+  display: none;
+}
+*/
+
+.post, .allPostsContent {
+  .entry-stuff .post-thumbnail .fee-thumbnail {
+    min-height: 50px;
+  }
+}
+
+
+/* EDIT FEE */
+.fee-toolbar {
+// 	bottom: 0px !important;
+  display: none;
+/*
+	border: none;
+	background: transparent;
+	box-shadow: none;
+
+	.fee-save {
+		visibility: hidden;
+	}
+
+	.fee-publish-options {
+		visibility: hidden;
+	}
+*/
+}
+
+.fee-on {
+	.fee-insert-thumbnail {
+// 		display: block !important;
+	}
+
+}
+
+.wp-core-ui {
+
+/*
+	[for="fee-post-status"] {
+		display: none;
+	}
+
+	[for="fee-post-visibility"] {
+		display: none;
+	}
+*/
+
+}
+
+
+// bugfix tiny mce : la barre d'option n'apparait pas quand elle devrait...
+.mce-stack-layout-item {
+    display: block !important;
+}
