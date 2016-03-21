@@ -11,8 +11,8 @@ function hide_attachments_wpquery_where( $where ){
 				if( $_POST['action'] == 'query-attachments' ){
 
 					// id du compte Dodoc : 189
-					$where .= ' AND (post_author='.$current_user->data->ID.' OR post_author=189)';
-//					$where .= ' AND post_author='.$current_user->data->ID;
+// 					$where .= ' AND (post_author='.$current_user->data->ID.' OR post_author=189)';
+					$where .= ' AND post_author='.$current_user->data->ID;
 				}
 			}
 		}
@@ -22,12 +22,14 @@ function hide_attachments_wpquery_where( $where ){
 }
 
 // hide private posts http://stackoverflow.com/a/1016137
+/*
 add_filter('posts_where', 'no_privates');
 function no_privates($where) {
     if( current_user_can( 'edit_posts') ) return $where;
     global $wpdb;
     return " $where AND {$wpdb->posts}.post_status != 'private' ";
 }
+*/
 
 
 

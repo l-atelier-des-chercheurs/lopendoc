@@ -10,7 +10,7 @@
 <?php } ?>
 		<?php
 
-		if ( user_can_edit() ) {
+		if ( user_can_edit_current_project() ) {
 			get_template_part('templates/content-modules/private-publish');
 		}
 		get_template_part('templates/content-carte');

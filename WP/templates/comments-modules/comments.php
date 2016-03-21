@@ -16,7 +16,7 @@
     <ol class="comment-list">
       <?php
 	      $canspam = 'false';
-	      if( user_can_edit())
+	      if( user_can_edit_current_project())
 	      	$canspam = 'true';
 
 	      wp_list_comments(array(

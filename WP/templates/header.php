@@ -84,13 +84,25 @@
 							  </button>
 							  <ul class="dropdown-menu dropdown-menu-right login-list" aria-labelledby="dropdownMenu1">
 									<?php
-									if (user_can_edit()) {
+									if( user_can_edit_current_project()) {
 										?>
 										<li class="action-button switch-edition">
-											<?php _e('Edit mode', 'opendoc'); ?>
+											  <?php _e('Edit mode', 'opendoc'); ?>
 										</li>
 										<?php
 									}
+									?>
+									<?php
+  								// rétro-compatibilité : les auteurs n'ont pas accès
+                  if( !current_user_can('author') || current_user_can('administrator') ) {
+										?>
+									  <a href="<?php echo admin_url(); ?>">
+    									<li class="action-button go-settings">
+    										<?php _e('Settings', 'opendoc'); ?>
+                      </li>
+  								  </a>
+										<?php
+                  }
 									?>
 									<li class="action-button deconnexion-field">
 										<?php _e('Logout', 'opendoc'); ?>

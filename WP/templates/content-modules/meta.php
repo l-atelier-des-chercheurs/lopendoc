@@ -30,16 +30,12 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 
 	// si on est sur le post "description", on veut les contributeurs du projet
 	if( $term && has_tag('featured')) {
-		$users = get_users('role=author');
+
+  	$contributors = get_all_project_contributors( $term);
+
 		$contributeursName = array();
-	  foreach ($users as $user) {
-			$userID = $user->ID;
-			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
-			$userProjects = explode('|', $hasProject);
-			$ifchecked = '';
-			if( in_array( $term, $userProjects)) {
-				$contributeursName[] = $user->display_name;
-			}
+	  foreach ($contributors as $contributor) {
+			$contributeursName[] = $contributor->display_name;
 		}
 
 		$htmlTags = '<div class="auteurs auteurs-list">';
@@ -63,7 +59,7 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 		endif;
 
 		// si le lecteur est contributeur, afficher l'icône qui permet d'éditer la liste des contributeurs
-		if( user_can_edit()):
+		if( user_can_edit_current_project()):
 			$htmlTags .= '
 
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -100,17 +96,13 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 				</g>
 				</svg>';
 		else:
-			// si pas un éditeur mais un utilisateur ET auteur
-			if( is_user_logged_in() ) {
-				if( current_user_can('author')) {
-					$htmlTags .= '<a class="become_contributor"
-				  data-toggle="tooltip" data-placement="right" title="' . __('A mail will be sent to all this project\'s contributors.', 'opendoc') . '" data-toggle-tooltip-color="#f9a339"
-					>';
-					$htmlTags .= __('Send a request to become a contributor', 'opendoc');
-					$htmlTags .= '</a>';
-				}
+			if( is_current_user_project_contributor()) {
+				$htmlTags .= '<a class="become_contributor"
+			  data-toggle="tooltip" data-placement="right" title="' . __('A mail will be sent to all this project\'s contributors.', 'opendoc') . '" data-toggle-tooltip-color="#f9a339"
+				>';
+				$htmlTags .= __('Send a request to become a contributor', 'opendoc');
+				$htmlTags .= '</a>';
 			}
-
 		endif;
 
 		$htmlTags .= '</div>';
@@ -164,7 +156,7 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 		}
 	}
 
-	if ( $hasTags || user_can_edit()) {
+	if ( $hasTags || user_can_edit_current_project()) {
 
 
 		$htmlTags = '<div class="category-list">';
@@ -186,7 +178,7 @@ data-toggle="tooltip" data-placement="top" title="<?php echo get_the_modified_ti
 			$alltags .= $tag->slug . " ";
 		}
 
-		if( user_can_edit()) {
+		if( user_can_edit_current_project()) {
 			if( $term && has_tag('featured')) {
 				$htmlTags .= '<span class="button-edit-categories">' . __( 'Edit project categories', 'opendoc' ) . "</span>";
 			} else {

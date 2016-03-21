@@ -41,7 +41,7 @@ Template Name: Accueil avec cartes
 
 		<div class="edit-all-project">
 
-			<?php if (current_user_can( 'edit_posts')) { ?>
+			<?php if ( is_current_user_project_contributor()) { ?>
 				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 					 viewBox="0 0 64.5 64.5" style="enable-background:new 0 0 64.5 64.5;" xml:space="preserve" class="options add-project"
 
@@ -144,7 +144,7 @@ Template Name: Accueil avec cartes
 	    </button>
 		</div>
 		<?php
-			if( current_user_can( 'edit_posts' )) {
+			if( user_can_edit_current_project()) {
 				get_template_part('templates/content-modules/refresh_mails');
 			}
 		?>
@@ -184,7 +184,14 @@ Template Name: Accueil avec cartes
 
 				$descriptionPostID = -1;
 				$descriptionTitle = '';
-				$userLists = get_users('role=author');
+
+        $roles = array('author','project_contributor');
+        $users = array();
+        foreach ($roles as $role) {
+            $args = array('role'=>$role);
+            $usersofrole = get_users($args);
+            $users = array_merge($usersofrole,$users);
+        }
 
 				while ( $get_description->have_posts()) : $get_description->the_post();
 					// chercher le featured, le récupérer puis break
@@ -220,7 +227,7 @@ Template Name: Accueil avec cartes
 
 					// si on est sur le post "description", on veut les contributeurs du projet
 					$contributeursName = array();
-					foreach ($userLists as $user) {
+					foreach ($users as $user) {
 						$userID = $user->ID;
 						$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
 						$userProjects = explode('|', $hasProject);

@@ -768,9 +768,9 @@ function updateProjectAuthors( newauthors) {
 	console.log('newauthors : ' + newauthors);
   var data = {
 	  'action': 'edit_projet_authors',
-			'projet': nomProjet,
-			'security': ajaxnonce,
-			'newauthors': newauthors
+		'projet': nomProjet,
+		'security': ajaxnonce,
+		'newauthors': newauthors
   };
   $.post(ajaxurl, data, function(response) {
 	console.log('Server response from the AJAX URL : ' + response);
@@ -1886,7 +1886,7 @@ var Roots = {
 
   tax_projets: {
 		init: function() {
-			createTimeline();
+			//createTimeline();
 
 			// si click sur le bouton "edit", alors lancer l'action d'éditer
 			$("body").on( "click", ".button-edit-categories", function() {

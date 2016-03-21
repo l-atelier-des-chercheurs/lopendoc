@@ -47,10 +47,10 @@
 			$descriptionPostID = $newpostID;
 		}
 
-		if( user_can_edit()) {
+		if( user_can_edit_current_project()) {
 			get_template_part('templates/content-modules/liste_utilisateurs');
 		}
-		if( current_user_can( 'edit_posts' )) {
+		if( is_current_user_project_contributor()) {
 			get_template_part('templates/content-modules/refresh_mails');
 		}
 
@@ -99,7 +99,7 @@
 */
 		}
 
-		if ( user_can_edit() ) {
+		if ( user_can_edit_current_project() ) {
 
 ?>
 			<div class="pageText">
@@ -150,7 +150,7 @@
 		</div>
 
 		<?php
-		if ( user_can_edit() ) {
+		if ( user_can_edit_current_project() ) {
 			?>
 
 			<div class="edit-all-project">
@@ -172,7 +172,7 @@
 				?>
 
 				<?php
-				if( current_user_can( 'edit_posts' ) && !empty($mailToContribute)) {
+				if( is_current_user_project_contributor() && !empty($mailToContribute)) {
 				?>
 
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -192,7 +192,7 @@
 				}
 				?>
 		<?php
-		if ( user_can_edit() ) {
+		if ( user_can_edit_current_project() ) {
 			?>
 
 			</div>
@@ -245,7 +245,7 @@
 					<?php if( !empty($whoIsLockingID) ) { echo " data-isLocked='$whoIsLocking'"; } ?>
 						>
 					<?php
-					if ( user_can_edit() ) {
+					if ( user_can_edit_current_project() ) {
 						get_template_part('templates/content-modules/private-publish');
 					}
 					get_template_part('templates/content-carte');
@@ -267,7 +267,7 @@
 		}
 		if( $descriptionPostID != -1) {
 			update_post_meta( $descriptionPostID, '_publishedCount', $publicPostCount);
-			if( user_can_edit())
+			if( user_can_edit_current_project())
 				update_post_meta( $descriptionPostID, '_privateCount', $privatePostCount);
 		}
 

@@ -9,7 +9,7 @@
 <article class="post" id="<?php echo $post->post_name ?>" <?php post_class(); ?> data-status="<?php echo $status; ?>" data-id="<?php echo $ID ?>" data-action="<?php echo esc_url(home_url('')); ?>/edit-page" data-singleurl="<?php echo esc_url( get_permalink() ); ?>">
 
 	<?php
-	if ( user_can_edit() ) {
+	if ( user_can_edit_current_project() ) {
 		get_template_part('templates/content-modules/button-right');
 	}
 	?>

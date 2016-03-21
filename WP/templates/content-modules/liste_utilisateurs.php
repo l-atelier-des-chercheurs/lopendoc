@@ -8,8 +8,14 @@
 		</p>
 
 		<?php
+    $roles = array('author','project_contributor');
+    $users = array();
+    foreach ($roles as $role) {
+        $args = array('role'=>$role);
+        $usersofrole = get_users($args);
+        $users = array_merge($usersofrole,$users);
+    }
 
-		$users = get_users('role=author');
 	  foreach ($users as $user) {
 			$userID = $user->ID;
 			$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );

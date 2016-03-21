@@ -14,28 +14,6 @@ function roots_wp_title($title) {
 add_filter('wp_title', 'roots_wp_title', 10);
 
 
-if ( ! function_exists( 'is_login_page' ) ) {
-  function is_login_page() {
-    return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-signup.php'));
-  }
-}
-function prevent_login_page() {
-    if( is_login_page() && !( defined( 'DOING_AJAX' ) && DOING_AJAX )){
-			wp_redirect( home_url() );
-      exit();
-    }
-}
-//add_action('init', 'prevent_login_page');
-
-
-function blockusers_init() {
-	if ( (is_admin()) && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-		wp_redirect( home_url() );
-		exit;
-	}
-}
-add_action( 'admin_init', 'blockusers_init' );
-
 
 
 // custom typeface
@@ -101,6 +79,7 @@ function projet_taxonomy() {
 		'show_admin_column'          => true,
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
+    'capabilities' => array( 'manage_options')
 	);
 	register_taxonomy( 'projets', array( 'post' ), $args );
 }
@@ -340,108 +319,6 @@ add_filter( 'media_view_settings', 'my_gallery_default_type_set_link');
 
 
 
-function user_can_edit() {
-
-	// si super admin ou admin
-	if( current_user_can('administrator')) {
-		return true;
-	}
-
-	// si logged in
-	if( is_user_logged_in() ) {
-		// si auteur
-		if( current_user_can('author')) {
-			// si editor
-			if(can_user_edit_project()) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-function can_user_edit_project() {
-
-	if( isset($GLOBALS["editor"]) && $GLOBALS["editor"] == true) {
-		return true;
-	}
-
-	$term = '';
-
-  if( get_query_var( 'term' ) !== '') {
-		$term = get_query_var( 'term' );
-	}
-  else if( count( wp_get_object_terms( get_the_ID(), 'projets' )) > 0 ) {
-  	$terms = get_the_terms( get_the_ID(), 'projets');
-		$term1 = array_pop($terms);
-		$term = $term1->slug;
-  }
-
-	if( $term != '') {
-		$currentuserid = wp_get_current_user()->ID;
-		$hasProjects = get_user_meta( $currentuserid, '_opendoc_user_projets', true );
-		$userProjects = explode('|', $hasProjects);
-
-		if( in_array( $term, $userProjects)) {
-			$GLOBALS["editor"] = true;
-			return true;
-		}
-	}
-	return false;
-}
-
-function can_user_edit_this_project($projet) {
-
-//	error_log( "-- is authorized ?");
-	if( current_user_can('administrator'))
-		return true;
-
-
-	if( !isset($GLOBALS["listeProjet"])) {
-		$currentuserid = wp_get_current_user()->ID;
-		$hasProjects = get_user_meta( $currentuserid, '_opendoc_user_projets', true );
-		$userProjects = explode('|', $hasProjects);
-		$GLOBALS["listeProjet"] = $userProjects;
-	}
-
-//	error_log( "-- listeprojets " . $GLOBALS["listeProjet"]);
-//	error_log( "-- projet in array listeprojets ? " . in_array( $projet, $GLOBALS["listeProjet"]));
-
-	if( $projet != '') {
-		if( in_array( $projet, $GLOBALS["listeProjet"])) {
-			return true;
-		}
-	}
-	return false;
-
-}
-
-
-// admin ou pas ajouter class au body
-function superadmin_ornot($classes) {
-	if( current_user_can('manage_options') ) {
-      $classes[] = 'is-admin';
-	}
-	if( current_user_can('superadmin') ) {
-      $classes[] = 'is-superadmin';
-	}
-	return $classes;
-}
-add_filter('body_class', 'superadmin_ornot');
-
-// admin ou pas ajouter class au body
-function current_user_loggedin($classes) {
-	if( is_user_logged_in() && user_can_edit() ) {
-      $classes[] = 'is-edition';
-	}
-	return $classes;
-}
-add_filter('body_class', 'current_user_loggedin');
-
-
-
-
-
 
 add_action( 'cmb2_init', 'opendoc_contributeur_projets' );
 /**
@@ -463,7 +340,7 @@ function opendoc_contributeur_projets() {
 		'new_user_section' => 'add-new-user', // where form will show on new user page. 'add-existing-user' is only other valid option.
 	) );
 	$cmb_user->add_field( array(
-		'name'     => __( 'Project\'s list where a user is author. Write slugs here.', 'opendoc' ),
+		'name'     => __( 'Project\'s list where a user is author/project_contributor. Write slugs here.', 'opendoc' ),
 		'desc'     => __( 'séparés par une virgule', 'opendoc' ),
 		'id'       => $prefix . 'projets',
 		'type'     => 'title',
@@ -489,25 +366,28 @@ if ( !current_user_can('administrator') )
   remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 
 // envoyer un mail à tous les contributeurs d'un projet
-function sendMailToAllProjectContributors( $projet, $sujet = '', $content = '') {
-	$users = get_users('role=author');
-	$contributors = array();
-  foreach ($users as $user) {
-		$userID = $user->ID;
-		$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
-		$userProjects = explode('|', $hasProject);
-		$ifchecked = '';
-		if( in_array( $projet, $userProjects)) {
-			array_push( $contributors, $user->user_email);
-		}
+function sendMailToAllProjectContributors( $projetslug, $sujet = '', $content = '') {
+
+  $contributors = get_all_project_contributors( $projetslug);
+
+  // si pas de contributeur au projet, prévenir l'administrateur
+  if( count( $contributors) == 0) {
+    $args = array('role'=>'administrator');
+    $admins = get_users($args);
+    $contributors = $admins;
+  }
+
+  $usermail = array();
+  foreach ($contributors as $contributor) {
+		array_push( $usermail, $contributor->user_email);
 	}
 
 	$sujet = str_replace("'", " ", $sujet);
 
   $mailToContribute =  get_option( "mail_addressTC" );
-	$mailToContribute = str_replace("leprojet", $projet, $mailToContribute);
+	$mailToContribute = str_replace("leprojet", $projetslug, $mailToContribute);
 
-	sendMailTo( $mailToContribute, $contributors, $sujet, $content);
+	sendMailTo( $mailToContribute, $usermail, $sujet, $content);
 
 }
 
@@ -555,7 +435,7 @@ function redirect_single_to_tax() {
 			$projet = $term->slug;
 
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				(is_current_user_project_contributor() && can_user_edit_this_project($projet))
 				||
 				current_user_can('administrator')
 				||
@@ -587,6 +467,7 @@ function logActionsToProject( $projet, $string) {
 	    'posts_per_page' => -1,
 			'order' => 'DESC',
 			'tags'	 => 'featured',
+
 		);
 	$description = new WP_Query($args);
 	if ( $description->have_posts() ) {

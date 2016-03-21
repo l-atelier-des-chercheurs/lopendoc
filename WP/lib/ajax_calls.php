@@ -34,7 +34,7 @@ function add_frontend_ajax_javascript_file(){ ?>
     <?php global $current_user; get_currentuserinfo(); ?>
 		<?php if ( is_user_logged_in() ) {
 			//echo 'Username: ' . $current_user->user_login . "\n"; echo 'User display name: ' . $current_user->display_name . "\n";
-			if( user_can_edit()) { ?>
+			if( user_can_edit_current_project()) { ?>
 		    var canuseredit = true;
 			<?php } else { ?>
 		    var canuseredit = false;
@@ -81,7 +81,7 @@ function ajax_create_private_post_with_tax()
     {
 			$projetslug = $_POST['term'];
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
+				( is_current_user_project_contributor() && can_user_edit_this_project($projetslug))
 			) {
 				$userid = $_POST['userid'];
 				$newpost = array(
@@ -127,11 +127,12 @@ function ajax_change_post_visibility()
     if(!empty($_POST['post_id']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
 
-			$projet = array_pop(wp_get_object_terms( $_POST['post_id'], 'projets'));
+      $projetTerms = wp_get_object_terms( $_POST['post_id'], 'projets');
+			$projet = array_pop( $projetTerms);
 			$projetslug = $projet->slug;
 
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
+				(is_current_user_project_contributor() && can_user_edit_this_project($projetslug))
 			) {
 
 		    $post = array();
@@ -172,7 +173,7 @@ function ajax_edit_log_postedited()
     {
 	    $projetslug = $_POST['projet'];
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
+				(is_current_user_project_contributor() && can_user_edit_this_project($projetslug))
 			) {
 				$user = get_user_by( 'id', get_current_user_id());
 				$username = $user->display_name;
@@ -201,7 +202,7 @@ function ajax_remove_post()
 			$postTitle = get_the_title( $_POST['post_id']);
 
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
+				(is_current_user_project_contributor() && can_user_edit_this_project($projetslug))
 			) {
 				wp_trash_post( $_POST['post_id'] );
         echo '';
@@ -223,7 +224,7 @@ function ajax_add_tax_term()
     if(!empty($_POST['tax_term']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ))
     {
 
-			if ( !current_user_can( 'edit_posts' )){ die(); }
+			if ( !is_current_user_project_contributor()){ die(); }
 
 	    $leprojet = $_POST['tax_term'];
 			$leuserid = $_POST['userid'];
@@ -298,11 +299,6 @@ function addTermAndCreateDescription( $projet, $userid, $addDescription) {
 add_action( 'wp_ajax_edit_projet_authors', 'ajax_edit_projet_authors' );
 function ajax_edit_projet_authors()
 {
-/*
-    error_log("debug ajout meta autheur");
-    error_log("projet ? " . $_POST['projet']);
-    error_log("validité nonce ? " . check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ));
-*/
 
     if(!empty($_POST['projet']) && check_ajax_referer( get_option( "wp_custom_nonce" ), 'security' ) )
     {
@@ -310,7 +306,7 @@ function ajax_edit_projet_authors()
 			$projet = $_POST['projet'];
 	    // check si l'auteur du changement un est admin, un superadmin, ou un auteur qui a l'accès à ce projet
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projet))
+				(is_current_user_project_contributor() && can_user_edit_this_project($projet))
 			){
 				$newAuthorsString = $_POST['newauthors'];
 				// liste des ID des utilisateurs à qui ajouter le projet
@@ -318,7 +314,7 @@ function ajax_edit_projet_authors()
 
 				// récupérer tous les auteurs
 				// si leur userid est dans la liste, leur ajouter le projet, sinon le virer
-				$users = get_users('role=author');
+				$users = get_all_users_who_can_contribute();
 
 			  foreach ($users as $user) {
 					$userid = $user->ID;
@@ -400,7 +396,7 @@ function ajax_ask_to_become_author()
 		$projetslug = $_POST['projet'];
     // check si l'auteur du changement est admin, un superadmin, ou un auteur qui a l'accès à ce projet
 		if (
-			(current_user_can( 'edit_posts' ) && !can_user_edit_this_project($projetslug))
+			( is_current_user_project_contributor() && !can_user_edit_this_project($projetslug))
 		) {
 			$userWhoEdited = get_user_by( 'id', get_current_user_id());
 			$usernameWhoEdited = $userWhoEdited->display_name;
@@ -472,7 +468,7 @@ function ajax_spam_comment()
 			$projetslug = $projet->slug;
 
 			if (
-				(current_user_can( 'edit_posts' ) && can_user_edit_this_project($projetslug))
+				(is_current_user_project_contributor() && can_user_edit_this_project($projetslug))
 			) {
 
 
