@@ -629,6 +629,8 @@ function allow_new_mime_types($mimes) {
   $mimes['json']  =     'application/javascript';
   $mimes['stl']   =     'application/vnd.ms-pki.stl';
   $mimes['eps']   =      'application/eps';
+  $mimes['webm']   =      'video/webm';
+  $mimes['mp4']   =      'video/mp4';
   return $mimes;
 }
 add_filter('upload_mimes', 'allow_new_mime_types');
