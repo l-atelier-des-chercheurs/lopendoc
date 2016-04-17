@@ -353,15 +353,6 @@ function cmb2_only_show_to_admin( $field ) {
     return current_user_can('administrator');
 }
 
-function set_default_admin_color($user_id) {
-	$args = array(
-		'ID' => $user_id,
-		'admin_color' => 'light'
-	);
-	wp_update_user( $args );
-}
-add_action('user_register', 'set_default_admin_color');
-
 if ( !current_user_can('administrator') )
   remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
 

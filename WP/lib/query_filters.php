@@ -9,7 +9,6 @@ function hide_attachments_wpquery_where( $where ){
 			if( isset( $_POST['action'] ) ){
 				// library query
 				if( $_POST['action'] == 'query-attachments' ){
-
 					// id du compte Dodoc : 189
 // 					$where .= ' AND (post_author='.$current_user->data->ID.' OR post_author=189)';
 					$where .= ' AND post_author='.$current_user->data->ID;
@@ -30,6 +29,26 @@ function no_privates($where) {
     return " $where AND {$wpdb->posts}.post_status != 'private' ";
 }
 */
+
+
+function only_show_userproject( $query ) {
+
+    if ( is_admin()) {
+//         $terms = get_terms( 'projets', array( 'fields' => 'ids' ) );
+        global $current_user;
+        $usersProject = get_all_projects_user_can_contribute_to( $current_user);
+        $query->set( 'tax_query', array(
+            array(
+                'taxonomy' => 'projets',
+                'field' => 'slug',
+                'terms' => $usersProject,
+            )
+        ) );
+    }
+
+    return $query;
+}
+add_filter('pre_get_posts','only_show_userproject');
 
 
 

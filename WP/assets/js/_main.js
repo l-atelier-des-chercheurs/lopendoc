@@ -338,8 +338,8 @@ function createTimeline() {
 
 	var options = {
 		radius : {
-			min: 6,
-			max: 10
+			min: 3,
+			max: 6
 		},
 	};
 
@@ -395,7 +395,7 @@ function createTimeline() {
 		.attr("y", 6)
 		.attr("width", "0%")
 		.attr("fill", "#f2682c")
-		.attr("height", 4);
+		.attr("height", 2);
 
 
 
@@ -1886,6 +1886,7 @@ var Roots = {
 
   tax_projets: {
 		init: function() {
+
 			//createTimeline();
 
 			// si click sur le bouton "edit", alors lancer l'action d'éditer

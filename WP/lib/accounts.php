@@ -10,21 +10,84 @@
 
 */
 
-remove_role( 'project_contributor');
-
 $newRoleResultas = add_role(
     'project_contributor',
-    __( 'Contibuteur aux projets' ),
+    __( 'Project contributor', 'opendoc' ),
     array(
-        'read'         => true,  // true allows this capability
         'edit_posts'  => true,
         'delete_posts'=> true,
-/*
-        'edit_posts'   => true,
-        'delete_posts' => false, // Use false to explicitly deny
-*/
+        'delete_published_posts' => true,
+        'edit_published_posts'  => true,
+        'publish_posts' => true,
+        'upload_files'  => true,
+
+        'read'         => true,  // true allows this capability
+        'read_private_posts'         => true,  // true allows this capability
+
+        'edit_others_posts' => true,
+        'edit_private_posts' => true,
+        'edit_published_posts' => true,
+
+        'delete_others_posts' => true,
+        'delete_private_posts' => true,
+        'delete_published_posts' => true,
+
     )
 );
+
+function set_default_admin_color($user_id) {
+	$args = array(
+		'ID' => $user_id,
+		'admin_color' => 'light'
+	);
+	wp_update_user( $args );
+}
+add_action('user_register', 'set_default_admin_color');
+
+function adjust_the_wp_menu() {
+	if( current_user_can( 'project_contributor')) {
+    remove_menu_page( 'edit-comments.php' );          //Comments
+    remove_menu_page( 'tools.php' );                  //Tools
+    remove_menu_page( 'edit.php' );                   //Posts
+    // $page[0] is the menu title
+    // $page[1] is the minimum level or capability required
+    // $page[2] is the URL to the item's file
+  }
+}
+add_action( 'admin_menu', 'adjust_the_wp_menu', 999 );
+
+function remove_admin_bar_links() {
+    global $wp_admin_bar;
+    $wp_admin_bar->remove_menu('new-post');
+    $wp_admin_bar->remove_menu('new-page');
+    $wp_admin_bar->remove_menu('new-cpt');
+    $wp_admin_bar->remove_menu('comments');         // Remove the comments link
+    $wp_admin_bar->remove_menu('new-content');      // Remove the content link
+}
+add_action( 'wp_before_admin_bar_render', 'remove_admin_bar_links' );
+
+function disable_new_post() {
+  if ( get_current_screen()->post_type == 'post' )
+    wp_die( __( 'Creating a post is made directly on the project\'s page.', 'opendoc'));
+}
+add_action( 'load-post-new.php', 'disable_new_post' );
+
+// Redirect any user trying to access comments page
+function df_disable_comments_admin_menu_redirect() {
+	global $pagenow;
+	if ($pagenow === 'edit-comments.php') {
+    wp_die( __( 'Comments must be approved and edited on a project\'s page.', 'opendoc'));
+	}
+}
+add_action('admin_init', 'df_disable_comments_admin_menu_redirect');
+
+function remove_dashboard_widgets() {
+  remove_meta_box( 'dashboard_activity', 'dashboard', 'normal');
+  remove_meta_box('dashboard_quick_press', 'dashboard', 'side');  // Quick Press
+  remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');  // Recent Drafts
+  remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal');
+}
+add_action('wp_dashboard_setup', 'remove_dashboard_widgets' );
 
 
 if ( ! function_exists( 'is_login_page' ) ) {
@@ -38,11 +101,11 @@ function prevent_login_page() {
       exit();
     }
 }
-//add_action('init', 'prevent_login_page');
-
+// add_action('init', 'prevent_login_page');
 
 function blockusers_init() {
 	if ( (is_admin()) && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+  	// do not block if project_contributor
   	if( !current_user_can( 'project_contributor')) {
   		wp_redirect( home_url() );
   		exit;
@@ -116,7 +179,7 @@ function get_all_users_who_can_contribute() {
 function get_all_project_contributors( $projetslug) {
 	$users = get_all_users_who_can_contribute();
 	$contributors = array();
-  foreach ($users as $user) {
+  foreach( $users as $user) {
 		$userID = $user->ID;
 		$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
 		$userProjects = explode('|', $hasProject);
@@ -128,7 +191,14 @@ function get_all_project_contributors( $projetslug) {
 }
 
 
+function get_all_projects_user_can_contribute_to( $user) {
 
+	$userID = $user->ID;
+	$hasProject = get_user_meta( $userID, '_opendoc_user_projets', true );
+	$userProjects = explode('|', $hasProject);
+
+  return $userProjects;
+}
 
 
 /********************************************************************************
