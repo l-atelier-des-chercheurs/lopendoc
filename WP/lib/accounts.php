@@ -35,6 +35,37 @@ $newRoleResultas = add_role(
     )
 );
 
+
+/**
+ * Redirect user after successful login.
+ *
+ * @param string $redirect_to URL to redirect to.
+ * @param string $request URL the user is coming from.
+ * @param object $user Logged user's data.
+ * @return string
+ */
+function my_login_redirect( $redirect_to, $request, $user ) {
+	//is there a user to check?
+	if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+		//check for admins
+		if ( in_array( 'administrator', $user->roles ) ) {
+			// redirect them to the default place
+			return $redirect_to;
+		} else {
+			return home_url();
+		}
+	} else {
+		return $redirect_to;
+	}
+}
+add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
+
+
+/*
+if ( !current_user_can('administrator') )
+  remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
+*/
+
 function set_default_admin_color($user_id) {
 	$args = array(
 		'ID' => $user_id,
@@ -45,43 +76,57 @@ function set_default_admin_color($user_id) {
 add_action('user_register', 'set_default_admin_color');
 
 function adjust_the_wp_menu() {
-	if( current_user_can( 'project_contributor')) {
-    remove_menu_page( 'edit-comments.php' );          //Comments
-    remove_menu_page( 'tools.php' );                  //Tools
-    remove_menu_page( 'edit.php' );                   //Posts
+	if( current_user_can( 'administrator' ))
+	  return;
+
+  remove_menu_page( 'edit-comments.php' );          //Comments
+  remove_menu_page( 'tools.php' );                  //Tools
+  remove_menu_page( 'edit.php' );                   //Posts
     // $page[0] is the menu title
     // $page[1] is the minimum level or capability required
     // $page[2] is the URL to the item's file
-  }
 }
 add_action( 'admin_menu', 'adjust_the_wp_menu', 999 );
 
 function remove_admin_bar_links() {
-    global $wp_admin_bar;
-    $wp_admin_bar->remove_menu('new-post');
-    $wp_admin_bar->remove_menu('new-page');
-    $wp_admin_bar->remove_menu('new-cpt');
-    $wp_admin_bar->remove_menu('comments');         // Remove the comments link
-    $wp_admin_bar->remove_menu('new-content');      // Remove the content link
+	if( current_user_can( 'administrator' ))
+	  return;
+
+  global $wp_admin_bar;
+  $wp_admin_bar->remove_menu('new-post');
+  $wp_admin_bar->remove_menu('new-page');
+  $wp_admin_bar->remove_menu('new-cpt');
+  $wp_admin_bar->remove_menu('comments');         // Remove the comments link
+  $wp_admin_bar->remove_menu('new-content');      // Remove the content link
 }
 add_action( 'wp_before_admin_bar_render', 'remove_admin_bar_links' );
 
 function disable_new_post() {
-  if ( get_current_screen()->post_type == 'post' )
+	if( current_user_can( 'administrator' ))
+	  return;
+
+  if ( get_current_screen()->post_type == 'post' ) {
     wp_die( __( 'Creating a post is made directly on the project\'s page.', 'opendoc'));
+  }
 }
 add_action( 'load-post-new.php', 'disable_new_post' );
 
-// Redirect any user trying to access comments page
-function df_disable_comments_admin_menu_redirect() {
+// Redirect any user trying to access some pages
+function disable_access_to_admin_pages() {
+	if( current_user_can( 'administrator' ))
+	  return;
+
 	global $pagenow;
-	if ($pagenow === 'edit-comments.php') {
-    wp_die( __( 'Comments must be approved and edited on a project\'s page.', 'opendoc'));
-	}
+	if ($pagenow === 'edit-comments.php' || $pagenow === 'post.php') {
+    wp_die( __( 'This page is not available.', 'opendoc'));
+  }
 }
-add_action('admin_init', 'df_disable_comments_admin_menu_redirect');
+add_action('admin_init', 'disable_access_to_admin_pages');
 
 function remove_dashboard_widgets() {
+	if( current_user_can( 'administrator' ))
+	  return;
+
   remove_meta_box( 'dashboard_activity', 'dashboard', 'normal');
   remove_meta_box('dashboard_quick_press', 'dashboard', 'side');  // Quick Press
   remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');  // Recent Drafts

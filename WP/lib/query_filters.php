@@ -3,16 +3,17 @@
 // bloquer l'accès aux medias médias des autres utilisateurs, sauf pour ceux qui viennent de dodoc
 add_filter( 'posts_where', 'hide_attachments_wpquery_where' );
 function hide_attachments_wpquery_where( $where ){
+	if( current_user_can( 'administrator' ))
+	  return $where;
+
 	global $current_user;
-	if( !current_user_can( 'manage_options' ) ) {
-		if( is_user_logged_in() ){
-			if( isset( $_POST['action'] ) ){
-				// library query
-				if( $_POST['action'] == 'query-attachments' ){
-					// id du compte Dodoc : 189
+	if( is_user_logged_in() ){
+		if( isset( $_POST['action'] ) ){
+			// library query
+			if( $_POST['action'] == 'query-attachments' ){
+				// id du compte Dodoc : 189
 // 					$where .= ' AND (post_author='.$current_user->data->ID.' OR post_author=189)';
-					$where .= ' AND post_author='.$current_user->data->ID;
-				}
+				$where .= ' AND post_author='.$current_user->data->ID;
 			}
 		}
 	}
@@ -32,21 +33,23 @@ function no_privates($where) {
 
 
 function only_show_userproject( $query ) {
+	if( current_user_can( 'administrator' ))
+	  return $query;
 
-    if ( is_admin()) {
+  if ( is_admin()) {
 //         $terms = get_terms( 'projets', array( 'fields' => 'ids' ) );
-        global $current_user;
-        $usersProject = get_all_projects_user_can_contribute_to( $current_user);
-        $query->set( 'tax_query', array(
-            array(
-                'taxonomy' => 'projets',
-                'field' => 'slug',
-                'terms' => $usersProject,
-            )
-        ) );
-    }
+    global $current_user;
+    $usersProject = get_all_projects_user_can_contribute_to( $current_user);
+    $query->set( 'tax_query', array(
+        array(
+            'taxonomy' => 'projets',
+            'field' => 'slug',
+            'terms' => $usersProject,
+        )
+    ) );
+  }
 
-    return $query;
+  return $query;
 }
 add_filter('pre_get_posts','only_show_userproject');
 

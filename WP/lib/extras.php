@@ -353,9 +353,6 @@ function cmb2_only_show_to_admin( $field ) {
     return current_user_can('administrator');
 }
 
-if ( !current_user_can('administrator') )
-  remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
-
 // envoyer un mail à tous les contributeurs d'un projet
 function sendMailToAllProjectContributors( $projetslug, $sujet = '', $content = '') {
 
