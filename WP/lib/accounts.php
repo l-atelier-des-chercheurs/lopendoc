@@ -136,17 +136,17 @@ add_action('wp_dashboard_setup', 'remove_dashboard_widgets' );
 
 
 if ( ! function_exists( 'is_login_page' ) ) {
-  function is_login_page() {
-    return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-signup.php'));
+  function is_signup_page() {
+    return in_array($GLOBALS['pagenow'], array('wp-signup.php'));
   }
 }
 function prevent_login_page() {
-    if( is_login_page() && !( defined( 'DOING_AJAX' ) && DOING_AJAX )){
-			wp_redirect( home_url() );
-      exit();
-    }
+  if( is_signup_page() && !( defined( 'DOING_AJAX' ) && DOING_AJAX )){
+		wp_redirect( home_url() );
+    exit();
+  }
 }
-// add_action('init', 'prevent_login_page');
+add_action('init', 'prevent_login_page');
 
 function blockusers_init() {
 	if ( (is_admin()) && !current_user_can( 'administrator' ) && !( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {

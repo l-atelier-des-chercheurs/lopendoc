@@ -401,7 +401,7 @@ function sendMailTo( $frommail, $contributors, $sujet, $content) {
 	endforeach;
 */
 
-/* 	error_log('plop'); */
+	error_log('Will send a new mail');
 /* 	error_log( 'header : ' . implode( "|", $headers)); */
 	wp_mail( $contributors, $sujet, $content);
 }

@@ -1569,18 +1569,19 @@ var Roots = {
 	init: function() {
 	  // JavaScript to be fired on all pages
 
+/*
 	  // désactive les console.log si pas un superadmin
 			if( !$("body").hasClass("is-superadmin") || username !== "arnaudjuracek") {
-			// logger.disableLogger();
+			//
 			} else {
 			}
 
-			if( username === "louis") {
+			if( username !== undefined && username === "louis") {
 				$(".content-info").append("<button style='color: #ccc;'>showgrid</button>").on("click", function() {
 					$(".thisGrid").toggle();
 				});
-
 			}
+*/
 
 			$(".post").each(function() { $(this).post_view_routine(); });
 			//initPhotoSwipeFromDOMForGalleries('.entry-content .gallery');

@@ -31,8 +31,9 @@ function add_frontend_ajax_javascript_file(){ ?>
 	    ?>";
     var singleID = "<?php echo get_the_ID(); ?>";
 
-    <?php global $current_user; get_currentuserinfo(); ?>
-		<?php if ( is_user_logged_in() ) {
+    <?php
+      $current_user = wp_get_current_user();
+      if ( is_user_logged_in() ) {
 			//echo 'Username: ' . $current_user->user_login . "\n"; echo 'User display name: ' . $current_user->display_name . "\n";
 			if( user_can_edit_current_project()) { ?>
 		    var canuseredit = true;
