@@ -184,9 +184,7 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
 update_option('use_smilies', false);
 
 
-// project color
 $new_general_setting = new new_general_setting();
-
 class new_general_setting {
     function new_general_setting( ) {
         add_action( 'admin_init' , array( &$this , 'register_fields' ) );
@@ -198,11 +196,11 @@ class new_general_setting {
         register_setting( 'general', 'secondary_color', 'esc_attr' );
         add_settings_field('secondary_color', '<label for="secondary_color">'.__('Couleur secondaire' , 'secondary_color' ).'</label>' , array(&$this, 'fields_html2') , 'general' );
 
-        register_setting( 'general', 'wp_custom_nonce', 'esc_attr' );
-        add_settings_field('wp_custom_nonce', '<label for="wp_custom_nonce">'.__('Chaîne de sécurité pour vérifier l\'origine des requêtes ajax' , 'wp_custom_nonce' ).'</label>' , array(&$this, 'fields_html4') , 'general' );
-
         register_setting( 'general', 'mail_addressTC', 'esc_attr' );
         add_settings_field('mail_addressTC', '<label for="mail_addressTC">'.__('Adresse Mail pour contribuer (sous la forme adresse+leprojet@gmail.com)' , 'mail_addressTC' ).'</label>' , array(&$this, 'fields_html3') , 'general' );
+
+        register_setting( 'general', 'wp_custom_nonce', 'esc_attr' );
+        add_settings_field('wp_custom_nonce', '<label for="wp_custom_nonce">'.__('Chaîne de sécurité pour vérifier l\'origine des requêtes ajax' , 'wp_custom_nonce' ).'</label>' , array(&$this, 'fields_html4') , 'general' );
     }
     function fields_html() {
         $value1 = get_option( 'primary_color', '' );
@@ -221,6 +219,46 @@ class new_general_setting {
         echo '<input type="text" id="wp_custom_nonce" name="wp_custom_nonce" value="' . $value4 . '" />';
 		}
 }
+
+
+// enable/disable mail notifications
+function disable_mail_notifications_checkbox( $user ) {
+    // get product categories
+    $disable_mail_notifications = get_the_author_meta('disable_mail_notifications', $user->ID);
+    ?>
+    <table class="form-table">
+        <tr>
+            <th>Disable mail notification on project update:</th>
+            <td>
+            <p>
+              <label for="disable_mail_notifications">
+                <input
+                  id="disable_mail_notifications"
+                  name="disable_mail_notifications"
+                  type="checkbox"
+                  <?php if ($disable_mail_notifications) echo ' checked="checked"'; ?> />
+                    Disable
+              </label>
+            </p>
+          </td>
+        </tr>
+    </table>
+    <?php
+}
+add_action( 'show_user_profile', 'disable_mail_notifications_checkbox' );
+add_action( 'edit_user_profile', 'disable_mail_notifications_checkbox' );
+
+// store interests
+function disable_mail_notifications_checkbox_save( $user_id ) {
+    if ( !current_user_can( 'edit_user', $user_id ) )
+        return false;
+    update_user_meta( $user_id, 'disable_mail_notifications', $_POST['disable_mail_notifications'] );
+}
+add_action( 'personal_options_update', 'disable_mail_notifications_checkbox_save' );
+add_action( 'edit_user_profile_update', 'disable_mail_notifications_checkbox_save' );
+
+
+
 
 function private_or_publish($classes) {
 	if( is_single() ) {
@@ -367,8 +405,12 @@ function sendMailToAllProjectContributors( $projetslug, $sujet = '', $content = 
 
   $usermail = array();
   foreach ($contributors as $contributor) {
-		array_push( $usermail, $contributor->user_email);
+  	  // for each contributor, let's see if they asked to have notifications disabled
+    $isNotificationsDisabledForThatContributor = get_the_author_meta('disable_mail_notifications', $contributor->ID);
+    if(empty($isNotificationsDisabledForThatContributor))
+      array_push( $usermail, $contributor->user_email);
 	}
+
 
 	$sujet = str_replace("'", " ", $sujet);
 
