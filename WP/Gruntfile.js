@@ -168,7 +168,6 @@ module.exports = function(grunt) {
     'concat'
   ]);
   grunt.registerTask('build', [
-    'jshint',
     'less:build',
     'autoprefixer:build',
     'uglify',
